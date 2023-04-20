@@ -1,0 +1,19 @@
+project:
+  type: website
+
+website:
+  title: "Syed Ahmad Zaki"
+  navbar:
+    left:
+      - href: index.qmd
+        text: Home
+      - href: about.qmd
+
+format:
+  html:
+    theme: flatly
+    css: styles.css
+    toc: false
+
+editor: visual
+
