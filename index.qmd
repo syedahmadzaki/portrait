@@ -1,12 +1,30 @@
 ---
-title: "portrait"
+title: "Welcome To My Page!"
+page-layout: full
 ---
 
-This is a Quarto website.
+<!-- Start of Grid -->
+::: {.grid}
 
-To learn more about Quarto websites visit <https://quarto.org/docs/websites>.
+<!-- Start of Left Column -->
+::: {.g-col-12 .g-col-md-3}
+![](portrait.png)
+::: 
+<!-- End of Left Column -->
 
-```{r}
-1 + 1
+<!-- Start of Right Column -->
+::: {.g-col-12 .g-col-md-9}
+## Hi, I'm Syed Ahmad Zaki.
+Thanks for dropping by! 
 
-```
+I'm currently working in [Pizza Hut](https://www.pizzahut.com/) Asia Pacific Franchise as a Development Services Manager. Simply put, i help my regional franchise partners identify where they can open their next store, using data analytics and predictive modeling. It's an exciting venture, where we marry the very best of science (data analytics) and art (my franchise partners' deep real estate experience) for sustainable net new unit growth.
+
+On this profile, i'll share more about myself as well as the projects that i've done thus far. 
+
+As such, feel free to reach out to me on [LinkedIn](https://www.linkedin.com/in/syed-ahmad-zaki-bin-syed-sakaf-al-attas/) or [email](mailto:syedahmadzaki@yahoo.com.sg).
+
+::: 
+<!-- End of Right Column -->
+
+::: 
+<!-- End of Grid -->
