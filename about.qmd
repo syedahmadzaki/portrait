@@ -3,35 +3,7 @@ title: "More About Me"
 page-layout: full
 ---
 
-<!-- Start of Grid -->
-::: {.grid}
-
-
-<!-- Start of Left Column -->
-::: {.g-col-12 .g-col-md-4}
-::: 
-<!-- End of Left Column -->
-
-
-<!-- Start of Middle Column -->
-::: {.g-col-12 .g-col-md-4}
-![](portrait.png)
-::: 
-<!-- End of Middle Column -->
-
-
-<!-- Start of Right Column -->
-::: {.g-col-12 .g-col-md-4}
-::: 
-<!-- End of Right Column -->
-
-::: 
-<!-- End of Grid -->
-
-![](portrait.png){width=30% fig-align="center"}
-
-## PROFESSIONAL PROFILE
-APAC business partner with excellent communication and interpersonal skills. Data-driven problem solver with wide-ranging cross-functional background. An avid learner in expanding analytical skillset.
+I'm truly blessed to have the opportunity to work with global franchise partners and teams in helping them unearth the right locations, using spatial data analytics. Since the field of data analytics (not just spatial) is ever evolving, i'm on the constant search for new ideas, knowledge, and a yearning to expand my analytical skillsets.
 
 ## EXPERIENCES
 <!-- Start of Grid -->
@@ -43,13 +15,18 @@ APAC business partner with excellent communication and interpersonal skills. Dat
 :::: {.columns}
 <!-- Start of Inner Two Columns - Logo Column -->
 ::: {.column width="6%"}
-[![](pizzahut.png)](https://www.pizzahut.com/){height="55"}
+[![](pizzahut.png)](https://www.pizzahut.com/){height="20"}
+:::
+::: {.column width="2%"}
 :::
 <!-- End of Inner Two Columns - Logo Column -->
 <!-- Start of Inner Two Columns - Text Column -->
-::: {.column width="94%"}
-PIZZA HUT ASIA PACIFIC FRANCHISE PTE. LTD.\
-**Development Services Manager**
+::: {.column width="92%"}
+**Manager, Market Planning**\
+PIZZA HUT GLOBAL\
+
+* Key thought partner to BMU Development leaders
+* Chief cheerleader to a talented team of market planners spread globally
 :::
 <!-- End of Inner Two Columns - Text Column -->
 ::::
@@ -60,17 +37,53 @@ PIZZA HUT ASIA PACIFIC FRANCHISE PTE. LTD.\
 
 <!-- Start of Right Column -->
 ::: {.g-col-3}
-FEB 2016 – PRESENT
+JUN 2023 – PRESENT
 ::: 
 <!-- End of Right Column -->
 ::: 
 <!-- End of Grid -->
 
-* Analysed franchisees’ data and identified franchisees’ growth opportunities using spatial analytics and predictive modeling
-* Developed competition tracking dashboard on PowerBI to monitor Pizza Hut APAC’s growth performance vs. competitors
-* Trained franchise partners on spatial analytics and predictive modeling to improve franchisee’s in-house analytical capabilities
-* Collaborated with franchisees across all levels of their organization to drive their implementation of growth strategies
-* Designed and tested in-house GIS platform using RShiny
+
+
+<!-- Start of Grid -->
+::: {.grid}
+<!-- Start of Left Column -->
+::: {.g-col-9}
+
+<!-- Start of Inner Two Columns -->
+:::: {.columns}
+<!-- Start of Inner Two Columns - Logo Column -->
+::: {.column width="6%"}
+[![](pizzahut.png)](https://www.pizzahut.com/){height="20"}
+:::
+::: {.column width="2%"}
+:::
+<!-- End of Inner Two Columns - Logo Column -->
+<!-- Start of Inner Two Columns - Text Column -->
+::: {.column width="92%"}
+**Development Services Manager**\
+PIZZA HUT ASIA PACIFIC FRANCHISE PTE. LTD.\
+
+* Leveraged Spatial Analytics and Predictive Modeling through the use of R, GIS and SAS, to unlock restaurant growth insights and 1,000+ opportunities within APAC region
+* Developed semi-automated competition tracking dashboard on PowerBI, with data sourced from web-scraping R scripts
+* Co-designed and tested in-house GIS platform, using RShiny, as a GIS SaaS Proof-of-Concept platform
+* Collaborated with senior management and working level teams of franchise partners to enhance restaurant growth capabilities
+* Developed close working relations with a local university to further analytical knowledge and synergies
+:::
+<!-- End of Inner Two Columns - Text Column -->
+::::
+<!-- End of Inner Two Columns -->
+
+::: 
+<!-- End of Left Column -->
+
+<!-- Start of Right Column -->
+::: {.g-col-3}
+FEB 2016 – MAY 2023
+::: 
+<!-- End of Right Column -->
+::: 
+<!-- End of Grid -->
 
 <!-- Start of Grid -->
 ::: {.grid}
@@ -83,11 +96,17 @@ FEB 2016 – PRESENT
 ::: {.column width="6%"}
 [![](SMU.jpg)](https://www.smu.edu.sg/){height="55"}
 :::
+::: {.column width="2%"}
+:::
 <!-- End of Inner Two Columns - Logo Column -->
 <!-- Start of Inner Two Columns - Text Column -->
-::: {.column width="94%"}
+::: {.column width="92%"}
+**MITB Analytics Research Projects**\
 SINGAPORE MANAGEMENT UNIVERSITY (SMU)\
-**MITB Analytics Research Projects**
+
+* Uncovering retail customer segmentation: A nuanced comparison of clustering algorithms using rough set reduced dataset
+* Project partnership with Ninja Van: Improving overall shipper retention rates
+* VAST Challenge 2021
 :::
 <!-- End of Inner Two Columns - Text Column -->
 ::::
@@ -103,8 +122,7 @@ JAN 2021 - DEC 2022
 <!-- End of Right Column -->
 ::: 
 <!-- End of Grid -->
-* Uncovering retail customer segmentation: A nuanced comparison of clustering algorithms using rough set reduced dataset
-* Project partnership with Ninja Van: Improving overall shipper retention rates
+
 
 <!-- Start of Grid -->
 ::: {.grid}
@@ -117,16 +135,22 @@ JAN 2021 - DEC 2022
 ::: {.column width="6%"}
 [![](pizzahut.png)](https://www.pizzahut.com/){height="55"}
 :::
+::: {.column width="2%"}
+:::
 <!-- End of Inner Two Columns - Logo Column -->
 <!-- Start of Inner Two Columns - Text Column -->
-::: {.column width="94%"}
+::: {.column width="92%"}
+**Development Specialist**\
 PIZZA HUT RESTAURANTS ASIA PTE. LTD.\
-**Development Specialist**
+
+* Managed financial reporting of Development tools and forecasting of restaurant builds across APAC
+* Monitored new restaurants’ financial health against forecasted sales
+* Analysed pre-post restaurant redevelopment effectiveness
+* Coordinated “to be Developed” system with Legal and Finance on contract renewal terms
 :::
 <!-- End of Inner Two Columns - Text Column -->
 ::::
 <!-- End of Inner Two Columns -->
-
 ::: 
 <!-- End of Left Column -->
 
@@ -138,10 +162,6 @@ JUL 2014 - JAN 2016
 ::: 
 <!-- End of Grid -->
 
-* Managed financial reporting of Development tools and forecasting of restaurant builds across APAC
-* Monitored new restaurants’ financial health against forecasted sales
-* Analysed pre-post restaurant redevelopment effectiveness
-* Coordinated “to be Developed” system with Legal and Finance on contract renewal terms
 
 <!-- Start of Grid -->
 ::: {.grid}
@@ -154,11 +174,17 @@ JUL 2014 - JAN 2016
 ::: {.column width="6%"}
 [![](watlow.png)](https://www.watlow.com/){height="55"}
 :::
+::: {.column width="2%"}
+:::
 <!-- End of Inner Two Columns - Logo Column -->
 <!-- Start of Inner Two Columns - Text Column -->
-::: {.column width="94%"}
+::: {.column width="92%"}
+**Senior Marketing Analyst / Continuous Improvement Facilitator (Finance Secondment)**\
 WATLOW SINGAPORE PTE. LTD.\
-**Senior Marketing Analyst / Continuous Improvement Facilitator (Finance Attachment)**
+
+* Active contributions in Asia’s monthly FP&A budgeting exercise
+* Conceptualized and established forecasting platform across Asia, for macro-overview on sales and operations planning
+* Performed financial reporting process
 :::
 <!-- End of Inner Two Columns - Text Column -->
 ::::
@@ -175,9 +201,6 @@ APR 2012 - JUN 2014
 ::: 
 <!-- End of Grid -->
 
-* Active contributions in Asia’s monthly FP&A budgeting exercise
-* Conceptualized and established forecasting platform across Asia, for macro-overview on sales and operations planning
-* Performed financial reporting process
 
 <!-- Start of Grid -->
 ::: {.grid}
@@ -190,11 +213,16 @@ APR 2012 - JUN 2014
 ::: {.column width="6%"}
 [![](watlow.png)](https://www.watlow.com/){height="55"}
 :::
+::: {.column width="2%"}
+:::
 <!-- End of Inner Two Columns - Logo Column -->
 <!-- Start of Inner Two Columns - Text Column -->
-::: {.column width="94%"}
+::: {.column width="92%"}
+**Marketing Analyst / Continuous Improvement Facilitator**\
 WATLOW SINGAPORE PTE. LTD.\
-**Marketing Analyst / Continuous Improvement Facilitator**
+
+* Implemented Saleslogix (CRM system) across Asia, for increased visibility on sales opportunities
+* Facilitated cross-functional Lean improvement initiatives
 :::
 <!-- End of Inner Two Columns - Text Column -->
 ::::
@@ -212,9 +240,6 @@ OCT 2010 - MAR 2012
 <!-- End of Grid -->
 
 
-* Implemented Saleslogix (CRM system) across Asia, for increased visibility on sales opportunities
-* Facilitated cross-functional Lean improvement initiatives
-
 <!-- Start of Grid -->
 ::: {.grid}
 <!-- Start of Left Column -->
@@ -226,28 +251,21 @@ OCT 2010 - MAR 2012
 ::: {.column width="6%"}
 [![](spire.jpg)](https://www.spireresearch.com/){height="55"}
 :::
+::: {.column width="2%"}
+:::
+
 <!-- End of Inner Two Columns - Logo Column -->
 <!-- Start of Inner Two Columns - Text Column -->
-::: {.column width="94%"}
+::: {.column width="92%"}
+**Assistant Consultant (Intern)**\
 SPIRE RESEARCH & CONSULTING\
-**Assistant Consultant (Intern)**
+
+* Advised on trends and opportunities in key SG industries, for a foreign development agency
+* Advised on growth areas for a multinational automotive company in Indonesia
 :::
 <!-- End of Inner Two Columns - Text Column -->
 ::::
 <!-- End of Inner Two Columns -->
-
-
-
-
-
-
-
-
-SPIRE RESEARCH & CONSULTING\
-**Assistant Consultant (Intern)**
-
-* Advised on trends and opportunities in key SG industries, for a foreign development agency
-* Advised on growth areas for a multinational automotive company in Indonesia
 ::: 
 <!-- End of Left Column -->
 
@@ -272,11 +290,13 @@ JUL 2009 - DEC 2009
 ::: {.column width="6%"}
 [![](SMU.jpg)](https://www.smu.edu.sg/){height="55"}
 :::
+::: {.column width="2%"}
+:::
 <!-- End of Inner Two Columns - Logo Column -->
 <!-- Start of Inner Two Columns - Text Column -->
-::: {.column width="94%"}
-SINGAPORE MANAGEMENT UNIVERSITY (SMU)\
-**Master of IT in Business (MITB) (Analytics Track, SAS Scholarship)**
+::: {.column width="92%"}
+**Master of IT in Business (MITB) (Analytics Track, SAS Scholarship)**\
+SINGAPORE MANAGEMENT UNIVERSITY (SMU)
 :::
 <!-- End of Inner Two Columns - Text Column -->
 ::::
@@ -304,11 +324,13 @@ SINGAPORE MANAGEMENT UNIVERSITY (SMU)\
 ::: {.column width="6%"}
 [![](wharton.png)](https://www.wharton.upenn.edu/){height="55"}
 :::
+::: {.column width="2%"}
+:::
 <!-- End of Inner Two Columns - Logo Column -->
 <!-- Start of Inner Two Columns - Text Column -->
-::: {.column width="94%"}
-WHARTON EXECUTIVE EDUCATION, PHILADELPHIA\
-**High-Potential Leaders: Accelerating Your Impact**
+::: {.column width="92%"}
+**High-Potential Leaders: Accelerating Your Impact**\
+WHARTON EXECUTIVE EDUCATION, PHILADELPHIA
 :::
 <!-- End of Inner Two Columns - Text Column -->
 ::::
@@ -322,7 +344,7 @@ WHARTON EXECUTIVE EDUCATION, PHILADELPHIA\
 2019
 ::: 
 <!-- End of Right Column -->
-::: 
+:::
 <!-- End of Grid -->
 
 <!-- Start of Grid -->
@@ -336,11 +358,13 @@ WHARTON EXECUTIVE EDUCATION, PHILADELPHIA\
 ::: {.column width="6%"}
 [![](ISCA.jpg)](https://www.isca.org.sg/){height="55"}
 :::
+::: {.column width="2%"}
+:::
 <!-- End of Inner Two Columns - Logo Column -->
 <!-- Start of Inner Two Columns - Text Column -->
-::: {.column width="94%"}
-INSTITUTE OF SINGAPORE CHARTERED ACCOUNTANTS (ISCA), SINGAPORE\
-**Chartered Accountant (CA), Singapore**
+::: {.column width="92%"}
+**Chartered Accountant (CA), Singapore**\
+INSTITUTE OF SINGAPORE CHARTERED ACCOUNTANTS (ISCA), SINGAPORE
 :::
 <!-- End of Inner Two Columns - Text Column -->
 ::::
@@ -368,11 +392,13 @@ INSTITUTE OF SINGAPORE CHARTERED ACCOUNTANTS (ISCA), SINGAPORE\
 ::: {.column width="6%"}
 [![](SMU.jpg)](https://www.smu.edu.sg/){height="55"}
 :::
+::: {.column width="2%"}
+:::
 <!-- End of Inner Two Columns - Logo Column -->
 <!-- Start of Inner Two Columns - Text Column -->
-::: {.column width="94%"}
-SINGAPORE MANAGEMENT UNIVERSITY (SMU)\
-**Bachelor of Business Management (BBM), OBHR and Finance**
+::: {.column width="92%"}
+**Bachelor of Business Management (BBM), OBHR and Finance**\
+SINGAPORE MANAGEMENT UNIVERSITY (SMU)
 :::
 <!-- End of Inner Two Columns - Text Column -->
 ::::

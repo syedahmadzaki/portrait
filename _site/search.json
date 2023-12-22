@@ -2,16 +2,16 @@
   {
     "objectID": "index.html",
     "href": "index.html",
-    "title": "Welcome To My Page!",
+    "title": "Syed Ahmad Zaki",
     "section": "",
-    "text": "Thanks for dropping by!\nI’m currently working in Pizza Hut Asia Pacific Franchise as a Development Services Manager. Simply put, i help my regional franchise partners identify where they can open their next store, using data analytics and predictive modeling. It’s an exciting venture, where we marry the very best of science (data analytics) and art (my franchise partners’ deep real estate experience) for sustainable net new unit growth.\nOn this profile, i’ll share more about myself as well as the projects that i’ve done thus far.\nAs such, feel free to reach out to me on LinkedIn or email."
+    "text": "Thanks for dropping by!\n\nMy name is Syed Ahmad Zaki, and i currently work in Pizza Hut Global as Manager, Market Planning.\n\nSimply put, i help my global Pizza Hut Restaurant Development leaders and their franchise partners, identify where they can open their next restaurant, using data analytics and predictive modeling. It’s an exciting venture, where we marry the very best of science (data analytics) and art (my franchise partners’ deep real estate experience) for sustainable net new unit growth.\n\nOn this profile, i’ll share more about myself, as well as the projects that i’ve done thus far. As such, feel free to reach out to me on either LinkedIn or Email."
   },
   {
     "objectID": "about.html",
     "href": "about.html",
-    "title": "About",
+    "title": "More About Me",
     "section": "",
-    "text": "About this site\n\n1 + 1\n\n[1] 2"
+    "text": "I’m truly blessed to have the opportunity to work with global franchise partners and teams in helping them unearth the right locations, using spatial data analytics. Since the field of data analytics (not just spatial) is ever evolving, i’m on the constant search for new ideas, knowledge, and a yearning to expand my analytical skillsets."
   },
   {
     "objectID": "about.html#experience",
@@ -24,15 +24,15 @@
     "objectID": "about.html#professional-profile",
     "href": "about.html#professional-profile",
     "title": "More About Me",
-    "section": "PROFESSIONAL PROFILE",
-    "text": "PROFESSIONAL PROFILE\nAPAC business partner with excellent communication and interpersonal skills. Data-driven problem solver with wide-ranging cross-functional background. An avid learner in expanding analytical skillset."
+    "section": "",
+    "text": "APAC business partner with excellent communication and interpersonal skills. Data-driven problem solver with wide-ranging cross-functional background. An avid learner in expanding analytical skillset."
   },
   {
     "objectID": "about.html#experiences",
     "href": "about.html#experiences",
     "title": "More About Me",
     "section": "EXPERIENCES",
-    "text": "EXPERIENCES\n\n\n\n\n\n\n\n\n\n\n\n\n\nPIZZA HUT ASIA PACIFIC FRANCHISE PTE. LTD.\nDevelopment Services Manager\n\n\n\n\n\n\n\nFEB 2016 – PRESENT\n\n\n\n\n\nAnalysed franchisees’ data and identified franchisees’ growth opportunities using spatial analytics and predictive modeling\nDeveloped competition tracking dashboard on PowerBI to monitor Pizza Hut APAC’s growth performance vs. competitors\nTrained franchise partners on spatial analytics and predictive modeling to improve franchisee’s in-house analytical capabilities\nCollaborated with franchisees across all levels of their organization to drive their implementation of growth strategies\nDesigned and tested in-house GIS platform using RShiny\n\n\n\n\n\n\n\n\n\n\n\n\n\n\nSINGAPORE MANAGEMENT UNIVERSITY (SMU)\nMITB Analytics Research Projects\n\n\n\n\n\n\n\nJAN 2021 - DEC 2022\n\n\n\n\n\nUncovering retail customer segmentation: A nuanced comparison of clustering algorithms using rough set reduced dataset\nProject partnership with Ninja Van: Improving overall shipper retention rates\n\n\n\n\n\n\n\n\n\n\n\n\n\n\nPIZZA HUT RESTAURANTS ASIA PTE. LTD.\nDevelopment Specialist\n\n\n\n\n\n\n\nJUL 2014 - JAN 2016\n\n\n\n\n\nManaged financial reporting of Development tools and forecasting of restaurant builds across APAC\nMonitored new restaurants’ financial health against forecasted sales\nAnalysed pre-post restaurant redevelopment effectiveness\nCoordinated “to be Developed” system with Legal and Finance on contract renewal terms\n\n\n\n\n\n\n\n\n\n\n\n\n\n\nWATLOW SINGAPORE PTE. LTD.\nSenior Marketing Analyst / Continuous Improvement Facilitator (Finance Attachment)\n\n\n\n\n\n\n\nAPR 2012 - JUN 2014\n\n\n\n\n\nActive contributions in Asia’s monthly FP&A budgeting exercise\nConceptualized and established forecasting platform across Asia, for macro-overview on sales and operations planning\nPerformed financial reporting process\n\n\n\n\n\n\n\n\n\n\n\n\n\n\nWATLOW SINGAPORE PTE. LTD.\nMarketing Analyst / Continuous Improvement Facilitator\n\n\n\n\n\n\n\nOCT 2010 - MAR 2012\n\n\n\n\n\nImplemented Saleslogix (CRM system) across Asia, for increased visibility on sales opportunities\nFacilitated cross-functional Lean improvement initiatives\n\n\n\n\n\n\n\n\n\n\n\n\n\n\nSPIRE RESEARCH & CONSULTING\nAssistant Consultant (Intern)\n\n\n\nSPIRE RESEARCH & CONSULTING\nAssistant Consultant (Intern)\n\nAdvised on trends and opportunities in key SG industries, for a foreign development agency\nAdvised on growth areas for a multinational automotive company in Indonesia\n\n\n\n\n\nJUL 2009 - DEC 2009"
+    "text": "EXPERIENCES\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\nManager, Market Planning\nPIZZA HUT GLOBAL\n\n\nKey thought partner to BMU Development leaders\nChief cheerleader to a talented team of market planners spread globally\n\n\n\n\n\n\n\n\nJUN 2023 – PRESENT\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\nDevelopment Services Manager\nPIZZA HUT ASIA PACIFIC FRANCHISE PTE. LTD.\n\n\nLeveraged Spatial Analytics and Predictive Modeling through the use of R, GIS and SAS, to unlock restaurant growth insights and 1,000+ opportunities within APAC region\nDeveloped semi-automated competition tracking dashboard on PowerBI, with data sourced from web-scraping R scripts\nCo-designed and tested in-house GIS platform, using RShiny, as a GIS SaaS Proof-of-Concept platform\nCollaborated with senior management and working level teams of franchise partners to enhance restaurant growth capabilities\nDeveloped close working relations with a local university to further analytical knowledge and synergies\n\n\n\n\n\n\n\n\nFEB 2016 – MAY 2023\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\nMITB Analytics Research Projects\nSINGAPORE MANAGEMENT UNIVERSITY (SMU)\n\n\nUncovering retail customer segmentation: A nuanced comparison of clustering algorithms using rough set reduced dataset\nProject partnership with Ninja Van: Improving overall shipper retention rates\nVAST Challenge 2021\n\n\n\n\n\n\n\n\nJAN 2021 - DEC 2022\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\nDevelopment Specialist\nPIZZA HUT RESTAURANTS ASIA PTE. LTD.\n\n\nManaged financial reporting of Development tools and forecasting of restaurant builds across APAC\nMonitored new restaurants’ financial health against forecasted sales\nAnalysed pre-post restaurant redevelopment effectiveness\nCoordinated “to be Developed” system with Legal and Finance on contract renewal terms\n\n\n\n\n\n\n\n\nJUL 2014 - JAN 2016\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\nSenior Marketing Analyst / Continuous Improvement Facilitator (Finance Secondment)\nWATLOW SINGAPORE PTE. LTD.\n\n\nActive contributions in Asia’s monthly FP&A budgeting exercise\nConceptualized and established forecasting platform across Asia, for macro-overview on sales and operations planning\nPerformed financial reporting process\n\n\n\n\n\n\n\n\nAPR 2012 - JUN 2014\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\nMarketing Analyst / Continuous Improvement Facilitator\nWATLOW SINGAPORE PTE. LTD.\n\n\nImplemented Saleslogix (CRM system) across Asia, for increased visibility on sales opportunities\nFacilitated cross-functional Lean improvement initiatives\n\n\n\n\n\n\n\n\nOCT 2010 - MAR 2012\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\nAssistant Consultant (Intern)\nSPIRE RESEARCH & CONSULTING\n\n\nAdvised on trends and opportunities in key SG industries, for a foreign development agency\nAdvised on growth areas for a multinational automotive company in Indonesia\n\n\n\n\n\n\n\n\nJUL 2009 - DEC 2009"
   },
   {
     "objectID": "about.html#education",
@@ -46,6 +46,90 @@
     "href": "about.html#education-certifications",
     "title": "More About Me",
     "section": "EDUCATION / CERTIFICATIONS",
-    "text": "EDUCATION / CERTIFICATIONS\n\n\n\n\n\n\n\n\n\n\n\n\n\nSINGAPORE MANAGEMENT UNIVERSITY (SMU)\nMaster of IT in Business (MITB) (Analytics Track, SAS Scholarship)\n\n\n\n\n\n\n\n2022\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\nWHARTON EXECUTIVE EDUCATION, PHILADELPHIA\nHigh-Potential Leaders: Accelerating Your Impact\n\n\n\n\n\n\n\n2019\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\nINSTITUTE OF SINGAPORE CHARTERED ACCOUNTANTS (ISCA), SINGAPORE\nChartered Accountant (CA), Singapore\n\n\n\n\n\n\n\n2019\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\nSINGAPORE MANAGEMENT UNIVERSITY (SMU)\nBachelor of Business Management (BBM), OBHR and Finance\n\n\n\n\n\n\n\n2010"
+    "text": "EDUCATION / CERTIFICATIONS\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\nMaster of IT in Business (MITB) (Analytics Track, SAS Scholarship)\nSINGAPORE MANAGEMENT UNIVERSITY (SMU)\n\n\n\n\n\n\n\n2022\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\nHigh-Potential Leaders: Accelerating Your Impact\nWHARTON EXECUTIVE EDUCATION, PHILADELPHIA\n\n\n\n\n\n\n\n2019\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\nChartered Accountant (CA), Singapore\nINSTITUTE OF SINGAPORE CHARTERED ACCOUNTANTS (ISCA), SINGAPORE\n\n\n\n\n\n\n\n2019\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\nBachelor of Business Management (BBM), OBHR and Finance\nSINGAPORE MANAGEMENT UNIVERSITY (SMU)\n\n\n\n\n\n\n\n2010"
+  },
+  {
+    "objectID": "books.html",
+    "href": "books.html",
+    "title": "Books",
+    "section": "",
+    "text": "About this site\n\n1 + 1\n\n[1] 2"
+  },
+  {
+    "objectID": "projects.html",
+    "href": "projects.html",
+    "title": "Projects",
+    "section": "",
+    "text": "This portfolio includes the various research work i’ve done,\nas well as other projects on the side.\n\n1 + 1\n\n[1] 2\n\n\n\n\n\n\n\n\n\n\n  \n\n\n\n\nVAST Challenge 2021 (Mini-Challenge 2) Part 1\n\n\n\n\n\nInvestigating the Mini-Challenge 2 of VAST Challenge 2021\n\n\n\n\n\n\nJul 26, 2021\n\n\nSyed Ahmad Zaki\n\n\n\n\n\n\nNo matching items\n\n\n\n\n\n\nNo matching items"
+  },
+  {
+    "objectID": "about.html#professional-profile-1",
+    "href": "about.html#professional-profile-1",
+    "title": "More About Me",
+    "section": "PROFESSIONAL PROFILE",
+    "text": "PROFESSIONAL PROFILE\nAPAC business partner with excellent communication and interpersonal skills. Data-driven problem solver with wide-ranging cross-functional background. An avid learner in expanding analytical skillset."
+  },
+  {
+    "objectID": "index.html#hi-im-syed-ahmad-zaki.",
+    "href": "index.html#hi-im-syed-ahmad-zaki.",
+    "title": "Syed Ahmad Zaki",
+    "section": "",
+    "text": "Thanks for dropping by!\nI’m currently working in Pizza Hut Asia Pacific Franchise as a Development Services Manager. Simply put, i help my regional franchise partners identify where they can open their next store, using data analytics and predictive modeling. It’s an exciting venture, where we marry the very best of science (data analytics) and art (my franchise partners’ deep real estate experience) for sustainable net new unit growth.\nOn this profile, i’ll share more about myself as well as the projects that i’ve done thus far.\nAs such, feel free to reach out to me on LinkedIn or email."
+  },
+  {
+    "objectID": "index.html#hi-im-syed-ahmad-zaki.-1",
+    "href": "index.html#hi-im-syed-ahmad-zaki.-1",
+    "title": "Syed Ahmad Zaki",
+    "section": "",
+    "text": "Thanks for dropping by!\nI’m currently working in Pizza Hut Asia Pacific Franchise as a Development Services Manager. Simply put, i help my regional franchise partners identify where they can open their next store, using data analytics and predictive modeling. It’s an exciting venture, where we marry the very best of science (data analytics) and art (my franchise partners’ deep real estate experience) for sustainable net new unit growth.\nOn this profile, i’ll share more about myself as well as the projects that i’ve done thus far.\nAs such, feel free to reach out to me on LinkedIn or email."
+  },
+  {
+    "objectID": "index.html#hi-there.",
+    "href": "index.html#hi-there.",
+    "title": "Syed Ahmad Zaki",
+    "section": "",
+    "text": "Thanks for dropping by!\n\nMy name is Syed Ahmad Zaki, and i currently work in Pizza Hut Global as Manager, Market Planning. Simply put, i help my global Pizza Hut Restaurant Development leaders and their regional franchise partners identify where they can open their next restaurant, using data analytics and predictive modeling. It’s an exciting venture, where we marry the very best of science (data analytics) and art (my franchise partners’ deep real estate experience) for sustainable net new unit growth.\n\nOn this profile, i’ll share more about myself, as well as the projects that i’ve done thus far. As such, feel free to reach out to me on LinkedIn or Email."
+  },
+  {
+    "objectID": "index.html#hi-there",
+    "href": "index.html#hi-there",
+    "title": "Syed Ahmad Zaki",
+    "section": "",
+    "text": "Thanks for dropping by!\n\nMy name is Syed Ahmad Zaki, and i currently work in Pizza Hut Global as Manager, Market Planning.\n\nSimply put, i help my global Pizza Hut Restaurant Development leaders and their franchise partners, identify where they can open their next restaurant, using data analytics and predictive modeling. It’s an exciting venture, where we marry the very best of science (data analytics) and art (my franchise partners’ deep real estate experience) for sustainable net new unit growth.\n\nOn this profile, i’ll share more about myself, as well as the projects that i’ve done thus far. As such, feel free to reach out to me on either LinkedIn or Email."
+  },
+  {
+    "objectID": "school/vast2021_1/index.html",
+    "href": "school/vast2021_1/index.html",
+    "title": "VAST Challenge 2021 (Mini-Challenge 2) Part 1",
+    "section": "",
+    "text": "Team Member:\nSyed Ahmad Zaki, Singapore Management University\nStudent Team: YES\nTools Used:\nRmarkdown\nApproximately how many hours were spent working on this submission in total?\n~200 hours\nMay we post your submission in the Visual Analytics Benchmark Repository after VAST Challenge 2021 is complete?\nYES\nVideo\nProvide a link to your video. Example: http://www.westbirmingham.ac.uk/uwb-smith-mc2-video.wmv"
+  },
+  {
+    "objectID": "school/vast2021_1/index.html#introduction",
+    "href": "school/vast2021_1/index.html#introduction",
+    "title": "VAST Challenge 2021 (Mini-Challenge 2) Part 1",
+    "section": "1. Introduction",
+    "text": "1. Introduction\n\n1.1 Our Mission (Should We Accept It!)\nAs a visual analytics expert assisting law enforcement, your mission is to identify which GASTech employees made which purchases and identify suspicious patterns of behavior. You must cope with uncertainties that result from missing, conflicting, and imperfect data to make recommendations for further investigation.\nUse visual analytics to analyze the available data and develop responses to the questions below. In addition, prepare a video that shows how you used visual analytics to solve this challenge. Submission instructions are available here. Entry forms are available for download here."
+  },
+  {
+    "objectID": "school/vast2021_1/index.html#literature-review",
+    "href": "school/vast2021_1/index.html#literature-review",
+    "title": "VAST Challenge 2021 (Mini-Challenge 2) Part 1",
+    "section": "2. Literature Review",
+    "text": "2. Literature Review\nBefore we begin our literature review, it’s important that we start by loading all the necessary datasets provided in the VAST Challenge 2021 Mini-Challenge 2.\nTeam Member:\nSyed Ahmad Zaki, Singapore Management University of Singapore, ahmadzaki.2020@mitb.smu.edu.sg\nStudent Team: YES\nTools Used:\nRmarkdown\nApproximately how many hours were spent working on this submission in total?\n~200 hours\nMay we post your submission in the Visual Analytics Benchmark Repository after VAST Challenge 2021 is complete?\nYES\nVideo\nProvide a link to your video. Example: http://www.westbirmingham.ac.uk/uwb-smith-mc2-video.wmv"
+  },
+  {
+    "objectID": "school/vast2021_1/index.html#introduction-1",
+    "href": "school/vast2021_1/index.html#introduction-1",
+    "title": "VAST Challenge 2021 (Mini-Challenge 2) Part 1",
+    "section": "1. Introduction",
+    "text": "1. Introduction\n\n1.1 Our Mission (Should We Accept It!)\nAs a visual analytics expert assisting law enforcement, your mission is to identify which GASTech employees made which purchases and identify suspicious patterns of behavior. You must cope with uncertainties that result from missing, conflicting, and imperfect data to make recommendations for further investigation.\nUse visual analytics to analyze the available data and develop responses to the questions below. In addition, prepare a video that shows how you used visual analytics to solve this challenge. Submission instructions are available here. Entry forms are available for download here."
+  },
+  {
+    "objectID": "school/vast2021_1/index.html#literature-review-1",
+    "href": "school/vast2021_1/index.html#literature-review-1",
+    "title": "VAST Challenge 2021 (Mini-Challenge 2) Part 1",
+    "section": "2. Literature Review",
+    "text": "2. Literature Review\nBefore we begin our literature review, it’s important that we start by loading all the necessary datasets provided in the VAST Challenge 2021 Mini-Challenge 2.\n\n# Loading all datasets and image\ncc &lt;- readr::read_csv(\"data/cc_data.csv\") # Add credit card data\nloyalty &lt;- readr::read_csv(\"data/loyalty_data.csv\") # Add loyalty data\nmc2 &lt;- raster(\"data/MC2-tourist_modified.tif\") # Add tif file as a raster layer\ngps &lt;- readr::read_csv(\"data/gps.csv\") # Add gps data\ncar &lt;- readr::read_csv(\"data/car-assignments.csv\") # Add car assignments\nAbila_st &lt;- st_read(dsn = \"data\", layer = \"Abila\")\nKronos_sf &lt;- st_as_sf(st_read(dsn = \"data\", layer = \"Kronos_Island\"))\n\nA cursory look at the dataset reveals the following data types:\n\n\n\n\n\n\n\n\nData\nType\nDescription\n\n\n\n\nCredit Card.csv (cc)\nAspatial\nCredit card txns by timestamp, location and amt\n\n\nLoyalty.csv\nAspatial\nLoyalty card txns by date, location and amt\n\n\nCar Assignment.csv (car)\nAspatial\nCar assignment ID with individuals’ name and role\n\n\nMC2.jpg\nAspatial\nAbila’s map in jpeg format\n\n\nMC2.tif\nGeospatial\nAbila’s map in a geotiff format\n\n\nGPS.csv (gps)\nGeospatial\nGPS points (latlong) by car ID and timestamp\n\n\nAbila\nGeospatial\nAbila’s road network\n\n\nKronos Island\nGeospatial\nPolygon showing Kronos Island’s admin boundary\n\n\n\nAn in-depth look at the dataset reveals the following fields:\n\n\n\nFile Name\ncc\nloyalty\ngps\ncar\nmc2\n\n\n\n\nFile Type\ncsv\ncsv\ncsv\ncsv\npic\n\n\nCount\n1,490\n1,392\n685,169\n44\n-\n\n\nDate Format\nm/d/y\nm/d/y\nm/d/y\n-\n-\n\n\nTime Format\nh:m\n-\nh:m:s\n-\n-\n\n\nLocation\nYes\nYes\n-\n-\nYes\n\n\nPrice\nYes\nYes\n-\n-\n-\n\n\nlast4ccnum\nYes\n-\n-\n-\n-\n\n\nloyaltynum\n-\nYes\n-\n-\n-\n\n\nID\n-\n-\nYes\nYes\n-\n\n\nLatlong\n-\n-\nYes\n-\n-\n\n\nNames\n-\n-\n-\nYes\n-\n\n\nEmployment Details\n-\n-\n-\nYes\n-\n\n\n\nNot all files have the same fields. While it’s easy to merge gps and car data using its unique ID, there are no unique fields tying the cc and loyalty data together. Thus, merging both cc and loyalty data together would require some form of fuzzy joining logic. Separately, to add to the complexity, we would need to identify the various locations within the gps data, using both the cc and mc2 map.\nWith these dataset in mind, the following considerations would need to be addressed:\n\n2.1 Fuzzy Matching\nThere are a few ways to employ fuzzy matching in our dataset. One is to use the native adist function within R, but its processing time leaves much to be desired. The other is to use packages specifically designed for fuzzy matching. One such package that is built for speed in matching similar phrases is stringdist. It uses openMP for parallel computing to speed up its matching of unequal content. The only downside (though it’s hardly a downside) is that it requires the columns of comparison to be housed in the same dataframe. Fuzzyjoin, built on top of stringdist, allows comparison of columns housed in different dataset, and its output include a merging of both datasets.\nUnfortunately, deciding on the fuzzy logic package is the easy part. The harder part is to decide on the appropriate fuzzy join logic. Here’s a list of distance metrics currently supported by stringdist:\n\n\n\n\n\n\n\nMethod Name\nDescription\n\n\n\n\nosa\nOptimal string aligment, (restricted Damerau-Levenshtein distance)\n\n\nlv\nLevenshtein distance (as in R’s native adist).\n\n\ndl\nFull Damerau-Levenshtein distance.\n\n\nhamming\nHamming distance (a and b must have same nr of characters).\n\n\nlcs\nLongest common substring distance\n\n\nqgram\nq-gram distance\n\n\ncosine\ncosine distance between q-gram profiles\n\n\njaccard\nJaccard distance between q-gram profiles\n\n\njw\nJaro, or Jaro-Winkler distance\n\n\n\nOut of the above methods, osa, lv and dl seems most apt, since we’re dealing with phrases with differing lengths and are more concerned with slight edits, realignment, addition and subtraction of letters within these phrases. We’ll rely on the osa method since it’s a balance between finding the right edits and speed.\n\n\n2.2 Map Visualisations of GPS Data\nWhile it makes sense to convert our GPS points into spatial lines, using the furnished map pic as a basemap is less than ideal. As shown below, it’s unclear whether the GPS path coincides with the location icons shown on the map. These icons are far too large, and does not reflect whether these GPS points either stopped at or merely drove past these points. At the same time, the GPS path seem to run on a road network, that is not reflected within the furnished map pic."
   }
 ]

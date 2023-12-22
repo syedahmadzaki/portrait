@@ -1,30 +1,32 @@
 ---
-title: "Welcome To My Page!"
+title: ""
 page-layout: full
+image: portrait3.jpg
+toc: false
+about: 
+  template: trestles
+  image-shape: round
+  image-width: 15em
+  links: 
+    - icon: linkedin
+      text: LinkedIn
+      href: https://www.linkedin.com/in/syed-ahmad-zaki-bin-syed-sakaf-al-attas/
+      target: _blank
+    - icon: github
+      text: Github
+      href: https://github.com/syedahmadzaki
+      target: _blank
+    - icon: envelope
+      text: Email
+      href: mailto:syedahmadzaki@yahoo.com.sg
 ---
 
-<!-- Start of Grid -->
-::: {.grid}
+## Hi there
 
-<!-- Start of Left Column -->
-::: {.g-col-12 .g-col-md-3}
-![](portrait.png)
-::: 
-<!-- End of Left Column -->
-
-<!-- Start of Right Column -->
-::: {.g-col-12 .g-col-md-9}
-## Hi, I'm Syed Ahmad Zaki.
-Thanks for dropping by! 
-
-I'm currently working in [Pizza Hut](https://www.pizzahut.com/) Asia Pacific Franchise as a Development Services Manager. Simply put, i help my regional franchise partners identify where they can open their next store, using data analytics and predictive modeling. It's an exciting venture, where we marry the very best of science (data analytics) and art (my franchise partners' deep real estate experience) for sustainable net new unit growth.
-
-On this profile, i'll share more about myself as well as the projects that i've done thus far. 
-
-As such, feel free to reach out to me on [LinkedIn](https://www.linkedin.com/in/syed-ahmad-zaki-bin-syed-sakaf-al-attas/) or [email](mailto:syedahmadzaki@yahoo.com.sg).
-
-::: 
-<!-- End of Right Column -->
-
-::: 
-<!-- End of Grid -->
+Thanks for dropping by!\
+\
+My name is Syed Ahmad Zaki, and i currently work in [Pizza Hut](https://www.pizzahut.com/) Global as Manager, Market Planning.\
+\
+Simply put, i help my global Pizza Hut Restaurant Development leaders and their franchise partners, identify where they can open their next restaurant, using data analytics and predictive modeling. It's an exciting venture, where we marry the very best of science (data analytics) and art (my franchise partners' deep real estate experience) for sustainable net new unit growth.\
+\
+On this profile, i'll share more about myself, as well as the projects that i've done thus far. As such, feel free to reach out to me on either [LinkedIn](https://www.linkedin.com/in/syed-ahmad-zaki-bin-syed-sakaf-al-attas/) or [Email](mailto:syedahmadzaki@yahoo.com.sg).

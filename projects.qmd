@@ -1,9 +1,22 @@
 ---
 title: "Projects"
 page-layout: full
+include-back-link: false
+toc-location: right
+listing: 
+  - id: school
+    contents: "school/*/index.qmd"
+    sort: "date desc"
+    categories: true
+  - id: personal
+    contents: "personal/*/index.qmd"
+    sort: "date desc"
+    categories: true    
 ---
 
-About this site
+This portfolio includes the various research work i've done,
+
+as well as other projects on the side.
 
 ```{r}
 
