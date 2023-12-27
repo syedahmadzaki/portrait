@@ -31,7 +31,7 @@ format:
     toc_float: false
     header-includes: |
       <link rel="stylesheet" media="screen" href="https://fontlibrary.org//face/lato" type="text/css"/>
-mainfont: Lato
+mainfont: LatoRegular
 
 editor: visual
 
