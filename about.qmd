@@ -6,422 +6,539 @@ page-layout: full
 I'm truly blessed to have the opportunity to work with global franchise partners and teams in helping them unearth the right locations, using spatial data analytics. Since the field of data analytics (not just spatial) is ever evolving, i'm on the constant search for new ideas, knowledge, and a yearning to expand my analytical skillsets.
 
 ## EXPERIENCES
-<!-- Start of Grid -->
-::: {.grid}
-<!-- Start of Left Column -->
-::: {.g-col-9}
 
+<!-- Start of Grid -->
+
+::: grid
+<!-- Start of Left Column -->
+
+::: g-col-9
 <!-- Start of Inner Two Columns -->
-:::: {.columns}
+
+::: columns
 <!-- Start of Inner Two Columns - Logo Column -->
+
 ::: {.column width="6%"}
-[![](pizzahut.png)](https://www.pizzahut.com/){height="20"}
+[![](pizzahut.png)](https://www.pizzahut.com/)
 :::
+
 ::: {.column width="2%"}
 :::
+
 <!-- End of Inner Two Columns - Logo Column -->
+
 <!-- Start of Inner Two Columns - Text Column -->
+
 ::: {.column width="92%"}
 **Manager, Market Planning**\
 PIZZA HUT GLOBAL\
 
-* Key thought partner to BMU Development leaders
-* Chief cheerleader to a talented team of market planners spread globally
+-   Key thought partner to BMU Development leaders
+-   Chief cheerleader to a talented team of market planners spread globally
 :::
-<!-- End of Inner Two Columns - Text Column -->
-::::
-<!-- End of Inner Two Columns -->
 
-::: 
+<!-- End of Inner Two Columns - Text Column -->
+:::
+
+<!-- End of Inner Two Columns -->
+:::
+
 <!-- End of Left Column -->
 
 <!-- Start of Right Column -->
-::: {.g-col-3}
+
+::: g-col-3
 JUN 2023 – PRESENT
-::: 
+:::
+
 <!-- End of Right Column -->
-::: 
+:::
+
 <!-- End of Grid -->
 
-
-
 <!-- Start of Grid -->
-::: {.grid}
-<!-- Start of Left Column -->
-::: {.g-col-9}
 
+::: grid
+<!-- Start of Left Column -->
+
+::: g-col-9
 <!-- Start of Inner Two Columns -->
-:::: {.columns}
+
+::: columns
 <!-- Start of Inner Two Columns - Logo Column -->
+
 ::: {.column width="6%"}
-[![](pizzahut.png)](https://www.pizzahut.com/){height="20"}
+[![](pizzahut.png)](https://www.pizzahut.com/)
 :::
+
 ::: {.column width="2%"}
 :::
+
 <!-- End of Inner Two Columns - Logo Column -->
+
 <!-- Start of Inner Two Columns - Text Column -->
+
 ::: {.column width="92%"}
 **Development Services Manager**\
 PIZZA HUT ASIA PACIFIC FRANCHISE PTE. LTD.\
 
-* Leveraged Spatial Analytics and Predictive Modeling through the use of R, GIS and SAS, to unlock restaurant growth insights and 1,000+ opportunities within APAC region
-* Developed semi-automated competition tracking dashboard on PowerBI, with data sourced from web-scraping R scripts
-* Co-designed and tested in-house GIS platform, using RShiny, as a GIS SaaS Proof-of-Concept platform
-* Collaborated with senior management and working level teams of franchise partners to enhance restaurant growth capabilities
-* Developed close working relations with a local university to further analytical knowledge and synergies
+-   Leveraged Spatial Analytics and Predictive Modeling through the use of R, GIS and SAS, to unlock restaurant growth insights and 1,000+ opportunities within APAC region
+-   Developed semi-automated competition tracking dashboard on PowerBI, with data sourced from web-scraping R scripts
+-   Co-designed and tested in-house GIS platform, using RShiny, as a GIS SaaS Proof-of-Concept platform
+-   Collaborated with senior management and working level teams of franchise partners to enhance restaurant growth capabilities
+-   Developed close working relations with a local university to further analytical knowledge and synergies
 :::
-<!-- End of Inner Two Columns - Text Column -->
-::::
-<!-- End of Inner Two Columns -->
 
-::: 
+<!-- End of Inner Two Columns - Text Column -->
+:::
+
+<!-- End of Inner Two Columns -->
+:::
+
 <!-- End of Left Column -->
 
 <!-- Start of Right Column -->
-::: {.g-col-3}
+
+::: g-col-3
 FEB 2016 – MAY 2023
-::: 
+:::
+
 <!-- End of Right Column -->
-::: 
+:::
+
 <!-- End of Grid -->
 
 <!-- Start of Grid -->
-::: {.grid}
-<!-- Start of Left Column -->
-::: {.g-col-9}
 
+::: grid
+<!-- Start of Left Column -->
+
+::: g-col-9
 <!-- Start of Inner Two Columns -->
-:::: {.columns}
+
+::: columns
 <!-- Start of Inner Two Columns - Logo Column -->
+
 ::: {.column width="6%"}
-[![](SMU.jpg)](https://www.smu.edu.sg/){height="55"}
+[![](SMU.jpg)](https://www.smu.edu.sg/)
 :::
+
 ::: {.column width="2%"}
 :::
+
 <!-- End of Inner Two Columns - Logo Column -->
+
 <!-- Start of Inner Two Columns - Text Column -->
+
 ::: {.column width="92%"}
 **MITB Analytics Research Projects**\
 SINGAPORE MANAGEMENT UNIVERSITY (SMU)\
 
-* Uncovering retail customer segmentation: A nuanced comparison of clustering algorithms using rough set reduced dataset
-* Project partnership with Ninja Van: Improving overall shipper retention rates
-* VAST Challenge 2021
+-   Uncovering retail customer segmentation: A nuanced comparison of clustering algorithms using rough set reduced dataset
+-   Project partnership with Ninja Van: Improving overall shipper retention rates
+-   VAST Challenge 2021
 :::
-<!-- End of Inner Two Columns - Text Column -->
-::::
-<!-- End of Inner Two Columns -->
 
-::: 
+<!-- End of Inner Two Columns - Text Column -->
+:::
+
+<!-- End of Inner Two Columns -->
+:::
+
 <!-- End of Left Column -->
 
 <!-- Start of Right Column -->
-::: {.g-col-3}
+
+::: g-col-3
 JAN 2021 - DEC 2022
-::: 
+:::
+
 <!-- End of Right Column -->
-::: 
+:::
+
 <!-- End of Grid -->
 
-
 <!-- Start of Grid -->
-::: {.grid}
-<!-- Start of Left Column -->
-::: {.g-col-9}
 
+::: grid
+<!-- Start of Left Column -->
+
+::: g-col-9
 <!-- Start of Inner Two Columns -->
-:::: {.columns}
+
+::: columns
 <!-- Start of Inner Two Columns - Logo Column -->
+
 ::: {.column width="6%"}
-[![](pizzahut.png)](https://www.pizzahut.com/){height="55"}
+[![](pizzahut.png)](https://www.pizzahut.com/)
 :::
+
 ::: {.column width="2%"}
 :::
+
 <!-- End of Inner Two Columns - Logo Column -->
+
 <!-- Start of Inner Two Columns - Text Column -->
+
 ::: {.column width="92%"}
 **Development Specialist**\
 PIZZA HUT RESTAURANTS ASIA PTE. LTD.\
 
-* Managed financial reporting of Development tools and forecasting of restaurant builds across APAC
-* Monitored new restaurants’ financial health against forecasted sales
-* Analysed pre-post restaurant redevelopment effectiveness
-* Coordinated “to be Developed” system with Legal and Finance on contract renewal terms
+-   Managed financial reporting of Development tools and forecasting of restaurant builds across APAC
+-   Monitored new restaurants’ financial health against forecasted sales
+-   Analysed pre-post restaurant redevelopment effectiveness
+-   Coordinated “to be Developed” system with Legal and Finance on contract renewal terms
 :::
+
 <!-- End of Inner Two Columns - Text Column -->
-::::
+:::
+
 <!-- End of Inner Two Columns -->
-::: 
+:::
+
 <!-- End of Left Column -->
 
 <!-- Start of Right Column -->
-::: {.g-col-3}
+
+::: g-col-3
 JUL 2014 - JAN 2016
-::: 
+:::
+
 <!-- End of Right Column -->
-::: 
+:::
+
 <!-- End of Grid -->
 
-
 <!-- Start of Grid -->
-::: {.grid}
-<!-- Start of Left Column -->
-::: {.g-col-9}
 
+::: grid
+<!-- Start of Left Column -->
+
+::: g-col-9
 <!-- Start of Inner Two Columns -->
-:::: {.columns}
+
+::: columns
 <!-- Start of Inner Two Columns - Logo Column -->
+
 ::: {.column width="6%"}
-[![](watlow.png)](https://www.watlow.com/){height="55"}
+[![](watlow.png)](https://www.watlow.com/)
 :::
+
 ::: {.column width="2%"}
 :::
+
 <!-- End of Inner Two Columns - Logo Column -->
+
 <!-- Start of Inner Two Columns - Text Column -->
+
 ::: {.column width="92%"}
 **Senior Marketing Analyst / Continuous Improvement Facilitator (Finance Secondment)**\
 WATLOW SINGAPORE PTE. LTD.\
 
-* Active contributions in Asia’s monthly FP&A budgeting exercise
-* Conceptualized and established forecasting platform across Asia, for macro-overview on sales and operations planning
-* Performed financial reporting process
+-   Active contributions in Asia’s monthly FP&A budgeting exercise
+-   Conceptualized and established forecasting platform across Asia, for macro-overview on sales and operations planning
+-   Performed financial reporting process
 :::
-<!-- End of Inner Two Columns - Text Column -->
-::::
-<!-- End of Inner Two Columns -->
 
-::: 
+<!-- End of Inner Two Columns - Text Column -->
+:::
+
+<!-- End of Inner Two Columns -->
+:::
+
 <!-- End of Left Column -->
 
 <!-- Start of Right Column -->
-::: {.g-col-3}
+
+::: g-col-3
 APR 2012 - JUN 2014
-::: 
+:::
+
 <!-- End of Right Column -->
-::: 
+:::
+
 <!-- End of Grid -->
 
-
 <!-- Start of Grid -->
-::: {.grid}
-<!-- Start of Left Column -->
-::: {.g-col-9}
 
+::: grid
+<!-- Start of Left Column -->
+
+::: g-col-9
 <!-- Start of Inner Two Columns -->
-:::: {.columns}
+
+::: columns
 <!-- Start of Inner Two Columns - Logo Column -->
+
 ::: {.column width="6%"}
-[![](watlow.png)](https://www.watlow.com/){height="55"}
+[![](watlow.png)](https://www.watlow.com/)
 :::
+
 ::: {.column width="2%"}
 :::
+
 <!-- End of Inner Two Columns - Logo Column -->
+
 <!-- Start of Inner Two Columns - Text Column -->
+
 ::: {.column width="92%"}
 **Marketing Analyst / Continuous Improvement Facilitator**\
 WATLOW SINGAPORE PTE. LTD.\
 
-* Implemented Saleslogix (CRM system) across Asia, for increased visibility on sales opportunities
-* Facilitated cross-functional Lean improvement initiatives
+-   Implemented Saleslogix (CRM system) across Asia, for increased visibility on sales opportunities
+-   Facilitated cross-functional Lean improvement initiatives
 :::
-<!-- End of Inner Two Columns - Text Column -->
-::::
-<!-- End of Inner Two Columns -->
 
-::: 
+<!-- End of Inner Two Columns - Text Column -->
+:::
+
+<!-- End of Inner Two Columns -->
+:::
+
 <!-- End of Left Column -->
 
 <!-- Start of Right Column -->
-::: {.g-col-3}
+
+::: g-col-3
 OCT 2010 - MAR 2012
-::: 
+:::
+
 <!-- End of Right Column -->
-::: 
+:::
+
 <!-- End of Grid -->
 
-
 <!-- Start of Grid -->
-::: {.grid}
-<!-- Start of Left Column -->
-::: {.g-col-9}
 
+::: grid
+<!-- Start of Left Column -->
+
+::: g-col-9
 <!-- Start of Inner Two Columns -->
-:::: {.columns}
+
+::: columns
 <!-- Start of Inner Two Columns - Logo Column -->
+
 ::: {.column width="6%"}
-[![](spire.jpg)](https://www.spireresearch.com/){height="55"}
+[![](spire.jpg)](https://www.spireresearch.com/)
 :::
+
 ::: {.column width="2%"}
 :::
 
 <!-- End of Inner Two Columns - Logo Column -->
+
 <!-- Start of Inner Two Columns - Text Column -->
+
 ::: {.column width="92%"}
 **Assistant Consultant (Intern)**\
 SPIRE RESEARCH & CONSULTING\
 
-* Advised on trends and opportunities in key SG industries, for a foreign development agency
-* Advised on growth areas for a multinational automotive company in Indonesia
+-   Advised on trends and opportunities in key SG industries, for a foreign development agency
+-   Advised on growth areas for a multinational automotive company in Indonesia
 :::
+
 <!-- End of Inner Two Columns - Text Column -->
-::::
+:::
+
 <!-- End of Inner Two Columns -->
-::: 
+:::
+
 <!-- End of Left Column -->
 
 <!-- Start of Right Column -->
-::: {.g-col-3}
+
+::: g-col-3
 JUL 2009 - DEC 2009
-::: 
+:::
+
 <!-- End of Right Column -->
-::: 
+:::
+
 <!-- End of Grid -->
 
-
 ## EDUCATION / CERTIFICATIONS
-<!-- Start of Grid -->
-::: {.grid}
-<!-- Start of Left Column -->
-::: {.g-col-9}
 
+<!-- Start of Grid -->
+
+::: grid
+<!-- Start of Left Column -->
+
+::: g-col-9
 <!-- Start of Inner Two Columns -->
-:::: {.columns}
+
+::: columns
 <!-- Start of Inner Two Columns - Logo Column -->
+
 ::: {.column width="6%"}
-[![](SMU.jpg)](https://www.smu.edu.sg/){height="55"}
+[![](SMU.jpg)](https://www.smu.edu.sg/)
 :::
+
 ::: {.column width="2%"}
 :::
+
 <!-- End of Inner Two Columns - Logo Column -->
+
 <!-- Start of Inner Two Columns - Text Column -->
+
 ::: {.column width="92%"}
 **Master of IT in Business (MITB) (Analytics Track, SAS Scholarship)**\
 SINGAPORE MANAGEMENT UNIVERSITY (SMU)
 :::
-<!-- End of Inner Two Columns - Text Column -->
-::::
-<!-- End of Inner Two Columns -->
 
-::: 
+<!-- End of Inner Two Columns - Text Column -->
+:::
+
+<!-- End of Inner Two Columns -->
+:::
+
 <!-- End of Left Column -->
 
 <!-- Start of Right Column -->
-::: {.g-col-3}
+
+::: g-col-3
 2022
-::: 
+:::
+
 <!-- End of Right Column -->
-::: 
+:::
+
 <!-- End of Grid -->
 
 <!-- Start of Grid -->
-::: {.grid}
-<!-- Start of Left Column -->
-::: {.g-col-9}
 
+::: grid
+<!-- Start of Left Column -->
+
+::: g-col-9
 <!-- Start of Inner Two Columns -->
-:::: {.columns}
+
+::: columns
 <!-- Start of Inner Two Columns - Logo Column -->
+
 ::: {.column width="6%"}
-[![](wharton.png)](https://www.wharton.upenn.edu/){height="55"}
+[![](wharton.png)](https://www.wharton.upenn.edu/)
 :::
+
 ::: {.column width="2%"}
 :::
+
 <!-- End of Inner Two Columns - Logo Column -->
+
 <!-- Start of Inner Two Columns - Text Column -->
+
 ::: {.column width="92%"}
 **High-Potential Leaders: Accelerating Your Impact**\
 WHARTON EXECUTIVE EDUCATION, PHILADELPHIA
 :::
-<!-- End of Inner Two Columns - Text Column -->
-::::
-<!-- End of Inner Two Columns -->
 
-::: 
+<!-- End of Inner Two Columns - Text Column -->
+:::
+
+<!-- End of Inner Two Columns -->
+:::
+
 <!-- End of Left Column -->
 
 <!-- Start of Right Column -->
-::: {.g-col-3}
+
+::: g-col-3
 2019
-::: 
+:::
+
 <!-- End of Right Column -->
 :::
+
 <!-- End of Grid -->
 
 <!-- Start of Grid -->
-::: {.grid}
-<!-- Start of Left Column -->
-::: {.g-col-9}
 
+::: grid
+<!-- Start of Left Column -->
+
+::: g-col-9
 <!-- Start of Inner Two Columns -->
-:::: {.columns}
+
+::: columns
 <!-- Start of Inner Two Columns - Logo Column -->
+
 ::: {.column width="6%"}
-[![](ISCA.jpg)](https://www.isca.org.sg/){height="55"}
+[![](ISCA.jpg)](https://www.isca.org.sg/)
 :::
+
 ::: {.column width="2%"}
 :::
+
 <!-- End of Inner Two Columns - Logo Column -->
+
 <!-- Start of Inner Two Columns - Text Column -->
+
 ::: {.column width="92%"}
 **Chartered Accountant (CA), Singapore**\
 INSTITUTE OF SINGAPORE CHARTERED ACCOUNTANTS (ISCA), SINGAPORE
 :::
-<!-- End of Inner Two Columns - Text Column -->
-::::
-<!-- End of Inner Two Columns -->
 
-::: 
+<!-- End of Inner Two Columns - Text Column -->
+:::
+
+<!-- End of Inner Two Columns -->
+:::
+
 <!-- End of Left Column -->
 
 <!-- Start of Right Column -->
-::: {.g-col-3}
+
+::: g-col-3
 2019
-::: 
+:::
+
 <!-- End of Right Column -->
-::: 
+:::
+
 <!-- End of Grid -->
 
 <!-- Start of Grid -->
-::: {.grid}
-<!-- Start of Left Column -->
-::: {.g-col-9}
 
+::: grid
+<!-- Start of Left Column -->
+
+::: g-col-9
 <!-- Start of Inner Two Columns -->
-:::: {.columns}
+
+::: columns
 <!-- Start of Inner Two Columns - Logo Column -->
+
 ::: {.column width="6%"}
-[![](SMU.jpg)](https://www.smu.edu.sg/){height="55"}
+[![](SMU.jpg)](https://www.smu.edu.sg/)
 :::
+
 ::: {.column width="2%"}
 :::
+
 <!-- End of Inner Two Columns - Logo Column -->
+
 <!-- Start of Inner Two Columns - Text Column -->
+
 ::: {.column width="92%"}
 **Bachelor of Business Management (BBM), OBHR and Finance**\
 SINGAPORE MANAGEMENT UNIVERSITY (SMU)
 :::
-<!-- End of Inner Two Columns - Text Column -->
-::::
-<!-- End of Inner Two Columns -->
 
-::: 
+<!-- End of Inner Two Columns - Text Column -->
+:::
+
+<!-- End of Inner Two Columns -->
+:::
+
 <!-- End of Left Column -->
 
 <!-- Start of Right Column -->
-::: {.g-col-3}
+
+::: g-col-3
 2010
-::: 
+:::
+
 <!-- End of Right Column -->
-::: 
+:::
+
 <!-- End of Grid -->
-
-
-
-
-
-
-
-
-
-
-
