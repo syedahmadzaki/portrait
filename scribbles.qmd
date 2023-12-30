@@ -1,0 +1,15 @@
+---
+title: "Scribbles"
+page-layout: full
+include-back-link: false
+toc-location: right
+listing:
+    contents: "scribbles/*/index.qmd"
+    type: grid
+    sort: "date desc"
+    categories: true
+
+---
+
+Scribing my musings from everyday interactions and experiences. Also for me to capture and reuse useful information and knowledge.
+\

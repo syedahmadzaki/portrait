@@ -1,6 +1,6 @@
 ---
 title: "VAST Challenge 2021 (Mini-Challenge 2) Part 3"
-description: "Investigating the Mini-Challenge 2 of VAST Challenge 2021: The Finale"
+description: "Investigating the Mini-Challenge 2 of VAST Challenge 2021: Wrapping Up"
 author: 
   - name: Syed Ahmad Zaki
 date: 07-26-2021
@@ -561,6 +561,8 @@ rm(Kronos_sf)                                  # Remove unused earlier dataset
 
 
 ```
+
+![City University London's MC2 Sample Map Entry](img/ferro.png)\
 
 ### 5.5 Question 5 And Its Answers (A Continuation From [Part 2](https://syedahmadzaki.netlify.app/school/vast2021_2/))
 

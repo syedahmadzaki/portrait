@@ -3,13 +3,15 @@ title: "Projects"
 page-layout: full
 include-back-link: false
 toc-location: right
-listing: 
+listing:
   - id: school
     contents: "school/*/index.qmd"
+    type: grid
     sort: "date desc"
     categories: true
   - id: personal
     contents: "personal/*/index.qmd"
+    type: grid
     sort: "date desc"
     categories: true    
 ---

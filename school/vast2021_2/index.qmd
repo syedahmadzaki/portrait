@@ -13,7 +13,6 @@ categories:
   - sf
   - tmap
   - VAST Challenge
-  
 ---
 
 ```{r install-packages, include = FALSE}
@@ -30,7 +29,6 @@ pacman::p_load(ggplot2, tidyverse, readr, grid, plotly, writexl, qwraps2, reshap
 
 ```
 
-
 ```{r load-all-datasets, include = FALSE, echo = T, message = FALSE, results = 'hide'}
 
 # Loading all datasets and images
@@ -45,7 +43,6 @@ Kronos_sf <- st_as_sf(st_read(dsn = "data",
                               layer = "Kronos_Island"))
 
 ```
-
 
 ```{r mc2, include = FALSE}
 
@@ -97,7 +94,6 @@ gps_path1 <- gps_sf %>% # Grouping gps lines according to id and day of month
 # Q2.2_mc2
 
 ```
-
 
 ```{r csv-data-cleaning, include = FALSE}
 
@@ -193,8 +189,6 @@ gps$weekday <- wday(gps$Timestamp,
 
 ```
 
-
-
 ```{r fuzzyjoin-innerjoin-stringdist-cc-loyalty, include = FALSE}
 
 cc_loyalty <- cc %>%                                     # Create a new df showing matches with a max distance difference of 1
@@ -225,7 +219,6 @@ cc_loyalty_1[which(cc_loyalty_1$loyaltynum ==  "L6267" |
              4] <- "duplicate"                           # Identifying duplicate in type column
 
 ```
-
 
 ```{r GPS-data-manipulation, include = FALSE}
 
@@ -258,7 +251,6 @@ spots$No <- rep(1:2965,
                 times = 1)                               # Redo running number in the first column
 
 ```
-
 
 ```{r identifying-stationary-GPS-points, include = FALSE}
 
@@ -486,7 +478,6 @@ spots_median_sf <- st_as_sf(spots_median,
 
 ```
 
-
 ```{r tmap-visualisation, include = FALSE, message = FALSE}
 
 Abila_st_union <- st_union(Abila_st)          # Dissolve Abila road network
@@ -571,19 +562,22 @@ rm(Kronos_sf)                                  # Remove unused earlier dataset
 
 ```
 
+![City University London's MC2 Sample Map Entry](img/ferro.png)\
+
 ### 5.4 Question 4 And Its Answers (A Continuation From [Part 1](https://syedahmadzaki.netlify.app/school/vast2021_1/))
 
 Given the data sources provided, identify potential informal or unofficial relationships among GASTech personnel. Provide evidence for these relationships. Please limit your response to 8 images and 500 words.
 
-#### 5.4.1 Elsa (ID: 7, Black Line) And Brand (ID: 33, Blue Line) Are Seeing Each Other  
+#### 5.4.1 Elsa (ID: 7, Black Line) And Brand (ID: 33, Blue Line) Are Seeing Each Other
 
 Both were frequenting the following places together at similar times and for similar durations:\
-- Chostus Hotel  
-- Frydos Autosupply n' More  
-- Gathering at Engineer's Lars Home on 10th Jan Late Evening  
-- Hippokampos on 15th Jan Afternoon  
+- Chostus Hotel\
+- Frydos Autosupply n' More\
+- Gathering at Engineer's Lars Home on 10th Jan Late Evening\
+- Hippokampos on 15th Jan Afternoon\
 - Ouzeri Elian on 6th Jan Afternoon\
 \
+
 ```{r elsa-brand-couple, warning = FALSE, message = FALSE}
 #| code-fold: show
 
@@ -613,12 +607,13 @@ Q5.4.1
 
 ```
 
-#### 5.4.2 21 Hennie Osvaldo Has Two Homes, Of Which Are Shared By Other Tenants    
-   
-Hennie seem to stay in two separate homes on different evenings:  
-- Either with Lidelse and Birgitta  
+#### 5.4.2 21 Hennie Osvaldo Has Two Homes, Of Which Are Shared By Other Tenants
+
+Hennie seem to stay in two separate homes on different evenings:\
+- Either with Lidelse and Birgitta\
 - Or with Inga, Loreto and Isia\
 \
+
 ```{r hennie-osvaldo-two-homes, warning = FALSE, message = FALSE}
 #| code-fold: show
 
@@ -643,12 +638,13 @@ Q5.4.2
 
 ```
 
-#### 5.4.3 Bertrand (ID: 29, Black Line) And Linnea (ID: 6, Blue Line) Are Seeing Each Other  
+#### 5.4.3 Bertrand (ID: 29, Black Line) And Linnea (ID: 6, Blue Line) Are Seeing Each Other
 
-Although both are staying in the same housing together with Kanon, both seem to frequent the same coffee chain in the mornings and food outlet in the evenings together. Kanon was not present during these meal times.  
-- Coffee Cameleon   
+Although both are staying in the same housing together with Kanon, both seem to frequent the same coffee chain in the mornings and food outlet in the evenings together. Kanon was not present during these meal times.\
+- Coffee Cameleon\
 - Katerina's Cafe\
 \
+
 ```{r bertrand-linnea-couple, warning = FALSE, message = FALSE}
 #| code-fold: show
 
@@ -678,14 +674,15 @@ Q5.4.3
 
 ```
 
-#### 5.4.4 Lidelse (ID: 14, Black Line) And Birgitta (ID: 18, Blue Line) Are Seeing Each Other  
+#### 5.4.4 Lidelse (ID: 14, Black Line) And Birgitta (ID: 18, Blue Line) Are Seeing Each Other
 
-Similarly, although both are staying in the same housing together with Hennie, both seem to frequent the same coffee chains in the mornings and food outlets in the afternoon and evenings together. Hennie was not present during these meal times.  
-- Guy's Gyros  
-- Bean There Done That  
-- Katerina's Cafe  
+Similarly, although both are staying in the same housing together with Hennie, both seem to frequent the same coffee chains in the mornings and food outlets in the afternoon and evenings together. Hennie was not present during these meal times.\
+- Guy's Gyros\
+- Bean There Done That\
+- Katerina's Cafe\
 - Hallowed Grounds\
 \
+
 ```{r lidelse-birgitta-couple, warning = FALSE, message = FALSE}
 #| code-fold: show
 
