@@ -13,6 +13,8 @@ website:
         text: About
       - href: projects.qmd
         text: Projects
+      - href: scribbles.qmd
+        text: Scribbles
       - href: books.qmd
         text: Books
       
