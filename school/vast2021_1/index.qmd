@@ -11,6 +11,7 @@ format:
 categories:
   - VAST Challenge
   - R
+  - sf
   - Fuzzy Matching
   
 ---
@@ -25,29 +26,25 @@ categories:
 
 # Install and load necessary packages
 if (!require("pacman")) install.packages("pacman")
-pacman::p_load(ggplot2, tidyverse, readr, grid, plotly, writexl, qwraps2, reshape2, scales, sf, raster, tmap, 
-               clock, forcats, readxl, lubridate, fuzzyjoin, ggridges, GGally, kableExtra, terra)
+pacman::p_load(ggplot2, tidyverse, readr, grid, plotly, writexl, qwraps2, reshape2, scales, sf, raster, tmap, clock, forcats, readxl, lubridate, fuzzyjoin, ggridges, GGally, kableExtra, terra)
 
 ```
 
 **Team Member:**\
 Syed Ahmad Zaki, Singapore Management University (SMU)\
 \
-
 **Student Team:**\
-YES\
+Yes\
 \
 **Tools Used:**\
-Rmarkdown\
+Quarto\
 \
 **Approximately how many hours were spent working on this submission in total?**\
 \~200 hours\
 \
 **May we post your submission in the Visual Analytics Benchmark Repository after VAST Challenge 2021 is complete?**\
-YES\
+Yes\
 \
-**Video**\
-Provide a link to your video. Example: <http://www.westbirmingham.ac.uk/uwb-smith-mc2-video.wmv>
 
 ## 1. Introduction
 
@@ -55,7 +52,7 @@ Provide a link to your video. Example: <http://www.westbirmingham.ac.uk/uwb-smit
 
 As a visual analytics expert assisting law enforcement, your mission is to identify which GASTech employees made which purchases and identify suspicious patterns of behavior. You must cope with uncertainties that result from missing, conflicting, and imperfect data to make recommendations for further investigation.\
 \
-Use visual analytics to analyze the available data and develop responses to the questions below. In addition, prepare a video that shows how you used visual analytics to solve this challenge. Submission instructions are available here. Entry forms are available for download [here.](https://vast-challenge.github.io/2021/MC2.html)\
+Use visual analytics to analyze the available data and develop responses to the questions below. In addition, prepare a video that shows how you used visual analytics to solve this challenge. Submission instructions are available here. Entry forms are available for download [here](https://vast-challenge.github.io/2021/MC2.html).\
 
 ## 2. Literature Review
 
@@ -134,7 +131,7 @@ Unfortunately, deciding on the fuzzy logic package is the easy part. The harder 
 | jaccard     | Jaccard distance between q-gram profiles                           |
 | jw          | Jaro, or Jaro-Winkler distance                                     |
 
-Out of the above methods, osa, lv and dl seems most apt, since we're dealing with phrases with differing lengths and are more concerned with slight edits, realignment, addition and subtraction of letters within these phrases. We'll rely on the osa method since it's a balance between finding the right edits and speed.
+Out of the above methods, osa, lv and dl seems most apt, since we're dealing with phrases of differing lengths and are more concerned with slight edits, realignment, addition and subtraction of letters within these phrases. We'll rely on the osa method then, since it's a balance between finding the right edits and speed.
 
 ### 2.2 Map Visualisations of GPS Data
 
@@ -157,7 +154,7 @@ gps_sf <- st_as_sf(gps,
 gps_path1 <- gps_sf %>% # Grouping gps lines according to id and day of month
   group_by(id, day) %>%
   summarize(m = mean(Timestamp),
-            do_union=FALSE,
+            do_union = FALSE,
             .groups = "drop") %>%
   st_cast("LINESTRING") # Change GPS into a line
 
@@ -176,15 +173,7 @@ Q2.2_mc2 <- tm_shape(mc2) +
               #        # interpolate = TRUE,
               #        # max.value = 255
               #        ) +
-              # tm_raster(palette = c("#D2D9DA",
-              #                       "#FFFFFF",
-              #                       "#F6EBDE"),
-              #        alpha = NA,
-              #        saturation = 1,
-              #        interpolate = TRUE,
-              #        max.value = 255) +
-              # tm_rgb(tm_mv)
-              # tm_rgb(mc2,
+              # tm_rgb(mc2,                      # tm_rgb used to work in the previous tmap versions, but are now unable to render multiple bands in a single raster layer
               #        r = 1,
               #        g = 2,
               #        b = 3,
@@ -196,10 +185,6 @@ Q2.2_mc2 <- tm_shape(mc2) +
                      filter(id==1)) +
               tm_lines()
 
-# nlayers(mc2)
-# nbands(mc2)
-# names(mc2)
-# plotRGB(mc2)
 Q2.2_mc2
 
 ```
@@ -227,11 +212,11 @@ Thus, we address these potential issues as well as create and simplify other col
 
 cc$timestamp <- date_time_parse(cc$timestamp,
                 zone = "UTC",
-                format = "%m/%d/%Y  %H:%M") # Readjust CC timestamp
+                format = "%m/%d/%Y  %H:%M")              # Readjust CC timestamp
 cc[grep("Katerina", cc$location),2] <- "Katerina's Cafe" # Replace unique characters in Katerina's Cafe
-cc$last4ccnum <- as_factor(cc$last4ccnum) # Change the column format to nominal format
-cc$hour <- as.numeric(format(cc$timestamp,"%H")) # Create a separate column just for hours in the cc data
-cc$period <- case_when( # Segment hour into 5 separate periods
+cc$last4ccnum <- as_factor(cc$last4ccnum)                # Change the column format to nominal format
+cc$hour <- as.numeric(format(cc$timestamp,"%H"))         # Create a separate column just for hours in the cc data
+cc$period <- case_when(                                  # Segment hour into 5 separate periods
   cc$hour >= 21 ~ "Late Evening 9pm to 11.59pm",
   cc$hour >= 18 ~ "Evening 6pm to 8.59pm",
   cc$hour >= 12 ~ "Afternoon 12noon to 5.59pm",
@@ -239,60 +224,78 @@ cc$period <- case_when( # Segment hour into 5 separate periods
   TRUE ~ "Late Night 12mn to 5.59am"
 )
 
-cc$period <- factor(cc$period, # Order periods accordingly
+cc$period <- factor(cc$period,                           # Order periods accordingly
                     levels = c("Morning 6am to 11.59am",
                                "Afternoon 12noon to 5.59pm",
                                "Evening 6pm to 8.59pm",
                                "Late Evening 9pm to 11.59pm",
                                "Late Night 12mn to 5.59am"))
 
-cc$dayofmonth <- day(cc$timestamp) # Extract day of month from timestamp in a new column
-cc$dayofmonth <- as_factor(cc$dayofmonth) # Change to nominal format
-cc$weekday <- wday(cc$timestamp, label = TRUE) # Extract day of week from timestamp in a new column
-cc <- tibble::rowid_to_column(cc, "ID") # Create a numeric id column
-cc$date <- as.Date(cc$timestamp) # Create a separate column just for dates in the cc data
-cc$concat_cc_loyalty <- paste(cc$date,cc$location,cc$price) # Create a separate column of unique values using concatenated values in the cc data
-cc$concat_cc_spots <- paste(cc$date,cc$location,cc$hour) # Create a second separate column of unique values using concatenated values in the cc data
-cc$ID <- as_factor(cc$ID) # Change the column format to nominal format
+cc$dayofmonth <- day(cc$timestamp)                       # Extract day of month from timestamp in a new column
+cc$dayofmonth <- as_factor(cc$dayofmonth)                # Change to nominal format
+cc$weekday <- wday(cc$timestamp, 
+                   label = TRUE)                         # Extract day of week from timestamp in a new column
+cc <- tibble::rowid_to_column(cc, 
+                              "ID")                      # Create a numeric id column
+cc$date <- as.Date(cc$timestamp)                         # Create a separate column just for dates in the cc data
+cc$concat_cc_loyalty <- paste(cc$date,
+                              cc$location,
+                              cc$price)                  # Create a separate column of unique values using concatenated values in the cc data
+cc$concat_cc_spots <- paste(cc$date,
+                            cc$location,
+                            cc$hour)                     # Create a second separate column of unique values using concatenated values in the cc data
+cc$ID <- as_factor(cc$ID)                                # Change the column format to nominal format
 
 #--------------- Cleaning Loyalty data ---------------
 
 loyalty$timestamp <- date_time_parse(loyalty$timestamp,
                 zone = "UTC",
-                format = "%m/%d/%Y") # Readjust loyalty timestamp
-loyalty[grep("Katerina", loyalty$location),2] <- "Katerina's Cafe" # Replace unique characters in Katerina's Cafe
-loyalty$dayofmonth <- day(loyalty$timestamp) # Extract day of month from timestamp in a new column
-loyalty$dayofmonth <- as_factor(loyalty$dayofmonth) # Change to nominal format
-loyalty$weekday <- wday(loyalty$timestamp, label = TRUE) # Extract day of week from timestamp in a new column
-loyalty$concat_loyalty_cc <- paste(loyalty$timestamp,loyalty$location,loyalty$price) # Create a separate column of unique values using concatenated values in the loyalty data
-loyalty <- tibble::rowid_to_column(loyalty, "ID") # Create a numeric id column
-loyalty$ID <- as_factor(loyalty$ID) # Change the column format to nominal format
+                format = "%m/%d/%Y")                     # Readjust loyalty timestamp
+loyalty[grep("Katerina", 
+             loyalty$location),
+        2] <- "Katerina's Cafe"                          # Replace unique characters in Katerina's Cafe
+loyalty$dayofmonth <- day(loyalty$timestamp)             # Extract day of month from timestamp in a new column
+loyalty$dayofmonth <- as_factor(loyalty$dayofmonth)      # Change to nominal format
+loyalty$weekday <- wday(loyalty$timestamp, 
+                        label = TRUE)                    # Extract day of week from timestamp in a new column
+loyalty$concat_loyalty_cc <- paste(loyalty$timestamp,
+                                   loyalty$location,
+                                   loyalty$price)        # Create a separate column of unique values using concatenated values in the loyalty data
+loyalty <- tibble::rowid_to_column(loyalty, 
+                                   "ID")                 # Create a numeric id column
+loyalty$ID <- as_factor(loyalty$ID)                      # Change the column format to nominal format
 
 #--------------- Cleaning Car Assignment data ---------------
 
-car$CarID <- as_factor(car$CarID) # Change the column format to nominal format
-car$FullName <- paste(car$FirstName,car$LastName, sep = " ") # Create new column with combined first and last name
-car$RoleNName <- paste(car$CarID, car$CurrentEmploymentTitle, car$FullName, sep = " ") # Create new column with combined ID, Role and Full Name
+car$CarID <- as_factor(car$CarID)                        # Change the column format to nominal format
+car$FullName <- paste(car$FirstName,
+                      car$LastName, 
+                      sep = " ")                         # Create new column with combined first and last name
+car$RoleNName <- paste(car$CarID, 
+                       car$CurrentEmploymentTitle, 
+                       car$FullName, 
+                       sep = " ")                        # Create new column with combined ID, Role and Full Name
 
 #--------------- Cleaning GPS data ---------------
 
-gps$date <- as_date(gps$Timestamp) # Create a separate column just for dates in the gps data
-gps$hour <- hour(gps$Timestamp) # Create a separate column just for hours in the gps data
-gps$period <- case_when( # Segment hour into 5 separate periods
+gps$date <- as_date(gps$Timestamp)                       # Create a separate column just for dates in the gps data
+gps$hour <- hour(gps$Timestamp)                          # Create a separate column just for hours in the gps data
+gps$period <- case_when(                                 # Segment hour into 5 separate periods
   gps$hour >= 21 ~ "Late Evening 9pm to 11.59pm",
   gps$hour >= 18 ~ "Evening 6pm to 8.59pm",
   gps$hour >= 12 ~ "Afternoon 12noon to 5.59pm",
   gps$hour >= 6 ~ "Morning 6am to 11.59am",
   TRUE ~ "Late Night 12mn to 5.59am"
 )
-gps$period <- factor(gps$period, # Order periods accordingly
+gps$period <- factor(gps$period,                         # Order periods accordingly
                      levels = c("Morning 6am to 11.59am",
                                 "Afternoon 12noon to 5.59pm",
                                 "Evening 6pm to 8.59pm",
                                 "Late Evening 9pm to 11.59pm",
                                 "Late Night 12mn to 5.59am"))
-gps$dayofmonth <- day(gps$Timestamp) # Extract day of month from timestamp in a new column
-gps$weekday <- wday(gps$Timestamp, label = TRUE) # Extract day of week from timestamp in a new column
+gps$dayofmonth <- day(gps$Timestamp)                     # Extract day of month from timestamp in a new column
+gps$weekday <- wday(gps$Timestamp, 
+                    label = TRUE)                        # Extract day of week from timestamp in a new column
 
 ```
 
@@ -305,28 +308,32 @@ We will now attempt to find matching rows between the cc and loyalty data.\
 ```{r fuzzyjoin-innerjoin-stringdist-cc-loyalty, warning=FALSE, message=FALSE}
 #| code-fold: show
 
-cc_loyalty <- cc %>% # Create a new df showing matches with a max distance difference of 1
+cc_loyalty <- cc %>%                                     # Create a new df showing matches with a max distance difference of 1
   stringdist_inner_join(loyalty,
                         by = c("concat_cc_loyalty" = "concat_loyalty_cc"),
                         method = "osa",
                         max_dist = 1,
                         distance_col = "distance")
 
-cc_loyalty_1 <- cc_loyalty %>% # Isolate best matching cc and loyalty with more than 2 counts
-    group_by(last4ccnum,loyaltynum) %>%
+cc_loyalty_1 <- cc_loyalty %>%                           # Isolate best matching cc and loyalty with more than 2 counts
+    group_by(last4ccnum,
+             loyaltynum) %>%
     count() %>%
     filter(n>2) %>%
     ungroup()
 
-cc_loyalty_duplicate_cc <- cc_loyalty_1 %>% # Extract duplicates in cc data
+cc_loyalty_duplicate_cc <- cc_loyalty_1 %>%              # Extract duplicates in cc data
   filter(cc_loyalty_1$last4ccnum == cc_loyalty_1$last4ccnum[duplicated(cc_loyalty_1$last4ccnum)])
 
-cc_loyalty_duplicate_loyalty <- subset(cc_loyalty_1,loyaltynum == "L6267" | loyaltynum == "L3288") # Extract duplicates in loyalty data
+cc_loyalty_duplicate_loyalty <- subset(cc_loyalty_1,loyaltynum == "L6267" | 
+                                       loyaltynum == "L3288") # Extract duplicates in loyalty data
 
-cc_loyalty_1$type <- "unique" # Creating a new type column with 'unique' as value
-cc_loyalty_1[which(cc_loyalty_1$last4ccnum == cc_loyalty_duplicate_cc$last4ccnum),4] <- "duplicate" # Identifying duplicate in type column
+cc_loyalty_1$type <- "unique"                            # Creating a new type column with 'unique' as value
+cc_loyalty_1[which(cc_loyalty_1$last4ccnum == cc_loyalty_duplicate_cc$last4ccnum),
+             4] <- "duplicate"                           # Identifying duplicate in type column
 cc_loyalty_1[which(cc_loyalty_1$loyaltynum ==  "L6267" |
-                   cc_loyalty_1$loyaltynum ==  "L3288"),4] <- "duplicate" # Identifying duplicate in type column
+                   cc_loyalty_1$loyaltynum ==  "L3288"),
+             4] <- "duplicate"                           # Identifying duplicate in type column
 
 ```
 
@@ -337,22 +344,33 @@ First, we will merge the GPS data with the car assignments. Next, we will isolat
 ```{r GPS-data-manipulation, warning=FALSE, message=FALSE}
 #| code-fold: show
 
-gps_name <- left_join(gps,car, by = c("id" = "CarID")) # Merge car assignments to gps data
-gps_name$Timestamp <- as.POSIXct(gps_name$Timestamp, format = "%m/%d/%Y  %H:%M:%S", tz = "GMT") # Timestamp switching to month-day-year format
-gps_name <- gps_name[with(gps_name,order(id,Timestamp)),] # Sort first by ID in ascending order and then Timestamp by oldest to newest
-gps_name <- gps_name %>% # Add running number in the first column
+gps_name <- left_join(gps,
+                      car, 
+                      by = c("id" = "CarID"))            # Merge car assignments to gps data
+gps_name$Timestamp <- as.POSIXct(gps_name$Timestamp, 
+                                 format = "%m/%d/%Y  %H:%M:%S", 
+                                 tz = "GMT")             # Timestamp switching to month-day-year format
+gps_name <- gps_name[with(gps_name,
+                          order(id,
+                                Timestamp)),
+                     ]                                   # Sort first by ID in ascending order and then Timestamp by oldest to newest
+gps_name <- gps_name %>%                                 # Add running number in the first column
   mutate(No = 1:n()) %>%
-  dplyr::select(No, everything())
-gps_name <- gps_name %>% # Create additional column indicating time taken from previous timestamp for same ID
-    mutate(Delta = Timestamp - lag(Timestamp, default = first(Timestamp)))
-gps_name$Delta <- as.numeric(gps_name$Delta) # Convert Delta column to numeric format
-gps_name$Delta_Hours <- round(gps_name$Delta / 60 / 60, 1) # Create column to convert Delta seconds into hours with one decimal place
+  dplyr::select(No, 
+                everything())
+gps_name <- gps_name %>%                                 # Create additional column indicating time taken from previous timestamp for same ID
+    mutate(Delta = Timestamp - lag(Timestamp, 
+                                   default = first(Timestamp)))
+gps_name$Delta <- as.numeric(gps_name$Delta)             # Convert Delta column to numeric format
+gps_name$Delta_Hours <- round(gps_name$Delta / 60 / 60, 
+                              1)                         # Create column to convert Delta seconds into hours with one decimal place
 
-rm(gps) # Remove unused earlier dataset
+rm(gps)                                                  # Remove unused earlier dataset
 
-spots <- gps_name %>% # Filtering out stationary gps coordinates of more than 10 mins
+spots <- gps_name %>%                                    # Filtering out stationary gps coordinates of more than 10 mins
   filter(Delta > 600)
-spots$No <- rep(1:2965, times = 1) # Redo running number in the first column
+spots$No <- rep(1:2965, 
+                times = 1)                               # Redo running number in the first column
 
 ```
 
@@ -367,147 +385,151 @@ spots$Location <- 1 # Create a Location column
 spots <- spots %>% mutate( # Create additional column with location names based on latlong
   Location = case_when(
     between(lat, 36.05092013, 36.05102938) &
-      between(long, 24.82586806, 24.82598723)  ~ "Abila Airport", # 35 features
+      between(long, 24.82586806, 24.82598723)  ~ "Abila Airport",                                       # 35 features
     between(lat, 36.07434876, 36.07443715) &
-      between(long, 24.84592966, 24.84598782)  ~ "Abila Scrapyard", # 4 features
+      between(long, 24.84592966, 24.84598782)  ~ "Abila Scrapyard",                                     # 4 features
     between(lat, 36.06342076, 36.06349309) &
-      between(long, 24.85096457, 24.85103679)  ~ "Abila Zacharo", # 66 features
+      between(long, 24.85096457, 24.85103679)  ~ "Abila Zacharo",                                       # 66 features
     between(lat, 36.07712237, 36.07715385) &
-      between(long, 24.87617634, 24.87621582)  ~ "Ahaggo Museum", # 5 features
+      between(long, 24.87617634, 24.87621582)  ~ "Ahaggo Museum",                                       # 5 features
     between(lat, 36.07522801, 36.07530344) &
-      between(long, 24.85626503, 24.85634849)  ~ "Albert's Fine Clothing", # 20 features
+      between(long, 24.85626503, 24.85634849)  ~ "Albert's Fine Clothing",                              # 20 features
     between(lat, 36.08172086, 36.08182543) &
-      between(long, 24.85086882, 24.85096705)  ~ "Bean There Done That", # 46 features
+      between(long, 24.85086882, 24.85096705)  ~ "Bean There Done That",                                # 46 features
     between(lat, 36.05402149, 36.05413903) &
-      between(long, 24.90116515, 24.90128202)  ~ "Brew've Been Served", # 106 features
+      between(long, 24.90116515, 24.90128202)  ~ "Brew've Been Served",                                 # 106 features
     between(lat, 36.07332048, 36.07336116) &
-      between(long, 24.86416419, 24.86420583)  ~ "Brewed Awakenings", # 36 features
+      between(long, 24.86416419, 24.86420583)  ~ "Brewed Awakenings",                                   # 36 features
     between(lat, 36.06582469, 36.065941) &
-      between(long, 24.90097567, 24.90108865)  ~ "20 Building Control Stenig's Home", # 20 features
+      between(long, 24.90097567, 24.90108865)  ~ "20 Building Control Stenig's Home",                   # 20 features
     between(lat, 36.05851786, 36.05860144) &
-      between(long, 24.8808655, 24.88092654)  ~ "Carlyle Chemical Inc.", # 30 features
+      between(long, 24.8808655, 24.88092654)  ~ "Carlyle Chemical Inc.",                                # 30 features
     between(lat, 36.07818062, 36.07821857) &
-      between(long, 24.87211555, 24.8721508)  ~ "4 CFO Ingrid's Home", # 27 features
+      between(long, 24.87211555, 24.8721508)  ~ "4 CFO Ingrid's Home",                                  # 27 features
     between(lat, 36.07682044, 36.07685752) &
-      between(long, 24.8658641, 24.86589901)  ~ "10 CIO Ada's Home", # 35 features
+      between(long, 24.8658641, 24.86589901)  ~ "10 CIO Ada's Home",                                    # 35 features
     between(lat, 36.0721156, 36.07215701) &
-      between(long, 24.87458425, 24.8746267)  ~ "32 COO Orhan's Home", # 29 features
+      between(long, 24.87458425, 24.8746267)  ~ "32 COO Orhan's Home",                                  # 29 features
     between(lat, 36.07062423, 36.07073983) &
-      between(long, 24.89517609, 24.89526281)  ~ "Chostus Hotel", # 11 features
+      between(long, 24.89517609, 24.89526281)  ~ "Chostus Hotel",                                       # 11 features
     between(lat, 36.05462322, 36.05469486) &
-      between(long, 24.88977034, 24.88983886)  ~ "Coffee Cameleon", # 29 features
+      between(long, 24.88977034, 24.88983886)  ~ "Coffee Cameleon",                                     # 29 features
     between(lat, 36.08954231, 36.08962196) &
-      between(long, 24.86066508, 24.8607611)  ~ "Desafio Golf Course", # 10 features
+      between(long, 24.86066508, 24.8607611)  ~ "Desafio Golf Course",                                  # 10 features
     between(lat, 36.07292088, 36.07301365) &
-      between(long, 24.88396447, 24.88405897)  ~ "26 Drill Site Manager Marin's Home", # 26 features
+      between(long, 24.88396447, 24.88405897)  ~ "26 Drill Site Manager Marin's Home",                  # 26 features
     between(lat, 36.08442031, 36.08449538) &
-      between(long, 24.86416741, 24.8642387)  ~ "7 Drill Technician Elsa's Home", # 25 features
+      between(long, 24.86416741, 24.8642387)  ~ "7 Drill Technician Elsa's Home",                       # 25 features
     between(lat, 36.08424703, 36.08432477) &
-      between(long, 24.8563809, 24.8564637)  ~ "9 Drill Technician Gustav's Home", # 13 features
+      between(long, 24.8563809, 24.8564637)  ~ "9 Drill Technician Gustav's Home",                      # 13 features
     between(lat, 36.0726185, 36.07380904) &
-      between(long, 24.87510166, 24.87613744)  ~ "28 Drill Technician Isande's Home", # 26 features
+      between(long, 24.87510166, 24.87613744)  ~ "28 Drill Technician Isande's Home",                   # 26 features
     between(lat, 36.06922564, 36.06931513) &
-      between(long, 24.88416486, 24.88426267)  ~ "27 Drill Technician Kare's Home", # 20 features
+      between(long, 24.88416486, 24.88426267)  ~ "27 Drill Technician Kare's Home",                     # 20 features
     between(lat, 36.08542073, 36.08550845) &
-      between(long, 24.86036422, 24.86045943)  ~ "2 Engineer Lars's Home", # 37 features
+      between(long, 24.86036422, 24.86045943)  ~ "2 Engineer Lars's Home",                              # 37 features
     between(lat, 36.08664252, 36.08672442) &
-      between(long, 24.85756416, 24.85766744)  ~ "3 Engineer Felix's Home", # 22 features
+      between(long, 24.85756416, 24.85766744)  ~ "3 Engineer Felix's Home",                             # 22 features
     between(lat, 36.07622023, 36.07626546) &
-      between(long, 24.87466429, 24.87471053)  ~ "35 Environmental Safety Advisor Willem's Home", # 33 features
+      between(long, 24.87466429, 24.87471053)  ~ "35 Environmental Safety Advisor Willem's Home",       # 33 features
     between(lat, 36.07212045, 36.07213193) &
-      between(long, 24.84132949, 24.84134818)  ~ "Frank's Fuel", # 2 features
+      between(long, 24.84132949, 24.84134818)  ~ "Frank's Fuel",                                        # 2 features
     between(lat, 36.05492145, 36.05503511) &
-      between(long, 24.90176782, 24.90188061)  ~ "Frydos Autosupply n' More", # 29 features
+      between(long, 24.90176782, 24.90188061)  ~ "Frydos Autosupply n' More",                           # 29 features
     between(lat, 36.04802098, 36.04805422) &
-      between(long, 24.87956497, 24.87957691)  ~ "GasTech", # 738 features
+      between(long, 24.87956497, 24.87957691)  ~ "GasTech",                                             # 738 features
     between(lat, 36.05970763, 36.05981097) &
-      between(long, 24.85797552, 24.8580772)  ~ "Gelatogalore", # 47 features
+      between(long, 24.85797552, 24.8580772)  ~ "Gelatogalore",                                         # 47 features
     between(lat, 36.06034564, 36.06043016) &
-      between(long, 24.85646426, 24.85657454)  ~ "General Grocer", # 12 features
+      between(long, 24.85646426, 24.85657454)  ~ "General Grocer",                                      # 12 features
     between(lat, 36.05572125, 36.05584094) &
-      between(long, 24.90246542, 24.90258487)  ~ "Guy's Gyros", # 143 features
+      between(long, 24.90246542, 24.90258487)  ~ "Guy's Gyros",                                         # 143 features
     between(lat, 36.06362146, 36.06371539) &
-      between(long, 24.88586605, 24.88595859)  ~ "Hallowed Grounds", # 70 features
+      between(long, 24.88586605, 24.88595859)  ~ "Hallowed Grounds",                                    # 70 features
     between(lat, 36.07660977, 36.07669909) &
-      between(long, 24.85756408, 24.85764247)  ~ "Hippokampos", # 155 features
+      between(long, 24.85756408, 24.85764247)  ~ "Hippokampos",                                         # 155 features
     between(lat, 36.08412146, 36.08420924) &
-      between(long, 24.85896842, 24.85905081)  ~ "11 Hydraulic Technician Axel's Home", # 23 features
+      between(long, 24.85896842, 24.85905081)  ~ "11 Hydraulic Technician Axel's Home",                 # 23 features
     between(lat, 36.08782802, 36.08793196) &
-      between(long, 24.85627136, 24.8563725)  ~ "19 Hydraulic Technician Vira's Home", # 24 features
+      between(long, 24.85627136, 24.8563725)  ~ "19 Hydraulic Technician Vira's Home",                  # 24 features
     between(lat, 36.06641679, 36.06650723) &
-      between(long, 24.88256875, 24.88265687)  ~ "1 IT Helpdesk Nils's Home", # 31 features
+      between(long, 24.88256875, 24.88265687)  ~ "1 IT Helpdesk Nils's Home",                           # 31 features
     between(lat, 36.06729646, 36.06736745) &
-      between(long, 24.87788423, 24.87795559)  ~ "5 IT Technician Isak's Home", # 21 features
+      between(long, 24.87788423, 24.87795559)  ~ "5 IT Technician Isak's Home",                         # 21 features
     between(lat, 36.06722012, 36.06731624) &
-      between(long, 24.8858687, 24.88596759)  ~ "8 IT Technician Lucas's Home", # 23 features
+      between(long, 24.8858687, 24.88596759)  ~ "8 IT Technician Lucas's Home",                         # 23 features
     between(lat, 36.06749651, 36.0675518) &
-      between(long, 24.87330651, 24.873366)  ~ "Jack's Magical Beans", # 31 features
+      between(long, 24.87330651, 24.873366)  ~ "Jack's Magical Beans",                                  # 31 features
     between(lat, 36.06582037, 36.06584879) &
-      between(long, 24.85236427, 24.85241027)  ~ "Kalami Kafenion", # 47 features
+      between(long, 24.85236427, 24.85241027)  ~ "Kalami Kafenion",                                     # 47 features
     between(lat, 36.05442247, 36.05453641) &
-      between(long, 24.89986596, 24.89998054)  ~ "Katerina's Cafe", # 158 features
+      between(long, 24.89986596, 24.89998054)  ~ "Katerina's Cafe",                                     # 158 features
     between(lat, 36.05292229, 36.05296701) &
-      between(long, 24.84936915, 24.84941679)  ~ "Kronos Capital", # 6 features
+      between(long, 24.84936915, 24.84941679)  ~ "Kronos Capital",                                      # 6 features
     between(lat, 36.06582196, 36.06587998) &
-      between(long, 24.8497762, 24.84983936)  ~ "Kronos Mart", # 9 features
+      between(long, 24.8497762, 24.84983936)  ~ "Kronos Mart",                                          # 9 features
     between(lat, 36.06523446, 36.06534083) &
-      between(long, 24.83307421, 24.83318494)  ~ "Kronos Pipe and Irrigation", # 7 features
+      between(long, 24.83307421, 24.83318494)  ~ "Kronos Pipe and Irrigation",                          # 7 features
     between(lat, 36.06402993, 36.06410072) &
-      between(long, 24.84137818, 24.84144338)  ~ "Maximum Iron and Steel", # 9 features
+      between(long, 24.84137818, 24.84144338)  ~ "Maximum Iron and Steel",                              # 9 features
     between(lat, 36.05840347, 36.05849041) &
-      between(long, 24.88546548, 24.88553455)  ~ "Nationwide Refinery", # 41 features
+      between(long, 24.88546548, 24.88553455)  ~ "Nationwide Refinery",                                 # 41 features
     between(lat, 36.05859158, 36.05859887) &
-      between(long, 24.85790261, 24.85799357)  ~ "Octavio's Office Supplies", # 3 features
+      between(long, 24.85790261, 24.85799357)  ~ "Octavio's Office Supplies",                           # 3 features
     between(lat, 36.05192066, 36.05197575) &
-      between(long, 24.87076418, 24.87082137)  ~ "Ouzeri Elian", # 67 features
+      between(long, 24.87076418, 24.87082137)  ~ "Ouzeri Elian",                                        # 67 features
     between(lat, 36.06764972, 36.06775002) &
-      between(long, 24.90243213, 24.9025445)  ~ "34 Perimeter Control Edvard's Home", # 20 features
+      between(long, 24.90243213, 24.9025445)  ~ "34 Perimeter Control Edvard's Home",                   # 20 features
     between(lat, 36.06324941, 36.06330782) &
-      between(long, 24.85226894, 24.8523291)  ~ "Roberts and Sons", # 9 features
+      between(long, 24.85226894, 24.8523291)  ~ "Roberts and Sons",                                     # 9 features
     between(lat, 36.05942407, 36.05952152) &
-      between(long, 24.89476557, 24.8948649)  ~ "Shared Home A - 6 Linnea 25 Kanon 29 Bertrand", # 72 features
+      between(long, 24.89476557, 24.8948649)  ~ "Shared Home A - 6 Linnea 25 Kanon 29 Bertrand",        # 72 features
     between(lat, 36.06332304, 36.06343537) &
-      between(long, 24.89607033, 24.89617856)  ~ "Shared Home B - 14 Lidelse 18 Birgitta 21 Hennie", # 60 features
+      between(long, 24.89607033, 24.89617856)  ~ "Shared Home B - 14 Lidelse 18 Birgitta 21 Hennie",    # 60 features
     between(lat, 36.06242283, 36.06253955) &
-      between(long, 24.89877023, 24.89888179)  ~ "Shared Home C - 17 Sven 24 Minke 33 Brand", # 68 features
+      between(long, 24.89877023, 24.89888179)  ~ "Shared Home C - 17 Sven 24 Minke 33 Brand",           # 68 features
     between(lat, 36.05842222, 36.05853828) &
-      between(long, 24.90096522, 24.90107874)  ~ "Shared Home D - 22 Adra 23 Varja 30 Felix", # 73 features
+      between(long, 24.90096522, 24.90107874)  ~ "Shared Home D - 22 Adra 23 Varja 30 Felix",           # 73 features
     between(lat, 36.0603222, 36.06044736) &
       between(long, 24.90556693, 24.90569385)  ~ "Shared Home E - 13 Inga 15 Loreto 16 Isia 21 Hennie", # 85 features
     between(lat, 36.05282139, 36.05288367) &
-      between(long, 24.86856868, 24.8686314)  ~ "Shoppers' Delight", # 17 features
+      between(long, 24.86856868, 24.8686314)  ~ "Shoppers' Delight",                                    # 17 features
     between(lat, 36.06772112, 36.06784956) &
-      between(long, 24.89906521, 24.89917328)  ~ "12 Site Control Hideki's Home", # 21 features
+      between(long, 24.89906521, 24.89917328)  ~ "12 Site Control Hideki's Home",                       # 21 features
     between(lat, 36.05409586, 36.05420832) &
-      between(long, 24.90806584, 24.90817838)  ~ "Stewart and Sons Fabrication", # 36 features
+      between(long, 24.90806584, 24.90817838)  ~ "Stewart and Sons Fabrication",                        # 36 features
     between(lat, 36.06774029, 36.06776587) &
-      between(long, 24.87148791, 24.87150031)  ~ "U-Pump", # 4 features
+      between(long, 24.87148791, 24.87150031)  ~ "U-Pump",                                              # 4 features
     between(lat, 36.05012433, 36.05021624) &
-      between(long, 24.9003978, 24.90047475)  ~ "Anonymous Site 1", # 6 features
+      between(long, 24.9003978, 24.90047475)  ~ "Anonymous Site 1",                                     # 6 features
     between(lat, 36.06314781, 36.06324321) &
-      between(long, 24.90010823, 24.90018668)  ~ "Anonymous Site 2", # 7 features
+      between(long, 24.90010823, 24.90018668)  ~ "Anonymous Site 2",                                    # 7 features
     between(lat, 36.05893131, 36.05900826) &
-      between(long, 24.89277554, 24.89284962)  ~ "Anonymous Site 3", # 7 features
+      between(long, 24.89277554, 24.89284962)  ~ "Anonymous Site 3",                                    # 7 features
     between(lat, 36.08061881, 36.08067087) &
-      between(long, 24.84681621, 24.84688282)  ~ "Anonymous Site 4", # 7 features
+      between(long, 24.84681621, 24.84688282)  ~ "Anonymous Site 4",                                    # 7 features
     between(lat, 36.06944928, 36.0695319) &
-      between(long, 24.84147082, 24.84157048)  ~ "Anonymous Site 5", # 8 features
+      between(long, 24.84147082, 24.84157048)  ~ "Anonymous Site 5",                                    # 8 features
     between(lat, 36.05149231, 36.05253234) &
-      between(long, 24.87495168, 24.87611086)  ~ "Anonymous Site 6", # 13 features
+      between(long, 24.87495168, 24.87611086)  ~ "Anonymous Site 6",                                    # 13 features
     between(lat, 36.05543848, 36.05657576) &
-      between(long, 24.86618187, 24.86735)  ~ "Anonymous Site 7", # 7 features
+      between(long, 24.86618187, 24.86735)  ~ "Anonymous Site 7",                                       # 7 features
     between(lat, 36.07099038, 36.07200089) &
-      between(long, 24.86869468, 24.86985682)  ~ "Anonymous Site 8", # 10 features
+      between(long, 24.86869468, 24.86985682)  ~ "Anonymous Site 8",                                    # 10 features
     ))
 
-spots$concat_spots_cc <- paste(spots$date,spots$Location,spots$hour) # Create a separate column of unique values using concatenated values in the distilled GPS data
-spots_median <- spots %>% # Extract the median lat & long coordinates of locations
+spots$concat_spots_cc <- paste(spots$date,
+                               spots$Location,
+                               spots$hour)         # Create a separate column of unique values using concatenated values in the distilled GPS data
+spots_median <- spots %>%                          # Extract the median lat & long coordinates of locations
   group_by(Location) %>%
-    summarise(lat.median = median(lat), long.median = median(long), .groups = "drop") %>%
-  filter(!is.na(Location)) %>% # Exclude remaining few unmatched locations
+  summarise(lat.median = median(lat), 
+            long.median = median(long), 
+            .groups = "drop") %>%
+  filter(!is.na(Location)) %>%                     # Exclude remaining few unmatched locations
   ungroup()
 
-spots_median <- spots_median %>% # Add additional column to classify locations into major buckets
+spots_median <- spots_median %>%                   # Add additional column to classify locations into major buckets
   mutate(Location.Type = case_when(
     Location %in% c("Anonymous Site 1",
                     "Anonymous Site 2",
@@ -576,7 +598,10 @@ spots_median <- spots_median %>% # Add additional column to classify locations i
                     "Frydos Autosupply n' More",
                     "U-Pump") ~ "Transport",
     ))
-spots_median_sf <- st_as_sf(spots_median, coords = c("long.median", "lat.median"), crs = 4326) # Changing into a shapefile
+spots_median_sf <- st_as_sf(spots_median, 
+                            coords = c("long.median", 
+                                       "lat.median"), 
+                            crs = 4326)                # Changing into a shapefile
 
 ```
 
@@ -587,47 +612,66 @@ Using the identified spots, we will create our custom map using the tmap package
 ```{r tmap-visualisation, echo = T, message = FALSE, warning=FALSE}
 #| code-fold: show
 
-Abila_st_union <- st_union(Abila_st) # Dissolve Abila road network
-Abila_st_proj <- st_transform(Abila_st_union, crs = 3857) # Transform to necessary projection
-Abila_st_buffer <- st_buffer(Abila_st_proj, dist = 25, nQuadSegs = 5, ) # Create a buffer around the dissolved Abila road network
+Abila_st_union <- st_union(Abila_st)          # Dissolve Abila road network
+Abila_st_proj <- st_transform(Abila_st_union, 
+                              crs = 3857)     # Transform to necessary projection
+Abila_st_buffer <- st_buffer(Abila_st_proj, 
+                             dist = 25, 
+                             nQuadSegs = 5, ) # Create a buffer around the dissolved Abila road network
 
-rm(Abila_st) # Remove unused earlier dataset
-rm(Abila_st_union) # Remove unused earlier dataset
-rm(Abila_st_proj) # Remove unused earlier dataset
+rm(Abila_st,
+   Abila_st_union,
+   Abila_st_proj)                             # Remove unused earlier dataset
 
-gps_path <- gps_sf %>% # Creating a movement path
-  group_by(id, day) %>%
-    summarize(m = mean(Timestamp),
+gps_path <- gps_sf %>%                        # Creating a movement path
+  group_by(id, 
+           day) %>%
+  summarize(m = mean(Timestamp),
               do_union=FALSE,
               .groups = "drop") %>%
-  left_join(dplyr::select(car,CarID,RoleNName), by = c("id" = "CarID")) %>% #Add in RoleNName column
+  left_join(dplyr::select(car,
+                          CarID,
+                          RoleNName), 
+            by = c("id" = "CarID")) %>%        # Add in RoleNName column
   ungroup() %>%
   st_cast("LINESTRING")
 
-# Create blue polygon as background to mimic sea
-long.sea <- c(24.91075,24.91075,24.8232,24.8232,24.91075)
-lat.sea <- c(36.09543,36.0445,36.0445,36.09543,36.09543)
-sea <-data.frame(long.sea, lat.sea)
+long.sea <- c(24.91075,                        # Create blue polygon as background to mimic sea
+              24.91075,
+              24.8232,
+              24.8232,
+              24.91075)
+lat.sea <- c(36.09543,
+             36.0445,
+             36.0445,
+             36.09543,
+             36.09543)
+sea <- data.frame(long.sea, 
+                  lat.sea)
 
-rm(gps_sf) # Remove unused earlier dataset
-rm(long.sea) # Remove unused earlier dataset
-rm(lat.sea) # Remove unused earlier dataset
-rm(car) # Remove unused earlier dataset
+rm(gps_sf,
+   long.sea,
+   lat.sea,
+   car)                                        # Remove unused earlier dataset
 
 sea_sf <- st_as_sf(sea, coords = c("long.sea", "lat.sea"))
 st_crs(sea_sf) <- 4326
 sea_poly<- st_sf(
   st_cast(
-    st_combine(sea_sf$geometry),"POLYGON"
+    st_combine(sea_sf$geometry),
+    "POLYGON"
   ))
 
-rm(sea) # Remove unused earlier dataset
-rm(sea_sf) # Remove unused earlier dataset
+rm(sea,
+   sea_sf)                                     # Remove unused earlier dataset
 
-# Clip a smaller Kronos island around Abila
-Kronos_sf_small <- st_crop(Kronos_sf, c(xmin = 24.8232, xmax = 24.91075, ymin = 36.0445, ymax = 36.09543))
+Kronos_sf_small <- st_crop(Kronos_sf,          # Clip a smaller Kronos island around Abila
+                           c(xmin = 24.8232, 
+                             xmax = 24.91075, 
+                             ymin = 36.0445, 
+                             ymax = 36.09543))
 
-rm(Kronos_sf) # Remove unused earlier dataset
+rm(Kronos_sf)                                  # Remove unused earlier dataset
 
 tmap_mode("view")
 
@@ -641,7 +685,7 @@ tm_shape(gps_path %>% filter(id==2)) +
   tm_lines(id = "RoleNName") +
 tm_shape(spots_median_sf) +
   tm_dots(col = "Location.Type",
-          id = "Location", # Bold in group
+          id = "Location",                    # Bold in group
           popup.vars = "Location Type:" =="Location.Type",
           size = 0.2)
 
@@ -665,15 +709,24 @@ Food and beverage places, such as Brew've Been Served, Guy's Gyros, Hallowed Gro
 #| code-fold: show
 
 cc_calendar <- cc %>%
-  count(dayofmonth, location) # Group and tally by day of month and location
+  count(dayofmonth, 
+        location)                                           # Group and tally by day of month and location
 cc_calendar$dayofmonth <- as_factor(cc_calendar$dayofmonth) # CHange day of month to factor type
 
 # Create calendar heatmap using ggplot and geom_tile
-Q5.1.1 <- ggplot(complete(cc_calendar, dayofmonth, location), aes(x = dayofmonth, y = location)) +
-  geom_tile(aes(fill = n), color = "white", size = 0.1) +
-  scale_fill_gradient(low = "light grey", high = "black", na.value = "light grey") +
+Q5.1.1 <- ggplot(complete(cc_calendar, 
+                          dayofmonth, 
+                          location), 
+                 aes(x = dayofmonth, 
+                     y = location)) +
+  geom_tile(aes(fill = n), 
+            color = "white", 
+            size = 0.1) +
+  scale_fill_gradient(low = "light grey", 
+                      high = "black", 
+                      na.value = "light grey") +
   scale_y_discrete(expand = expansion(add = 1.6),
-                   limits=rev) +
+                   limits = rev) +
   labs(title = "Calendar Heatmap of Location Visit Frequency (From CC Data) By Date",
        subtitle = "Food and coffee outlets seem to be the most frequented, based on credit card data",
        x = "Day of Month",
@@ -685,7 +738,7 @@ Q5.1.1 <- ggplot(complete(cc_calendar, dayofmonth, location), aes(x = dayofmonth
         panel.grid.major = element_blank(),
         panel.grid.minor = element_blank(),
         text = element_text(size=7),
-        axis.title.x = element_text(vjust=-3),
+        axis.title.x = element_text(vjust = -3),
         axis.title.y = element_blank(),
         legend.position = "bottom")
 
@@ -701,45 +754,62 @@ The txn dates of Kronos Mart differ by exactly one day, comparing either side of
 #| code-fold: show
 
 Q5.1.2_cc <- cc %>%
-  filter(location == "Kronos Mart") %>% # Filter out only Kronos Mart cc txns
-  dplyr::select(dayofmonth, price, location) %>% # Select only three columns
-  group_by(dayofmonth) %>% # Group by day of month
-    summarise(cc_data = sum(price), .groups = "drop") %>% # Create cc_data column which sums prices
+  filter(location == "Kronos Mart") %>%                                # Filter out only Kronos Mart cc txns
+  dplyr::select(dayofmonth, 
+                price, 
+                location) %>%                                          # Select only three columns
+  group_by(dayofmonth) %>%                                             # Group by day of month
+  summarise(cc_data = sum(price), 
+              .groups = "drop") %>%                                    # Create cc_data column which sums prices
   ungroup()
 
-Q5.1.2_loyalty <- loyalty %>% # Same methodology as above but done on loyalty data
+Q5.1.2_loyalty <- loyalty %>%                                          # Same methodology as above but done on loyalty data
   filter(location == "Kronos Mart") %>%
-  dplyr::select(dayofmonth, price, location) %>%
+  dplyr::select(dayofmonth, 
+                price, 
+                location) %>%
   group_by(dayofmonth) %>%
-  summarise(loyalty_data = sum(price), .groups = "drop") %>%
+  summarise(loyalty_data = sum(price), 
+            .groups = "drop") %>%
   ungroup()
 
-Q5.1.2_combined <- data.frame(dayofmonth = c(6:19)) # Create new df with the 14 days
-Q5.1.2_combined$dayofmonth <- as_factor(Q5.1.2_combined$dayofmonth) # Change to factor type
-Q5.1.2_combined <- Q5.1.2_combined %>% # Merge df to manipulated cc and loyalty data
-  left_join(Q5.1.2_cc, by = "dayofmonth") %>%
-  left_join(Q5.1.2_loyalty, by = "dayofmonth")
+Q5.1.2_combined <- data.frame(dayofmonth = c(6:19))                    # Create new df with the 14 days
+Q5.1.2_combined$dayofmonth <- as_factor(Q5.1.2_combined$dayofmonth)    # Change to factor type
+Q5.1.2_combined <- Q5.1.2_combined %>%                                 # Merge df to manipulated cc and loyalty data
+  left_join(Q5.1.2_cc, 
+            by = "dayofmonth") %>%
+  left_join(Q5.1.2_loyalty, 
+            by = "dayofmonth")
 
-rm(Q5.1.2_cc) # Remove unused earlier dataset
-rm(Q5.1.2_loyalty) # Remove unused earlier dataset
+rm(Q5.1.2_cc,
+   Q5.1.2_loyalty)                                                     # Remove unused earlier dataset
 
-Q5.1.2_combined$cc_data[is.na(Q5.1.2_combined$cc_data)] <- 0 # Replace NA with 0
+Q5.1.2_combined$cc_data[is.na(Q5.1.2_combined$cc_data)] <- 0           # Replace NA with 0
 Q5.1.2_combined$loyalty_data[is.na(Q5.1.2_combined$loyalty_data)] <- 0 # Replace NA with 0
 
-Q5.1.2_combined <-melt(Q5.1.2_combined, id.vars = "dayofmonth", variable.name = "source") # Change from wide to long format
+Q5.1.2_combined <- melt(Q5.1.2_combined, 
+                        id.vars = "dayofmonth", 
+                        variable.name = "source")                      # Change from wide to long format
 
 # Create area graph on both cc and loyalty data
-Q5.1.2 <- ggplot(Q5.1.2_combined, aes(dayofmonth, value, group = source)) +
-  geom_area(aes(colour = source, fill = source),
+Q5.1.2 <- ggplot(Q5.1.2_combined, 
+                 aes(dayofmonth, 
+                     value, 
+                     group = source)) +
+  geom_area(aes(colour = source, 
+                fill = source),
             size = 1) +
   geom_point() +
-  geom_text(data=subset(Q5.1.2_combined, value != 0),
-            aes(label = round(value,0),
+  geom_text(data = subset(Q5.1.2_combined, 
+                          value != 0),
+            aes(label = round(value,
+                              0),
             group = source),
             vjust = -1,
             size = 3) +
   facet_grid(source~.) +
-  ylim(0,500) +
+  ylim(0,
+       500) +
   labs("title" = "Kronos Mart's Suspicious Delayed Transactions",
        "subtitle" = "Loyalty transactions in Kronos Mart recorded one day earlier than in credit card") +
   theme(axis.text.y = element_blank(),
@@ -765,11 +835,14 @@ Q5.1.3 <- ggplot(cc,
                      y = location,
                      fill = after_stat(x)
                      )) +
-                 geom_density_ridges_gradient(scale=3,rel_min_height = 0.001) +
+                 geom_density_ridges_gradient(scale = 3,
+                                              rel_min_height = 0.001) +
   scale_x_continuous(breaks = 0:24) +
-  scale_y_discrete(limits=rev) +
-  scale_fill_viridis_c(name = "ABC", option = "A") +
-  theme_ridges(font_size = 7, grid = TRUE) +
+  scale_y_discrete(limits = rev) +
+  scale_fill_viridis_c(name = "ABC", 
+                       option = "A") +
+  theme_ridges(font_size = 7, 
+               grid = TRUE) +
   theme(legend.position = "none") +
   labs(title = "Uncovering Location Type Beyond Ambiguous Location Names Using Credit Card Data",
        subtitle = "High Noon Txns Suggests Abila Zacharo and Hippokampos As Food Outlets")
@@ -785,29 +858,41 @@ Coffee chains usually open for longer than just the three hours we see in the da
 ```{r coffee-hour, warning=FALSE, message=FALSE}
 #| code-fold: show
 
-Q5.1.4_cc <- cc %>% # Merge cc with location type data from spots median
-  left_join(dplyr::select(spots_median,Location, Location.Type), by = c("location" = "Location")) %>%
-  filter(Location.Type == "Coffee Cafe") %>% # Filter only Coffee Cafe location type
-  dplyr::select(location, hour, price) %>%
-  group_by(location, hour) %>%
-  summarise(coffee_money = sum(price), .groups = "drop") %>%
+Q5.1.4_cc <- cc %>%                                     # Merge cc with location type data from spots median
+  left_join(dplyr::select(spots_median,Location, 
+                          Location.Type), 
+            by = c("location" = "Location")) %>%
+  filter(Location.Type == "Coffee Cafe") %>%            # Filter only Coffee Cafe location type
+  dplyr::select(location, 
+                hour, 
+                price) %>%
+  group_by(location, 
+           hour) %>%
+  summarise(coffee_money = sum(price), 
+            .groups = "drop") %>%
   ungroup() %>%
-  dcast(hour ~ location, value.var = "coffee_money") # Change from long to wide format
+  dcast(hour ~ location, 
+        value.var = "coffee_money")                     # Change from long to wide format
 
 
-Q5.1.4_cc$hour <- as_factor(Q5.1.4_cc$hour) # Change to factor type
+Q5.1.4_cc$hour <- as_factor(Q5.1.4_cc$hour)             # Change to factor type
 
-Q5.1.4_combined <- data.frame(hour = c(1:24)) # Create new dataframe with hours
+Q5.1.4_combined <- data.frame(hour = c(1:24))           # Create new dataframe with hours
 Q5.1.4_combined$hour <- as_factor(Q5.1.4_combined$hour) # Change to factor type
 Q5.1.4_combined <- Q5.1.4_combined %>%
-  left_join(Q5.1.4_cc, by = "hour")
+  left_join(Q5.1.4_cc, 
+            by = "hour")
 
-rm(Q5.1.4_cc) # Remove unused earlier dataset
+rm(Q5.1.4_cc)                                           # Remove unused earlier dataset
 
-Q5.1.4_combined <-melt(Q5.1.4_combined, id.vars = "hour", variable.name = "coffee_place") # Change from wide to long format
+Q5.1.4_combined <-melt(Q5.1.4_combined, 
+                       id.vars = "hour", 
+                       variable.name = "coffee_place")  # Change from wide to long format
 
 # Create a clock-like visualisation using ggplot
-Q5.1.4 <- ggplot(Q5.1.4_combined, aes(hour, value, fill = coffee_place)) +
+Q5.1.4 <- ggplot(Q5.1.4_combined, aes(hour, 
+                                      value, 
+                                      fill = coffee_place)) +
   geom_bar(stat = "identity") +
   coord_polar(theta = "x") +
   labs(title = "Daily CC Txns At Coffee Chains Restricted To Only Three Hours",
@@ -818,7 +903,7 @@ Q5.1.4 <- ggplot(Q5.1.4_combined, aes(hour, value, fill = coffee_place)) +
         axis.ticks = element_blank(),
         axis.text.y = element_blank(),
         panel.background = element_blank(),
-        panel.grid.major.x = element_line(colour="grey"),
+        panel.grid.major.x = element_line(colour = "grey"),
         axis.text.x = element_text(size = 15),
         legend.title=element_blank())
 
@@ -834,7 +919,8 @@ There were no credit card transactions on weekends before 12 noon. This is odd, 
 #| code-fold: show
 
 Q5.1.5_weekday <- data.frame("weekday" = unique(cc[c('weekday')])) %>%
-  slice(rep(1:n(), each = 5)) # Create new data frame based on unique values in cc
+  slice(rep(1:n(), 
+            each = 5))                                          # Create new data frame based on unique values in cc
 Q5.1.5_period <- data.frame("period" = unique(cc[c('period')])) # Create new data frame based on unique values in loyalty
 Q5.1.5_period$period <- factor(Q5.1.5_period$period,
                                 levels = c("Morning 6am to 11.59am",
@@ -842,20 +928,26 @@ Q5.1.5_period$period <- factor(Q5.1.5_period$period,
                                            "Evening 6pm to 8.59pm",
                                            "Late Evening 9pm to 11.59pm",
                                            "Late Night 12mn to 5.59am"))
-Q5.1.5_period <- as.data.frame(lapply(Q5.1.5_period,rep,7))
-Q5.1.5_combined <- cbind(Q5.1.5_weekday,Q5.1.5_period)
+Q5.1.5_period <- as.data.frame(lapply(Q5.1.5_period,
+                                      rep,7))
+Q5.1.5_combined <- cbind(Q5.1.5_weekday,
+                         Q5.1.5_period)
 
-rm(Q5.1.5_weekday) # Remove unused earlier dataset
-rm(Q5.1.5_period) # Remove unused earlier dataset
+rm(Q5.1.5_weekday,
+   Q5.1.5_period)                                              # Remove unused earlier dataset
 
 Q5.1.5_cc <- cc %>%
-  group_by(weekday,period) %>%
+  group_by(weekday,
+           period) %>%
   tally() %>%
   ungroup()
 
 Q5.1.5_combined <- Q5.1.5_combined %>%
-  left_join(Q5.1.5_cc, by = c("weekday"="weekday","period"="period"))
-Q5.1.5_combined$id <- seq(1, nrow(Q5.1.5_combined))
+  left_join(Q5.1.5_cc, 
+            by = c("weekday"="weekday",
+                   "period"="period"))
+Q5.1.5_combined$id <- seq(1, 
+                          nrow(Q5.1.5_combined))
 Q5.1.5_combined[36:63,] <- NA
 Q5.1.5_combined[36,4] <- 5.1
 Q5.1.5_combined[37,4] <- 5.2
@@ -886,11 +978,12 @@ Q5.1.5_combined[61,4] <- 35.2
 Q5.1.5_combined[62,4] <- 35.3
 Q5.1.5_combined[63,4] <- 35.4
 
-rm(Q5.1.5_cc) # Remove unused earlier dataset
+rm(Q5.1.5_cc)                                                  # Remove unused earlier dataset
 
 Q5.1.5_combined <- Q5.1.5_combined %>%
   arrange(id)
-Q5.1.5_combined$id <- seq(1, nrow(Q5.1.5_combined))
+Q5.1.5_combined$id <- seq(1, 
+                          nrow(Q5.1.5_combined))
 Q5.1.5_combined$period <- factor(Q5.1.5_combined$period,
                                 levels = c("Morning 6am to 11.59am",
                                            "Afternoon 12noon to 5.59pm",
@@ -900,49 +993,139 @@ Q5.1.5_combined$period <- factor(Q5.1.5_combined$period,
 
 Q5.1.5_label <- Q5.1.5_combined
 Q5.1.5_number_of_bar <- nrow(Q5.1.5_label)
-Q5.1.5_angle <- 90 - 360 * (Q5.1.5_label$id-0.5) /Q5.1.5_number_of_bar
-Q5.1.5_label$hjust <- ifelse(Q5.1.5_angle < -90, 1, 0)
-Q5.1.5_label$angle <- ifelse(Q5.1.5_angle < -90, Q5.1.5_angle+180, Q5.1.5_angle)
+Q5.1.5_angle <- 90 - 360 * (Q5.1.5_label$id-0.5) / Q5.1.5_number_of_bar
+Q5.1.5_label$hjust <- ifelse(Q5.1.5_angle < -90, 
+                             1, 
+                             0)
+Q5.1.5_label$angle <- ifelse(Q5.1.5_angle < -90, 
+                             Q5.1.5_angle + 180,
+                             Q5.1.5_angle)
 
-rm(Q5.1.5_angle) # Remove unused earlier dataset
-rm(Q5.1.5_number_of_bar) # Remove unused earlier dataset
+rm(Q5.1.5_angle,
+   Q5.1.5_number_of_bar)                                       # Remove unused earlier dataset
 
 Q5.1.5_base <- Q5.1.5_combined %>%
   group_by(weekday) %>%
-    summarize(start=min(id), end=max(id) - 4, .groups = "drop") %>%
+  summarize(start = min(id), 
+            end = max(id) - 4, 
+            .groups = "drop") %>%
   rowwise() %>%
-  mutate(title=mean(c(start, end))) %>%
+  mutate(title = mean(c(start, 
+                        end))) %>%
   ungroup()
 
 Q5.1.5_grid <- Q5.1.5_base
-Q5.1.5_grid$end <- Q5.1.5_grid$end[ c( nrow(Q5.1.5_grid), 1:nrow(Q5.1.5_grid)-1)] + 1
+Q5.1.5_grid$end <- Q5.1.5_grid$end[ c( nrow(Q5.1.5_grid), 
+                                       1:nrow(Q5.1.5_grid) - 1)] + 1
 Q5.1.5_grid$start <- Q5.1.5_grid$start - 1
 Q5.1.5_grid <- Q5.1.5_grid[-1,]
 
 
-Q5.1.5 <- ggplot(Q5.1.5_combined, aes(x=as_factor(id), y=n, fill=period)) +
-  geom_bar(aes(x=as_factor(id), y=n, fill=period), stat="identity", alpha=0.5) +
-
-  geom_segment(data=Q5.1.5_grid, aes(x = end, y = 120, xend = start, yend = 120), colour = "grey", alpha=1, size=0.3 , inherit.aes = FALSE ) +
-  geom_segment(data=Q5.1.5_grid, aes(x = end, y = 90, xend = start, yend = 90), colour = "grey", alpha=1, size=0.3 , inherit.aes = FALSE ) +
-  geom_segment(data=Q5.1.5_grid, aes(x = end, y = 60, xend = start, yend = 60), colour = "grey", alpha=1, size=0.3 , inherit.aes = FALSE ) +
-  geom_segment(data=Q5.1.5_grid, aes(x = end, y = 30, xend = start, yend = 30), colour = "grey", alpha=1, size=0.3 , inherit.aes = FALSE ) +
-
-  annotate("text", x = rep(max(Q5.1.5_combined$id),4), y = c(30, 60, 90, 120), label = c("30", "60", "90", "120") , color="grey", size=3 , angle=0, fontface="bold", hjust=1) +
-
-  geom_bar(aes(x=as_factor(id), y=n, fill=period), stat="identity", alpha=0.5) +
-  ylim(-100,150) +
+Q5.1.5 <- ggplot(Q5.1.5_combined, 
+                 aes(x = as_factor(id), 
+                     y = n, 
+                     fill = period)) +
+  geom_bar(aes(x = as_factor(id),
+               y = n, 
+               fill = period), 
+           stat = "identity", 
+           alpha = 0.5) +
+  geom_segment(data = Q5.1.5_grid, 
+               aes(x = end, 
+                   y = 120, 
+                   xend = start, 
+                   yend = 120), 
+               colour = "grey", 
+               alpha = 1, 
+               size = 0.3 , 
+               inherit.aes = FALSE ) +
+  geom_segment(data = Q5.1.5_grid, 
+               aes(x = end, 
+                   y = 90, 
+                   xend = start, 
+                   yend = 90), 
+               colour = "grey", 
+               alpha = 1, 
+               size = 0.3 , 
+               inherit.aes = FALSE ) +
+  geom_segment(data = Q5.1.5_grid, 
+               aes(x = end, 
+                   y = 60, 
+                   xend = start, 
+                   yend = 60), 
+               colour = "grey", 
+               alpha = 1, 
+               size = 0.3 , 
+               inherit.aes = FALSE ) +
+  geom_segment(data = Q5.1.5_grid, 
+               aes(x = end, 
+                   y = 30, 
+                   xend = start, 
+                   yend = 30), 
+               colour = "grey", 
+               alpha = 1, 
+               size = 0.3 , 
+               inherit.aes = FALSE ) +
+  annotate("text", 
+           x = rep(max(Q5.1.5_combined$id),
+                   4), 
+           y = c(30, 
+                 60, 
+                 90, 
+                 120), 
+           label = c("30", 
+                     "60", 
+                     "90", 
+                     "120") , 
+           color = "grey", 
+           size = 3 , 
+           angle = 0, 
+           fontface = "bold", 
+           hjust = 1) +
+  geom_bar(aes(x = as_factor(id), 
+               y = n, 
+               fill = period), 
+           stat = "identity", 
+           alpha = 0.5) +
+  ylim(-100,
+       150) +
   theme_minimal() +
   theme(axis.text = element_blank(),
         axis.title = element_blank(),
         panel.grid = element_blank(),
-        plot.margin = unit(rep(-1,4), "cm")) +
+        plot.margin = unit(rep(-1,
+                               4), 
+                           "cm")) +
   coord_polar() +
-  geom_text(data=Q5.1.5_label, aes(x=id, y=n+10, label=n, hjust=hjust), color="black", fontface="bold",alpha=0.6, size=3, angle= Q5.1.5_label$angle, inherit.aes = FALSE ) +
-
-  geom_segment(data=Q5.1.5_base, aes(x = start, y = -5, xend = end, yend = -5), colour = "black", alpha=0.8, size=0.6 , inherit.aes = FALSE )  +
-
-  geom_text(data=Q5.1.5_base, aes(x=title, y=-18, label=weekday), color="black", fontface="bold",alpha=0.6, size=3, inherit.aes = FALSE )
+  geom_text(data = Q5.1.5_label, 
+            aes(x = id, 
+                y = n + 10, 
+                label = n, 
+                hjust = hjust), 
+            color = "black", 
+            fontface = "bold",
+            alpha = 0.6, 
+            size = 3, 
+            angle = Q5.1.5_label$angle, 
+            inherit.aes = FALSE ) +
+  geom_segment(data = Q5.1.5_base, 
+               aes(x = start, 
+                   y = -5, 
+                   xend = end, 
+                   yend = -5), 
+               colour = "black", 
+               alpha = 0.8, 
+               size = 0.6, 
+               inherit.aes = FALSE ) +
+  geom_text(data = Q5.1.5_base, 
+            aes(x = title, 
+                y = -18, 
+                label = weekday), 
+            color = "black", 
+            fontface = "bold",
+            alpha = 0.6, 
+            size = 3, 
+            inherit.aes = FALSE )
 
 Q5.1.5
 
@@ -962,12 +1145,13 @@ Q5.1.6_label_loyalty <- data.frame("id" = 55:108,
                                    "code" = cc_loyalty_1$loyaltynum)
 
 Q5.1.6_label <- bind_rows(Q5.1.6_label_cc,
-                      Q5.1.6_label_loyalty)
+                          Q5.1.6_label_loyalty)
 
-rm(Q5.1.6_label_cc) # Remove unused earlier dataset
-rm(Q5.1.6_label_loyalty) # Remove unused earlier dataset
+rm(Q5.1.6_label_cc,
+   Q5.1.6_label_loyalty) # Remove unused earlier dataset
 
-Q5.1.6_label <- subset(Q5.1.6_label, select = -1 )
+Q5.1.6_label <- subset(Q5.1.6_label, 
+                       select = -1 )
 
 # Create parallel coordinates plot showing relationship between cc and loyalty. Non-unique matches are visualised in black, whereas 1-to-1 matches are shown in grey. Fig.height changed to 9 to show full height of parallel coordinates plot.
 Q5.1.6 <- ggparcoord(cc_loyalty_1,
@@ -978,7 +1162,8 @@ Q5.1.6 <- ggparcoord(cc_loyalty_1,
   geom_text(aes(label= Q5.1.6_label$code),
             size = 3,
             nudge_x = 0.07) +
-  scale_color_manual(values=c( "#172623", "#E8E8E8")) +
+  scale_color_manual(values=c( "#172623", 
+                               "#E8E8E8")) +
   theme_minimal() +
   scale_y_discrete(breaks = NULL) +
   theme(axis.title.x = element_blank(),
@@ -1005,23 +1190,30 @@ In section 5.1.2 earlier, we mentioned of the possibility of transactional data 
 # Create new df of gps data specifically on Kronos Mart's tracking
 Q5.2.1_gps <- tibble("dayofmonth" = c(6:19)) %>%
                   left_join(spots %>%
-                    group_by(Location, dayofmonth) %>%
-                    tally() %>%
-                    filter(Location == "Kronos Mart") %>%
-                    ungroup(), by = "dayofmonth") %>%
-                    mutate(n2=n) %>%
-                    replace_na(list(n=0))
+                              group_by(Location, 
+                                       dayofmonth) %>%
+                              tally() %>%
+                              filter(Location == "Kronos Mart") %>%
+                              ungroup(), 
+                            by = "dayofmonth") %>%
+                  mutate(n2 = n) %>%
+                  replace_na(list(n = 0))
 
 # Showcase Kronos Mart's GPS activity via a geom-area visualisation
 Q5.2.1 <- ggplot(Q5.2.1_gps,
-                  aes(x = dayofmonth, y = n)) +
+                  aes(x = dayofmonth, 
+                      y = n)) +
   geom_area(size = 1) +
   geom_point() +
-  geom_text(aes(label = n2), na.rm = TRUE,
+  geom_text(aes(label = n2), 
+            na.rm = TRUE,
             vjust = -1,
             size = 3) +
-  scale_x_continuous(breaks = seq(6,19,1)) +
-  ylim(0,5) +
+  scale_x_continuous(breaks = seq(6,
+                                  19,
+                                  1)) +
+  ylim(0,
+       5) +
   labs("title" = "GPS Movements to Kronos Mart Validates Loyalty Data",
        "subtitle" = "GPS data seem to validate the loyalty data, more than the credit card data") +
   theme(axis.text.y = element_blank(),
@@ -1045,16 +1237,20 @@ Visitations to unknown locations such as Hippokampos and Abila Zacharo during no
 
 # Create ridgeline plot of GPS locations by hours of day, and excluding Home, Anonymous locations and Gastech.
 Q5.2.2 <- ggplot(spots %>%
-                   filter(!grepl("Home|Anonymous|GasTech", Location)),
+                   filter(!grepl("Home|Anonymous|GasTech", 
+                                 Location)),
                  aes(x = hour,
                      y = Location,
                      fill = stat(x)
                      )) +
-                 geom_density_ridges_gradient(scale=3,rel_min_height = 0.001) +
+                 geom_density_ridges_gradient(scale = 3,
+                                              rel_min_height = 0.001) +
   scale_x_continuous(breaks = 0:24) +
-  scale_y_discrete(limits=rev) +
-  scale_fill_viridis_c(name = "ABC", option = "A") +
-  theme_ridges(font_size = 7, grid = TRUE) +
+  scale_y_discrete(limits = rev) +
+  scale_fill_viridis_c(name = "ABC", 
+                       option = "A") +
+  theme_ridges(font_size = 7, 
+               grid = TRUE) +
   theme(legend.position = "none") +
   labs(title = "Uncovering Location Type Beyond Ambiguous Location Names Using GPS Data",
        subtitle = "High Noon GPS Activity Continue To Suggest Abila Zacharo and Hippokampos As Food Outlets")
@@ -1072,7 +1268,9 @@ GPS data shows restricted activity coffee chain activity to just two hours withi
 
 # Merge spots data with Location Type and change from long to wide format
 Q5.2.3_spots <- spots %>%
-  left_join(dplyr::select(spots_median,Location, Location.Type), by = c("Location" = "Location")) %>%
+  left_join(dplyr::select(spots_median,Location, 
+                          Location.Type), 
+            by = c("Location" = "Location")) %>%
   filter(Location.Type == "Coffee Cafe") %>%
   count(Location, hour) %>%
   ungroup() %>%
@@ -1083,13 +1281,19 @@ Q5.2.3_spots$hour <- as_factor(Q5.2.3_spots$hour)
 Q5.2.3_combined <- data.frame(hour = c(1:24))
 Q5.2.3_combined$hour <- as_factor(Q5.2.3_combined$hour)
 Q5.2.3_combined <- Q5.2.3_combined %>%
-  left_join(Q5.2.3_spots, by = "hour")
+  left_join(Q5.2.3_spots, 
+            by = "hour")
 
 rm(Q5.2.3_spots) # Remove unused earlier dataset
 
-Q5.2.3_combined <-melt(Q5.2.3_combined, id.vars = "hour", variable.name = "coffee_place")
+Q5.2.3_combined <-melt(Q5.2.3_combined, 
+                       id.vars = "hour", 
+                       variable.name = "coffee_place")
 
-Q5.2.3 <- ggplot(Q5.2.3_combined, aes(hour, value, fill = coffee_place)) +
+Q5.2.3 <- ggplot(Q5.2.3_combined, 
+                 aes(hour, 
+                     value, 
+                     fill = coffee_place)) +
   geom_bar(stat = "identity") +
   coord_polar(theta = "x") +
   labs(title = "Daily GPS Activity At Coffee Chains Restricted To Only Two Hours",
@@ -1100,7 +1304,7 @@ Q5.2.3 <- ggplot(Q5.2.3_combined, aes(hour, value, fill = coffee_place)) +
         axis.ticks = element_blank(),
         axis.text.y = element_blank(),
         panel.background = element_blank(),
-        panel.grid.major.x = element_line(colour="grey"),
+        panel.grid.major.x = element_line(colour = "grey"),
         axis.text.x = element_text(size = 15),
         legend.title=element_blank())
 
@@ -1116,7 +1320,8 @@ On Sat morning, there was around 2,000+ gps points up and about in the city. Thi
 #| code-fold: show
 
 Q5.2.4_weekday <- data.frame("weekday" = unique(cc[c('weekday')])) %>%
-  slice(rep(1:n(), each = 5))
+  slice(rep(1:n(), 
+            each = 5))
 Q5.2.4_period <- data.frame("period" = unique(cc[c('period')]))
 Q5.2.4_period$period <- factor(Q5.2.4_period$period,
                                 levels = c("Morning 6am to 11.59am",
@@ -1124,20 +1329,27 @@ Q5.2.4_period$period <- factor(Q5.2.4_period$period,
                                            "Evening 6pm to 8.59pm",
                                            "Late Evening 9pm to 11.59pm",
                                            "Late Night 12mn to 5.59am"))
-Q5.2.4_period <- as.data.frame(lapply(Q5.2.4_period,rep,7))
-Q5.2.4_combined <- cbind(Q5.2.4_weekday,Q5.2.4_period)
+Q5.2.4_period <- as.data.frame(lapply(Q5.2.4_period,
+                                      rep,
+                                      7))
+Q5.2.4_combined <- cbind(Q5.2.4_weekday,
+                         Q5.2.4_period)
 
-rm(Q5.2.4_weekday) # Remove unused earlier dataset
-rm(Q5.2.4_period) # Remove unused earlier dataset
+rm(Q5.2.4_weekday,
+   Q5.2.4_period) # Remove unused earlier dataset
 
 Q5.2.4_gps <- gps_name %>%
-  group_by(weekday,period) %>%
+  group_by(weekday,
+           period) %>%
   tally() %>%
   ungroup()
 
 Q5.2.4_combined <- Q5.2.4_combined %>%
-  left_join(Q5.2.4_gps, by = c("weekday"="weekday","period"="period"))
-Q5.2.4_combined$id <- seq(1, nrow(Q5.2.4_combined))
+  left_join(Q5.2.4_gps, 
+            by = c("weekday" = "weekday",
+                   "period" = "period"))
+Q5.2.4_combined$id <- seq(1, 
+                          nrow(Q5.2.4_combined))
 Q5.2.4_combined[36:63,] <- NA
 Q5.2.4_combined[36,4] <- 5.1
 Q5.2.4_combined[37,4] <- 5.2
@@ -1172,7 +1384,8 @@ rm(Q5.2.4_gps) # Remove unused earlier dataset
 
 Q5.2.4_combined <- Q5.2.4_combined %>%
   arrange(id)
-Q5.2.4_combined$id <- seq(1, nrow(Q5.2.4_combined))
+Q5.2.4_combined$id <- seq(1, 
+                          nrow(Q5.2.4_combined))
 Q5.2.4_combined$period <- factor(Q5.2.4_combined$period,
                                 levels = c("Morning 6am to 11.59am",
                                            "Afternoon 12noon to 5.59pm",
@@ -1182,49 +1395,138 @@ Q5.2.4_combined$period <- factor(Q5.2.4_combined$period,
 
 Q5.2.4_label <- Q5.2.4_combined
 Q5.2.4_number_of_bar <- nrow(Q5.2.4_label)
-Q5.2.4_angle <- 90 - 360 * (Q5.2.4_label$id-0.5) /Q5.2.4_number_of_bar
-Q5.2.4_label$hjust <- ifelse(Q5.2.4_angle < -90, 1, 0)
-Q5.2.4_label$angle <- ifelse(Q5.2.4_angle < -90, Q5.2.4_angle+180, Q5.2.4_angle)
+Q5.2.4_angle <- 90 - 360 * (Q5.2.4_label$id - 0.5) / Q5.2.4_number_of_bar
+Q5.2.4_label$hjust <- ifelse(Q5.2.4_angle < -90, 
+                             1, 
+                             0)
+Q5.2.4_label$angle <- ifelse(Q5.2.4_angle < -90, 
+                             Q5.2.4_angle + 180, 
+                             Q5.2.4_angle)
 
 rm(Q5.2.4_angle) # Remove unused earlier dataset
 rm(Q5.2.4_number_of_bar) # Remove unused earlier dataset
 
 Q5.2.4_base <- Q5.2.4_combined %>%
   group_by(weekday) %>%
-  summarize(start=min(id), end=max(id) - 4, .groups = "drop") %>%
+  summarize(start = min(id), 
+            end = max(id) - 4, 
+            .groups = "drop") %>%
   rowwise() %>%
-  mutate(title=mean(c(start, end))) %>%
+  mutate(title = mean(c(start, 
+                        end))) %>%
   ungroup()
 
 Q5.2.4_grid <- Q5.2.4_base
-Q5.2.4_grid$end <- Q5.2.4_grid$end[ c( nrow(Q5.2.4_grid), 1:nrow(Q5.2.4_grid)-1)] + 1
+Q5.2.4_grid$end <- Q5.2.4_grid$end[ c( nrow(Q5.2.4_grid), 1:nrow(Q5.2.4_grid) - 1)] + 1
 Q5.2.4_grid$start <- Q5.2.4_grid$start - 1
 Q5.2.4_grid <- Q5.2.4_grid[-1,]
 
 
-Q5.2.4 <- ggplot(Q5.2.4_combined, aes(x=as_factor(id), y=n, fill=period)) +
-  geom_bar(aes(x=as_factor(id), y=n, fill=period), stat="identity", alpha=0.5) +
-
-  geom_segment(data=Q5.2.4_grid, aes(x = end, y = 80000, xend = start, yend = 80000), colour = "grey", alpha=1, size=0.3 , inherit.aes = FALSE ) +
-  geom_segment(data=Q5.2.4_grid, aes(x = end, y = 60000, xend = start, yend = 60000), colour = "grey", alpha=1, size=0.3 , inherit.aes = FALSE ) +
-  geom_segment(data=Q5.2.4_grid, aes(x = end, y = 40000, xend = start, yend = 40000), colour = "grey", alpha=1, size=0.3 , inherit.aes = FALSE ) +
-  geom_segment(data=Q5.2.4_grid, aes(x = end, y = 20000, xend = start, yend = 20000), colour = "grey", alpha=1, size=0.3 , inherit.aes = FALSE ) +
-
-  annotate("text", x = rep(max(Q5.2.4_combined$id),4), y = c(20000, 40000, 60000, 80000), label = c("20000", "40000", "60000", "80000") , color="grey", size=3 , angle=0, fontface="bold", hjust=1) +
-
-  geom_bar(aes(x=as_factor(id), y=n, fill=period), stat="identity", alpha=0.5) +
-  ylim(-80000,100000) +
+Q5.2.4 <- ggplot(Q5.2.4_combined, 
+                 aes(x = as_factor(id), 
+                     y = n, 
+                     fill = period)) +
+  geom_bar(aes(x = as_factor(id), 
+               y = n, 
+               fill = period), 
+           stat = "identity", 
+           alpha = 0.5) +
+  geom_segment(data = Q5.2.4_grid, 
+               aes(x = end, 
+                   y = 80000, 
+                   xend = start, 
+                   yend = 80000), 
+               colour = "grey", 
+               alpha = 1, 
+               size = 0.3 , 
+               inherit.aes = FALSE ) +
+  geom_segment(data = Q5.2.4_grid, 
+               aes(x = end, 
+                   y = 60000, 
+                   xend = start, 
+                   yend = 60000), 
+               colour = "grey", 
+               alpha = 1, 
+               size = 0.3 , 
+               inherit.aes = FALSE ) +
+  geom_segment(data = Q5.2.4_grid, 
+               aes(x = end, 
+                   y = 40000, 
+                   xend = start, 
+                   yend = 40000), 
+               colour = "grey", 
+               alpha = 1, 
+               size = 0.3 , 
+               inherit.aes = FALSE ) +
+  geom_segment(data = Q5.2.4_grid, 
+               aes(x = end, 
+                   y = 20000, 
+                   xend = start, 
+                   yend = 20000), 
+               colour = "grey", 
+               alpha = 1, 
+               size = 0.3 , 
+               inherit.aes = FALSE ) +
+  annotate("text", 
+           x = rep(max(Q5.2.4_combined$id),
+                   4), 
+           y = c(20000, 
+                 40000, 
+                 60000, 
+                 80000), 
+           label = c("20000", 
+                     "40000", 
+                     "60000", 
+                     "80000") , 
+           color = "grey", 
+           size = 3 , 
+           angle = 0, 
+           fontface = "bold", 
+           hjust = 1) +
+  geom_bar(aes(x = as_factor(id), 
+               y = n, 
+               fill = period), 
+           stat = "identity", 
+           alpha = 0.5) +
+  ylim(-80000,
+       100000) +
   theme_minimal() +
   theme(axis.text = element_blank(),
         axis.title = element_blank(),
         panel.grid = element_blank(),
-        plot.margin = unit(rep(-1,4), "cm")) +
+        plot.margin = unit(rep(-1,
+                               4), 
+                           "cm")) +
   coord_polar() +
-  geom_text(data=Q5.2.4_label, aes(x=id, y=n+10, label=n, hjust=hjust), color="black", fontface="bold",alpha=0.6, size=3, angle= Q5.2.4_label$angle, inherit.aes = FALSE ) +
-
-  geom_segment(data=Q5.2.4_base, aes(x = start, y = -5, xend = end, yend = -5), colour = "black", alpha=0.8, size=0.6 , inherit.aes = FALSE )  +
-
-  geom_text(data=Q5.2.4_base, aes(x=title, y=-10000, label=weekday), color="black", fontface="bold",alpha=0.6, size=3, inherit.aes = FALSE )
+  geom_text(data = Q5.2.4_label, 
+            aes(x = id, 
+                y = n + 10, 
+                label = n, 
+                hjust = hjust), 
+            color = "black", 
+            fontface = "bold",
+            alpha = 0.6, 
+            size = 3, 
+            angle = Q5.2.4_label$angle, 
+            inherit.aes = FALSE ) +
+  geom_segment(data = Q5.2.4_base, 
+               aes(x = start, 
+                   y = -5, 
+                   xend = end, 
+                   yend = -5), 
+               colour = "black", 
+               alpha = 0.8, 
+               size = 0.6 , 
+               inherit.aes = FALSE )  +
+  geom_text(data = Q5.2.4_base, 
+            aes(x = title, 
+                y = -10000, 
+                label = weekday), 
+            color = "black", 
+            fontface = "bold",
+            alpha = 0.6, 
+            size = 3, 
+            inherit.aes = FALSE )
 
 Q5.2.4
 
