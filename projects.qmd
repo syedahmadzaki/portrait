@@ -14,12 +14,6 @@ listing:
     categories: true    
 ---
 
-This portfolio includes the various research work i've done,
+This portfolio includes the various research work i've done, as well as other projects on the side.
 
-as well as other projects on the side.
-
-```{r}
-
-1 + 1
-
-```
+\

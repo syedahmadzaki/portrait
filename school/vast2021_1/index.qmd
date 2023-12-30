@@ -4,31 +4,48 @@ description: "Investigating the Mini-Challenge 2 of VAST Challenge 2021"
 author: 
   - name: Syed Ahmad Zaki
 date: 07-26-2021
+toc: true
+format:
+  html: 
+    code-overflow: wrap
+categories:
+  - VAST Challenge
+  - R
+  - Fuzzy Matching
+  
 ---
 
 ```{r install-packages, include=FALSE}
 
+# require(devtools)
+# install_version("tmap", version = "3.3-2", repos = "http://cran.us.r-project.org")
+# packageurl <- "https://cran.r-project.org/src/contrib/Archive/tmap/tmap_3.3-1.tar.gz"
+# install.packages(packageurl, repos=NULL, type="source")
+# library(tmap)
+
 # Install and load necessary packages
 if (!require("pacman")) install.packages("pacman")
-pacman::p_load(ggplot2, tidyverse, readr, grid, plotly, writexl, qwraps2, 
-               reshape2, scales, sf, raster, tmap, clock, forcats, readxl,
-               lubridate, fuzzyjoin, ggridges, GGally, kableExtra)
+pacman::p_load(ggplot2, tidyverse, readr, grid, plotly, writexl, qwraps2, reshape2, scales, sf, raster, tmap, 
+               clock, forcats, readxl, lubridate, fuzzyjoin, ggridges, GGally, kableExtra, terra)
 
 ```
 
 **Team Member:**\
-Syed Ahmad Zaki, Singapore Management University\
-Student Team: YES
+Syed Ahmad Zaki, Singapore Management University (SMU)\
+\
 
+**Student Team:**\
+YES\
+\
 **Tools Used:**\
-Rmarkdown
-
+Rmarkdown\
+\
 **Approximately how many hours were spent working on this submission in total?**\
-\~200 hours
-
+\~200 hours\
+\
 **May we post your submission in the Visual Analytics Benchmark Repository after VAST Challenge 2021 is complete?**\
-YES
-
+YES\
+\
 **Video**\
 Provide a link to your video. Example: <http://www.westbirmingham.ac.uk/uwb-smith-mc2-video.wmv>
 
@@ -36,59 +53,37 @@ Provide a link to your video. Example: <http://www.westbirmingham.ac.uk/uwb-smit
 
 ### 1.1 Our Mission (Should We Accept It!)
 
-As a visual analytics expert assisting law enforcement, your mission is to identify which GASTech employees made which purchases and identify suspicious patterns of behavior. You must cope with uncertainties that result from missing, conflicting, and imperfect data to make recommendations for further investigation.
-
-Use visual analytics to analyze the available data and develop responses to the questions below. In addition, prepare a video that shows how you used visual analytics to solve this challenge. Submission instructions are available here. Entry forms are available for download [here.](https://vast-challenge.github.io/2021/MC2.html)
-
-## 2. Literature Review
-
-Before we begin our literature review, it's important that we start by loading all the necessary datasets provided in the VAST Challenge 2021 Mini-Challenge 2.
-
-**Team Member:**\
-Syed Ahmad Zaki, Singapore Management University of Singapore, ahmadzaki.2020\@mitb.smu.edu.sg\
-Student Team: YES
-
-**Tools Used:**\
-Rmarkdown
-
-**Approximately how many hours were spent working on this submission in total?**\
-\~200 hours
-
-**May we post your submission in the Visual Analytics Benchmark Repository after VAST Challenge 2021 is complete?**\
-YES
-
-**Video**\
-Provide a link to your video. Example: <http://www.westbirmingham.ac.uk/uwb-smith-mc2-video.wmv>
-
-## 1. Introduction
-
-### 1.1 Our Mission (Should We Accept It!)
-
-As a visual analytics expert assisting law enforcement, your mission is to identify which GASTech employees made which purchases and identify suspicious patterns of behavior. You must cope with uncertainties that result from missing, conflicting, and imperfect data to make recommendations for further investigation.
-
-Use visual analytics to analyze the available data and develop responses to the questions below. In addition, prepare a video that shows how you used visual analytics to solve this challenge. Submission instructions are available here. Entry forms are available for download [here.](https://vast-challenge.github.io/2021/MC2.html)
+As a visual analytics expert assisting law enforcement, your mission is to identify which GASTech employees made which purchases and identify suspicious patterns of behavior. You must cope with uncertainties that result from missing, conflicting, and imperfect data to make recommendations for further investigation.\
+\
+Use visual analytics to analyze the available data and develop responses to the questions below. In addition, prepare a video that shows how you used visual analytics to solve this challenge. Submission instructions are available here. Entry forms are available for download [here.](https://vast-challenge.github.io/2021/MC2.html)\
 
 ## 2. Literature Review
 
-Before we begin our literature review, it's important that we start by loading all the necessary datasets provided in the VAST Challenge 2021 Mini-Challenge 2.
-
+Before we begin our literature review, it's important that we start by loading all the necessary datasets provided in the VAST Challenge 2021 Mini-Challenge 2.\
+\
 ```{r load-all-datasets, echo = T, message = FALSE, results = 'hide'}
+#| code-fold: show
 
-# Loading all datasets and image
-cc <- readr::read_csv("data/cc_data.csv") # Add credit card data
-loyalty <- readr::read_csv("data/loyalty_data.csv") # Add loyalty data
-mc2 <- raster("data/MC2-tourist_modified.tif") # Add tif file as a raster layer
-gps <- readr::read_csv("data/gps.csv") # Add gps data
-car <- readr::read_csv("data/car-assignments.csv") # Add car assignments
-Abila_st <- st_read(dsn = "data", layer = "Abila")
-Kronos_sf <- st_as_sf(st_read(dsn = "data", layer = "Kronos_Island"))
+# Loading all datasets and images
+cc <- read_csv("data/cc_data.csv")                  # Add credit card data
+loyalty <- read_csv("data/loyalty_data.csv")        # Add loyalty data
+mc2 <- raster("data/MC2-tourist_modified.tif")      # Add tif file as a raster layer
+# mc2 <- brick("data/MC2-tourist_modified.tif")     # Add tif file as a raster layer
+# mc2 <- rast("data/MC2-tourist_modified.tif")      # Add tif file as a raster layer
+gps <- read_csv("data/gps.csv")                     # Add gps data
+car <- read_csv("data/car-assignments.csv")         # Add car assignments
+Abila_st <- st_read(dsn = "data", 
+                    layer = "Abila")
+Kronos_sf <- st_as_sf(st_read(dsn = "data", 
+                              layer = "Kronos_Island"))
 
 ```
 
-A cursory look at the dataset reveals the following data types:
+A cursory look at the dataset reveals the following data types:\
+\
 
 |           Data           |    Type    | Description                                       |
-|:---------------:|:---------------:|:-------------------------------------|
+|:---------------:|:---------------:|:-------------------------------------:|
 |   Credit Card.csv (cc)   |  Aspatial  | Credit card txns by timestamp, location and amt   |
 |       Loyalty.csv        |  Aspatial  | Loyalty card txns by date, location and amt       |
 | Car Assignment.csv (car) |  Aspatial  | Car assignment ID with individuals' name and role |
@@ -98,10 +93,11 @@ A cursory look at the dataset reveals the following data types:
 |          Abila           | Geospatial | Abila's road network                              |
 |      Kronos Island       | Geospatial | Polygon showing Kronos Island's admin boundary    |
 
-An in-depth look at the dataset reveals the following fields:
+An in-depth look at the dataset reveals the following fields:\
+\
 
 |          File Name |  cc   | loyalty |   gps   | car | mc2 |
-|-------------------:|:-----:|:-------:|:-------:|:---:|:---:|
+|:-----------------:|:-----:|:-------:|:-------:|:---:|:---:|
 |          File Type |  csv  |   csv   |   csv   | csv | pic |
 |              Count | 1,490 |  1,392  | 685,169 | 44  | \-  |
 |        Date Format | m/d/y |  m/d/y  |  m/d/y  | \-  | \-  |
@@ -115,18 +111,19 @@ An in-depth look at the dataset reveals the following fields:
 |              Names |  \-   |   \-    |   \-    | Yes | \-  |
 | Employment Details |  \-   |   \-    |   \-    | Yes | \-  |
 
-Not all files have the same fields. While it's easy to merge gps and car data using its unique ID, there are no unique fields tying the cc and loyalty data together. Thus, merging both cc and loyalty data together would require some form of fuzzy joining logic. Separately, to add to the complexity, we would need to identify the various locations within the gps data, using both the cc and mc2 map.
-
-With these dataset in mind, the following considerations would need to be addressed:
+Not all files have the same fields. While it's easy to merge gps and car data using its unique ID, there are no unique fields tying the cc and loyalty data together. Thus, merging both cc and loyalty data together would require some form of fuzzy joining logic. Separately, to add to the complexity, we would need to identify the various locations within the gps data, using both the cc and mc2 map.\
+\
+With these dataset in mind, the following considerations would need to be addressed.
 
 ### 2.1 Fuzzy Matching
 
-There are a few ways to employ fuzzy matching in our dataset. One is to use the native [adist](https://www.rdocumentation.org/packages/utils/versions/3.6.2/topics/adist) function within R, but its processing time leaves much to be desired. The other is to use packages specifically designed for fuzzy matching. One such package that is built for speed in matching similar phrases is [stringdist](https://www.rdocumentation.org/packages/stringdist/versions/0.9.6.3). It uses [openMP](https://www.openmp.org/) for parallel computing to speed up its matching of unequal content. The only downside (though it's hardly a downside) is that it requires the columns of comparison to be housed in the same dataframe. [Fuzzyjoin](https://www.rdocumentation.org/packages/fuzzyjoin/versions/0.1.6), built on top of [stringdist](https://www.rdocumentation.org/packages/stringdist/versions/0.9.6.3), allows comparison of columns housed in different dataset, and its output include a merging of both datasets.
-
-Unfortunately, deciding on the fuzzy logic package is the easy part. The harder part is to decide on the appropriate fuzzy join logic. Here's a list of [distance metrics](https://cran.r-project.org/web/packages/stringdist/stringdist.pdf) currently supported by stringdist:
+There are a few ways to employ fuzzy matching in our dataset. One is to use the native [adist](https://www.rdocumentation.org/packages/utils/versions/3.6.2/topics/adist) function within R, but its processing time leaves much to be desired. The other is to use packages specifically designed for fuzzy matching. One such package that is built for speed in matching similar phrases is [stringdist](https://www.rdocumentation.org/packages/stringdist/versions/0.9.6.3). It uses [openMP](https://www.openmp.org/) for parallel computing to speed up its matching of unequal content. The only downside (though it's hardly a downside) is that it requires the columns of comparison to be housed in the same dataframe. [Fuzzyjoin](https://www.rdocumentation.org/packages/fuzzyjoin/versions/0.1.6), built on top of [stringdist](https://www.rdocumentation.org/packages/stringdist/versions/0.9.6.3), allows comparison of columns housed in different dataset, and its output include a merging of both datasets.\
+\
+Unfortunately, deciding on the fuzzy logic package is the easy part. The harder part is to decide on the appropriate fuzzy join logic. Here's a list of [distance metrics](https://cran.r-project.org/web/packages/stringdist/stringdist.pdf) currently supported by stringdist:\
+\
 
 | Method Name | Description                                                        |
-|:-------------------------------|:---------------------------------------|
+|:--------------|:-----------------------------------------------------------------|
 | osa         | Optimal string aligment, (restricted Damerau-Levenshtein distance) |
 | lv          | Levenshtein distance (as in R’s native adist).                     |
 | dl          | Full Damerau-Levenshtein distance.                                 |
@@ -141,1090 +138,1138 @@ Out of the above methods, osa, lv and dl seems most apt, since we're dealing wit
 
 ### 2.2 Map Visualisations of GPS Data
 
-While it makes sense to convert our GPS points into spatial lines, using the furnished map pic as a basemap is less than ideal. As shown below, it's unclear whether the GPS path coincides with the location icons shown on the map. These icons are far too large, and does not reflect whether these GPS points either stopped at or merely drove past these points. At the same time, the GPS path seem to run on a road network, that is not reflected within the furnished map pic.
-
-<!-- ```{r mc2} -->
-
-<!-- gps$Timestamp <- date_time_parse(gps$Timestamp, -->
-<!--                 zone = "UTC", -->
-<!--                 format = "%m/%d/%Y %H:%M:%S") # Readjust loyalty timestamp -->
-<!-- gps$day <- as_factor(get_day(gps$Timestamp)) # Extract day of month and convert to factor data type -->
-<!-- gps$id <- as_factor(gps$id) # Change to factor data type -->
-
-<!-- gps_sf <- st_as_sf(gps, coords = c("long", "lat"), crs = 4326) # Changing into a shapefile -->
-
-<!-- gps_path1 <- gps_sf %>% # Grouping gps lines according to id and day of month -->
-<!--   group_by(id, day) %>% -->
-<!--   summarize(m = mean(Timestamp),  -->
-<!--             do_union=FALSE,  -->
-<!--             .groups = "drop") %>% -->
-<!--   st_cast("LINESTRING") # Change GPS into a line -->
-
-<!-- tmap_mode("view") -->
-<!-- Q2.2_mc2 <- tm_shape(mc2) + -->
-<!--               tm_rgb(mc2, r = 1,g = 2,b = 3, -->
-<!--                    alpha = NA, -->
-<!--                    saturation = 1, -->
-<!--                    interpolate = TRUE, -->
-<!--                    max.value = 255) + -->
-<!--             tm_shape(gps_path1 %>% -->
-<!--                      filter(id==1)) + -->
-<!--               tm_lines() -->
-
-<!-- Q2.2_mc2 -->
-
-<!-- ``` -->
-
-<!-- At the same time, we are provided with the Abila road network. This granular road network is not reflected at all within the map pic. Taking inspiration from [City University London's entry](https://www.cs.umd.edu/hcil/varepository/VAST%20Challenge%202014/challenges/MC2%20-%20Patterns%20of%20Life%20Analysis/entries/giCentre%20-%20City%20University%20London/), they made great use of the Abila road network to create their own map (reproduced below). They then coupled this road network with actual location points that they have derived from the data. We will borrow this visualisation format as a basis for our own visualisation. To bring it a step further, we will recreate this map in an interactive fashion in subsequent sections. For now, let's prepare the necessary data. -->
-
-<!-- ![City University London's MC2 Sample Map Entry](img/ferro.png) -->
-
-<!-- ## 3. Data Comprehension -->
-
-<!-- As always, we review each dataset in greater detail. This is a necessary step in order to accurately prepare the data for subsequent use. -->
-
-<!-- While reviewing the four csv data, we immediately noticed a few potential issues:\ -->
-<!-- 1. Date format within the timestamp were in a MM-DD-YYYY H:M format\ -->
-<!-- 2. Katerina's Cafe contains unique characters, which may cause downstream problems during our analysis\ -->
-<!-- 3. ID and Last4CCNum are treated as regular double numbers, instead of a character type\ -->
-<!-- 4. Names and roles are broken up into multiple columns within the car data -->
-
-<!-- Thus, we address these potential issues as well as create and simplify other columns for subsequent ease in analysis. -->
-
-<!-- ```{r csv-data-cleaning} -->
-
-<!-- #--------------- Cleaning CC data --------------- -->
-
-<!-- cc$timestamp <- date_time_parse(cc$timestamp, -->
-<!--                 zone = "UTC", -->
-<!--                 format = "%m/%d/%Y  %H:%M") # Readjust CC timestamp -->
-<!-- cc[grep("Katerina", cc$location),2] <- "Katerina's Cafe" # Replace unique characters in Katerina's Cafe -->
-<!-- cc$last4ccnum <- as_factor(cc$last4ccnum) # Change the column format to nominal format -->
-<!-- cc$hour <- as.numeric(format(cc$timestamp,"%H")) # Create a separate column just for hours in the cc data -->
-<!-- cc$period <- case_when( # Segment hour into 5 separate periods -->
-<!--   cc$hour >= 21 ~ "Late Evening 9pm to 11.59pm", -->
-<!--   cc$hour >= 18 ~ "Evening 6pm to 8.59pm", -->
-<!--   cc$hour >= 12 ~ "Afternoon 12noon to 5.59pm", -->
-<!--   cc$hour >= 6 ~ "Morning 6am to 11.59am", -->
-<!--   TRUE ~ "Late Night 12mn to 5.59am" -->
-<!-- ) -->
-
-<!-- cc$period <- factor(cc$period, # Order periods accordingly -->
-<!--                     levels = c("Morning 6am to 11.59am",  -->
-<!--                                "Afternoon 12noon to 5.59pm",  -->
-<!--                                "Evening 6pm to 8.59pm", -->
-<!--                                "Late Evening 9pm to 11.59pm", -->
-<!--                                "Late Night 12mn to 5.59am")) -->
-
-<!-- cc$dayofmonth <- day(cc$timestamp) # Extract day of month from timestamp in a new column -->
-<!-- cc$dayofmonth <- as_factor(cc$dayofmonth) # Change to nominal format -->
-<!-- cc$weekday <- wday(cc$timestamp, label = TRUE) # Extract day of week from timestamp in a new column -->
-<!-- cc <- tibble::rowid_to_column(cc, "ID") # Create a numeric id column -->
-<!-- cc$date <- as.Date(cc$timestamp) # Create a separate column just for dates in the cc data -->
-<!-- cc$concat_cc_loyalty <- paste(cc$date,cc$location,cc$price) # Create a separate column of unique values using concatenated values in the cc data -->
-<!-- cc$concat_cc_spots <- paste(cc$date,cc$location,cc$hour) # Create a second separate column of unique values using concatenated values in the cc data -->
-<!-- cc$ID <- as_factor(cc$ID) # Change the column format to nominal format -->
-
-<!-- #--------------- Cleaning Loyalty data --------------- -->
-
-<!-- loyalty$timestamp <- date_time_parse(loyalty$timestamp, -->
-<!--                 zone = "UTC", -->
-<!--                 format = "%m/%d/%Y") # Readjust loyalty timestamp -->
-<!-- loyalty[grep("Katerina", loyalty$location),2] <- "Katerina's Cafe" # Replace unique characters in Katerina's Cafe -->
-<!-- loyalty$dayofmonth <- day(loyalty$timestamp) # Extract day of month from timestamp in a new column -->
-<!-- loyalty$dayofmonth <- as_factor(loyalty$dayofmonth) # Change to nominal format -->
-<!-- loyalty$weekday <- wday(loyalty$timestamp, label = TRUE) # Extract day of week from timestamp in a new column -->
-<!-- loyalty$concat_loyalty_cc <- paste(loyalty$timestamp,loyalty$location,loyalty$price) # Create a separate column of unique values using concatenated values in the loyalty data -->
-<!-- loyalty <- tibble::rowid_to_column(loyalty, "ID") # Create a numeric id column -->
-<!-- loyalty$ID <- as_factor(loyalty$ID) # Change the column format to nominal format -->
-
-<!-- #--------------- Cleaning Car Assignment data --------------- -->
-
-<!-- car$CarID <- as_factor(car$CarID) # Change the column format to nominal format -->
-<!-- car$FullName <- paste(car$FirstName,car$LastName, sep = " ") # Create new column with combined first and last name -->
-<!-- car$RoleNName <- paste(car$CarID, car$CurrentEmploymentTitle, car$FullName, sep = " ") # Create new column with combined ID, Role and Full Name -->
-
-<!-- #--------------- Cleaning GPS data --------------- -->
-
-<!-- gps$date <- as_date(gps$Timestamp) # Create a separate column just for dates in the gps data -->
-<!-- gps$hour <- hour(gps$Timestamp) # Create a separate column just for hours in the gps data -->
-<!-- gps$period <- case_when( # Segment hour into 5 separate periods -->
-<!--   gps$hour >= 21 ~ "Late Evening 9pm to 11.59pm", -->
-<!--   gps$hour >= 18 ~ "Evening 6pm to 8.59pm", -->
-<!--   gps$hour >= 12 ~ "Afternoon 12noon to 5.59pm", -->
-<!--   gps$hour >= 6 ~ "Morning 6am to 11.59am", -->
-<!--   TRUE ~ "Late Night 12mn to 5.59am" -->
-<!-- ) -->
-<!-- gps$period <- factor(gps$period, # Order periods accordingly -->
-<!--                      levels = c("Morning 6am to 11.59am",  -->
-<!--                                 "Afternoon 12noon to 5.59pm",  -->
-<!--                                 "Evening 6pm to 8.59pm", -->
-<!--                                 "Late Evening 9pm to 11.59pm", -->
-<!--                                 "Late Night 12mn to 5.59am")) -->
-<!-- gps$dayofmonth <- day(gps$Timestamp) # Extract day of month from timestamp in a new column -->
-<!-- gps$weekday <- wday(gps$Timestamp, label = TRUE) # Extract day of week from timestamp in a new column -->
-
-<!-- ``` -->
-
-<!-- ## 4. Data Preparation -->
-
-<!-- ### 4.1 Combining Both Credit Card and Loyalty Data Using Fuzzy Join (OSA) -->
-
-<!-- We will now attempt to find matching rows between the cc and loyalty data. -->
-
-<!-- ```{r fuzzyjoin-innerjoin-stringdist-cc-loyalty} -->
-
-<!-- cc_loyalty <- cc %>% # Create a new df showing matches with a max distance difference of 1 -->
-<!--   stringdist_inner_join(loyalty,  -->
-<!--                         by = c("concat_cc_loyalty" = "concat_loyalty_cc"), -->
-<!--                         method = "osa", -->
-<!--                         max_dist = 1, -->
-<!--                         distance_col = "distance") -->
-
-<!-- cc_loyalty_1 <- cc_loyalty %>% # Isolate best matching cc and loyalty with more than 2 counts -->
-<!--     group_by(last4ccnum,loyaltynum) %>% -->
-<!--     count() %>% -->
-<!--     filter(n>2) %>% -->
-<!--     ungroup() -->
-
-<!-- cc_loyalty_duplicate_cc <- cc_loyalty_1 %>% # Extract duplicates in cc data -->
-<!--   filter(cc_loyalty_1$last4ccnum == cc_loyalty_1$last4ccnum[duplicated(cc_loyalty_1$last4ccnum)]) -->
-
-<!-- cc_loyalty_duplicate_loyalty <- subset(cc_loyalty_1,loyaltynum == "L6267" | loyaltynum == "L3288") # Extract duplicates in loyalty data -->
-
-<!-- cc_loyalty_1$type <- "unique" # Creating a new type column with 'unique' as value -->
-<!-- cc_loyalty_1[which(cc_loyalty_1$last4ccnum == cc_loyalty_duplicate_cc$last4ccnum),4] <- "duplicate" # Identifying duplicate in type column -->
-<!-- cc_loyalty_1[which(cc_loyalty_1$loyaltynum ==  "L6267" | -->
-<!--                    cc_loyalty_1$loyaltynum ==  "L3288"),4] <- "duplicate" # Identifying duplicate in type column -->
-
-<!-- ``` -->
-
-<!-- ### 4.2 Combining Both GPS and Car Assignment Data -->
-
-<!-- First, we will merge the GPS data with the car assignments. Next, we will isolate GPS points, that have been stationary for at least 10 mins. -->
-
-<!-- ```{r GPS-data-manipulation} -->
-
-<!-- gps_name <- left_join(gps,car, by = c("id" = "CarID")) # Merge car assignments to gps data -->
-<!-- gps_name$Timestamp <- as.POSIXct(gps_name$Timestamp, format = "%m/%d/%Y  %H:%M:%S", tz = "GMT") # Timestamp switching to month-day-year format -->
-<!-- gps_name <- gps_name[with(gps_name,order(id,Timestamp)),] # Sort first by ID in ascending order and then Timestamp by oldest to newest -->
-<!-- gps_name <- gps_name %>% # Add running number in the first column -->
-<!--   mutate(No = 1:n()) %>%  -->
-<!--   dplyr::select(No, everything())  -->
-<!-- gps_name <- gps_name %>% # Create additional column indicating time taken from previous timestamp for same ID -->
-<!--     mutate(Delta = Timestamp - lag(Timestamp, default = first(Timestamp))) -->
-<!-- gps_name$Delta <- as.numeric(gps_name$Delta) # Convert Delta column to numeric format -->
-<!-- gps_name$Delta_Hours <- round(gps_name$Delta / 60 / 60, 1) # Create column to convert Delta seconds into hours with one decimal place -->
-
-<!-- rm(gps) # Remove unused earlier dataset -->
-
-<!-- spots <- gps_name %>% # Filtering out stationary gps coordinates of more than 10 mins -->
-<!--   filter(Delta > 600) -->
-<!-- spots$No <- rep(1:2965, times = 1) # Redo running number in the first column -->
-
-<!-- ``` -->
-
-<!-- ### 4.3 Identifying Stationary GPS Points -->
-
-<!-- Next, using the map and other data sources, we identify the locations of each of these stationary GPS points. Through a visual inspection of the map, credit card and loyalty data, we found 66 unique locations. -->
-
-<!-- ```{r identifying-stationary-GPS-points} -->
-
-<!-- spots$Location <- 1 # Create a Location column -->
-<!-- spots <- spots %>% mutate( # Create additional column with location names based on latlong -->
-<!--   Location = case_when( -->
-<!--     between(lat, 36.05092013, 36.05102938) &  -->
-<!--       between(long, 24.82586806, 24.82598723)  ~ "Abila Airport", # 35 features -->
-<!--     between(lat, 36.07434876, 36.07443715) &  -->
-<!--       between(long, 24.84592966, 24.84598782)  ~ "Abila Scrapyard", # 4 features -->
-<!--     between(lat, 36.06342076, 36.06349309) &  -->
-<!--       between(long, 24.85096457, 24.85103679)  ~ "Abila Zacharo", # 66 features -->
-<!--     between(lat, 36.07712237, 36.07715385) &  -->
-<!--       between(long, 24.87617634, 24.87621582)  ~ "Ahaggo Museum", # 5 features -->
-<!--     between(lat, 36.07522801, 36.07530344) &  -->
-<!--       between(long, 24.85626503, 24.85634849)  ~ "Albert's Fine Clothing", # 20 features -->
-<!--     between(lat, 36.08172086, 36.08182543) &  -->
-<!--       between(long, 24.85086882, 24.85096705)  ~ "Bean There Done That", # 46 features -->
-<!--     between(lat, 36.05402149, 36.05413903) &  -->
-<!--       between(long, 24.90116515, 24.90128202)  ~ "Brew've Been Served", # 106 features -->
-<!--     between(lat, 36.07332048, 36.07336116) &  -->
-<!--       between(long, 24.86416419, 24.86420583)  ~ "Brewed Awakenings", # 36 features -->
-<!--     between(lat, 36.06582469, 36.065941) &  -->
-<!--       between(long, 24.90097567, 24.90108865)  ~ "20 Building Control Stenig's Home", # 20 features -->
-<!--     between(lat, 36.05851786, 36.05860144) &  -->
-<!--       between(long, 24.8808655, 24.88092654)  ~ "Carlyle Chemical Inc.", # 30 features -->
-<!--     between(lat, 36.07818062, 36.07821857) &  -->
-<!--       between(long, 24.87211555, 24.8721508)  ~ "4 CFO Ingrid's Home", # 27 features -->
-<!--     between(lat, 36.07682044, 36.07685752) &  -->
-<!--       between(long, 24.8658641, 24.86589901)  ~ "10 CIO Ada's Home", # 35 features -->
-<!--     between(lat, 36.0721156, 36.07215701) &  -->
-<!--       between(long, 24.87458425, 24.8746267)  ~ "32 COO Orhan's Home", # 29 features -->
-<!--     between(lat, 36.07062423, 36.07073983) &  -->
-<!--       between(long, 24.89517609, 24.89526281)  ~ "Chostus Hotel", # 11 features -->
-<!--     between(lat, 36.05462322, 36.05469486) &  -->
-<!--       between(long, 24.88977034, 24.88983886)  ~ "Coffee Cameleon", # 29 features -->
-<!--     between(lat, 36.08954231, 36.08962196) &  -->
-<!--       between(long, 24.86066508, 24.8607611)  ~ "Desafio Golf Course", # 10 features -->
-<!--     between(lat, 36.07292088, 36.07301365) &  -->
-<!--       between(long, 24.88396447, 24.88405897)  ~ "26 Drill Site Manager Marin's Home", # 26 features -->
-<!--     between(lat, 36.08442031, 36.08449538) &  -->
-<!--       between(long, 24.86416741, 24.8642387)  ~ "7 Drill Technician Elsa's Home", # 25 features -->
-<!--     between(lat, 36.08424703, 36.08432477) &  -->
-<!--       between(long, 24.8563809, 24.8564637)  ~ "9 Drill Technician Gustav's Home", # 13 features -->
-<!--     between(lat, 36.0726185, 36.07380904) &  -->
-<!--       between(long, 24.87510166, 24.87613744)  ~ "28 Drill Technician Isande's Home", # 26 features -->
-<!--     between(lat, 36.06922564, 36.06931513) &  -->
-<!--       between(long, 24.88416486, 24.88426267)  ~ "27 Drill Technician Kare's Home", # 20 features -->
-<!--     between(lat, 36.08542073, 36.08550845) &  -->
-<!--       between(long, 24.86036422, 24.86045943)  ~ "2 Engineer Lars's Home", # 37 features -->
-<!--     between(lat, 36.08664252, 36.08672442) &  -->
-<!--       between(long, 24.85756416, 24.85766744)  ~ "3 Engineer Felix's Home", # 22 features -->
-<!--     between(lat, 36.07622023, 36.07626546) &  -->
-<!--       between(long, 24.87466429, 24.87471053)  ~ "35 Environmental Safety Advisor Willem's Home", # 33 features -->
-<!--     between(lat, 36.07212045, 36.07213193) &  -->
-<!--       between(long, 24.84132949, 24.84134818)  ~ "Frank's Fuel", # 2 features -->
-<!--     between(lat, 36.05492145, 36.05503511) &  -->
-<!--       between(long, 24.90176782, 24.90188061)  ~ "Frydos Autosupply n' More", # 29 features -->
-<!--     between(lat, 36.04802098, 36.04805422) &  -->
-<!--       between(long, 24.87956497, 24.87957691)  ~ "GasTech", # 738 features -->
-<!--     between(lat, 36.05970763, 36.05981097) &  -->
-<!--       between(long, 24.85797552, 24.8580772)  ~ "Gelatogalore", # 47 features -->
-<!--     between(lat, 36.06034564, 36.06043016) &  -->
-<!--       between(long, 24.85646426, 24.85657454)  ~ "General Grocer", # 12 features -->
-<!--     between(lat, 36.05572125, 36.05584094) &  -->
-<!--       between(long, 24.90246542, 24.90258487)  ~ "Guy's Gyros", # 143 features -->
-<!--     between(lat, 36.06362146, 36.06371539) &  -->
-<!--       between(long, 24.88586605, 24.88595859)  ~ "Hallowed Grounds", # 70 features -->
-<!--     between(lat, 36.07660977, 36.07669909) &  -->
-<!--       between(long, 24.85756408, 24.85764247)  ~ "Hippokampos", # 155 features -->
-<!--     between(lat, 36.08412146, 36.08420924) &  -->
-<!--       between(long, 24.85896842, 24.85905081)  ~ "11 Hydraulic Technician Axel's Home", # 23 features -->
-<!--     between(lat, 36.08782802, 36.08793196) &  -->
-<!--       between(long, 24.85627136, 24.8563725)  ~ "19 Hydraulic Technician Vira's Home", # 24 features -->
-<!--     between(lat, 36.06641679, 36.06650723) &  -->
-<!--       between(long, 24.88256875, 24.88265687)  ~ "1 IT Helpdesk Nils's Home", # 31 features -->
-<!--     between(lat, 36.06729646, 36.06736745) &  -->
-<!--       between(long, 24.87788423, 24.87795559)  ~ "5 IT Technician Isak's Home", # 21 features -->
-<!--     between(lat, 36.06722012, 36.06731624) &  -->
-<!--       between(long, 24.8858687, 24.88596759)  ~ "8 IT Technician Lucas's Home", # 23 features -->
-<!--     between(lat, 36.06749651, 36.0675518) &  -->
-<!--       between(long, 24.87330651, 24.873366)  ~ "Jack's Magical Beans", # 31 features -->
-<!--     between(lat, 36.06582037, 36.06584879) &  -->
-<!--       between(long, 24.85236427, 24.85241027)  ~ "Kalami Kafenion", # 47 features -->
-<!--     between(lat, 36.05442247, 36.05453641) &  -->
-<!--       between(long, 24.89986596, 24.89998054)  ~ "Katerina's Cafe", # 158 features -->
-<!--     between(lat, 36.05292229, 36.05296701) &  -->
-<!--       between(long, 24.84936915, 24.84941679)  ~ "Kronos Capital", # 6 features -->
-<!--     between(lat, 36.06582196, 36.06587998) &  -->
-<!--       between(long, 24.8497762, 24.84983936)  ~ "Kronos Mart", # 9 features -->
-<!--     between(lat, 36.06523446, 36.06534083) &  -->
-<!--       between(long, 24.83307421, 24.83318494)  ~ "Kronos Pipe and Irrigation", # 7 features -->
-<!--     between(lat, 36.06402993, 36.06410072) &  -->
-<!--       between(long, 24.84137818, 24.84144338)  ~ "Maximum Iron and Steel", # 9 features -->
-<!--     between(lat, 36.05840347, 36.05849041) &  -->
-<!--       between(long, 24.88546548, 24.88553455)  ~ "Nationwide Refinery", # 41 features -->
-<!--     between(lat, 36.05859158, 36.05859887) &  -->
-<!--       between(long, 24.85790261, 24.85799357)  ~ "Octavio's Office Supplies", # 3 features -->
-<!--     between(lat, 36.05192066, 36.05197575) &  -->
-<!--       between(long, 24.87076418, 24.87082137)  ~ "Ouzeri Elian", # 67 features -->
-<!--     between(lat, 36.06764972, 36.06775002) &  -->
-<!--       between(long, 24.90243213, 24.9025445)  ~ "34 Perimeter Control Edvard's Home", # 20 features -->
-<!--     between(lat, 36.06324941, 36.06330782) &  -->
-<!--       between(long, 24.85226894, 24.8523291)  ~ "Roberts and Sons", # 9 features -->
-<!--     between(lat, 36.05942407, 36.05952152) &  -->
-<!--       between(long, 24.89476557, 24.8948649)  ~ "Shared Home A - 6 Linnea 25 Kanon 29 Bertrand", # 72 features -->
-<!--     between(lat, 36.06332304, 36.06343537) &  -->
-<!--       between(long, 24.89607033, 24.89617856)  ~ "Shared Home B - 14 Lidelse 18 Birgitta 21 Hennie", # 60 features -->
-<!--     between(lat, 36.06242283, 36.06253955) &  -->
-<!--       between(long, 24.89877023, 24.89888179)  ~ "Shared Home C - 17 Sven 24 Minke 33 Brand", # 68 features -->
-<!--     between(lat, 36.05842222, 36.05853828) &  -->
-<!--       between(long, 24.90096522, 24.90107874)  ~ "Shared Home D - 22 Adra 23 Varja 30 Felix", # 73 features -->
-<!--     between(lat, 36.0603222, 36.06044736) &  -->
-<!--       between(long, 24.90556693, 24.90569385)  ~ "Shared Home E - 13 Inga 15 Loreto 16 Isia 21 Hennie", # 85 features -->
-<!--     between(lat, 36.05282139, 36.05288367) &  -->
-<!--       between(long, 24.86856868, 24.8686314)  ~ "Shoppers' Delight", # 17 features -->
-<!--     between(lat, 36.06772112, 36.06784956) &  -->
-<!--       between(long, 24.89906521, 24.89917328)  ~ "12 Site Control Hideki's Home", # 21 features -->
-<!--     between(lat, 36.05409586, 36.05420832) &  -->
-<!--       between(long, 24.90806584, 24.90817838)  ~ "Stewart and Sons Fabrication", # 36 features -->
-<!--     between(lat, 36.06774029, 36.06776587) &  -->
-<!--       between(long, 24.87148791, 24.87150031)  ~ "U-Pump", # 4 features -->
-<!--     between(lat, 36.05012433, 36.05021624) &  -->
-<!--       between(long, 24.9003978, 24.90047475)  ~ "Anonymous Site 1", # 6 features -->
-<!--     between(lat, 36.06314781, 36.06324321) &  -->
-<!--       between(long, 24.90010823, 24.90018668)  ~ "Anonymous Site 2", # 7 features -->
-<!--     between(lat, 36.05893131, 36.05900826) &  -->
-<!--       between(long, 24.89277554, 24.89284962)  ~ "Anonymous Site 3", # 7 features -->
-<!--     between(lat, 36.08061881, 36.08067087) &  -->
-<!--       between(long, 24.84681621, 24.84688282)  ~ "Anonymous Site 4", # 7 features -->
-<!--     between(lat, 36.06944928, 36.0695319) &  -->
-<!--       between(long, 24.84147082, 24.84157048)  ~ "Anonymous Site 5", # 8 features -->
-<!--     between(lat, 36.05149231, 36.05253234) &  -->
-<!--       between(long, 24.87495168, 24.87611086)  ~ "Anonymous Site 6", # 13 features -->
-<!--     between(lat, 36.05543848, 36.05657576) &  -->
-<!--       between(long, 24.86618187, 24.86735)  ~ "Anonymous Site 7", # 7 features  -->
-<!--     between(lat, 36.07099038, 36.07200089) &  -->
-<!--       between(long, 24.86869468, 24.86985682)  ~ "Anonymous Site 8", # 10 features  -->
-<!--     )) -->
-
-<!-- spots$concat_spots_cc <- paste(spots$date,spots$Location,spots$hour) # Create a separate column of unique values using concatenated values in the distilled GPS data -->
-<!-- spots_median <- spots %>% # Extract the median lat & long coordinates of locations -->
-<!--   group_by(Location) %>% -->
-<!--     summarise(lat.median = median(lat), long.median = median(long), .groups = "drop") %>% -->
-<!--   filter(!is.na(Location)) %>% # Exclude remaining few unmatched locations -->
-<!--   ungroup() -->
-
-<!-- spots_median <- spots_median %>% # Add additional column to classify locations into major buckets -->
-<!--   mutate(Location.Type = case_when( -->
-<!--     Location %in% c("Anonymous Site 1", -->
-<!--                     "Anonymous Site 2", -->
-<!--                     "Anonymous Site 3", -->
-<!--                     "Anonymous Site 4", -->
-<!--                     "Anonymous Site 5", -->
-<!--                     "Anonymous Site 6", -->
-<!--                     "Anonymous Site 7", -->
-<!--                     "Anonymous Site 8") ~ "Unknown", -->
-<!--     Location %in% c("Bean There Done That", -->
-<!--                     "Brew've Been Served", -->
-<!--                     "Brewed Awakenings", -->
-<!--                     "Coffee Cameleon", -->
-<!--                     "Jack's Magical Beans", -->
-<!--                     "Hallowed Grounds") ~ "Coffee Cafe", -->
-<!--     Location %in% c("Abila Zacharo", -->
-<!--                     "Gelatogalore", -->
-<!--                     "Guy's Gyros", -->
-<!--                     "Hippokampos", -->
-<!--                     "Kalami Kafenion", -->
-<!--                     "Katerina's Cafe", -->
-<!--                     "Ouzeri Elian") ~ "Food Joints", -->
-<!--     Location %in% c("GasTech") ~ "HQ", -->
-<!--     Location %in% c("1 IT Helpdesk Nils's Home", -->
-<!--                     "10 CIO Ada's Home", -->
-<!--                     "11 Hydraulic Technician Axel's Home", -->
-<!--                     "12 Site Control Hideki's Home", -->
-<!--                     "19 Hydraulic Technician Vira's Home", -->
-<!--                     "2 Engineer Lars's Home", -->
-<!--                     "20 Building Control Stenig's Home", -->
-<!--                     "26 Drill Site Manager Marin's Home", -->
-<!--                     "27 Drill Technician Kare's Home", -->
-<!--                     "28 Drill Technician Isande's Home", -->
-<!--                     "3 Engineer Felix's Home", -->
-<!--                     "32 COO Orhan's Home", -->
-<!--                     "34 Perimeter Control Edvard's Home", -->
-<!--                     "35 Environmental Safety Advisor Willem's Home", -->
-<!--                     "4 CFO Ingrid's Home", -->
-<!--                     "5 IT Technician Isak's Home", -->
-<!--                     "7 Drill Technician Elsa's Home", -->
-<!--                     "8 IT Technician Lucas's Home", -->
-<!--                     "9 Drill Technician Gustav's Home", -->
-<!--                     "Shared Home A - 6 Linnea 25 Kanon 29 Bertrand", -->
-<!--                     "Shared Home B - 14 Lidelse 18 Birgitta 21 Hennie", -->
-<!--                     "Shared Home C - 17 Sven 24 Minke 33 Brand", -->
-<!--                     "Shared Home D - 22 Adra 23 Varja 30 Felix", -->
-<!--                     "Shared Home E - 13 Inga 15 Loreto 16 Isia 21 Hennie") ~ "Residential", -->
-<!--     Location %in% c("Abila Scrapyard", -->
-<!--                     "Carlyle Chemical Inc.", -->
-<!--                     "Kronos Pipe and Irrigation", -->
-<!--                     "Maximum Iron and Steel", -->
-<!--                     "Nationwide Refinery", -->
-<!--                     "Stewart and Sons Fabrication") ~ "Industrial",     -->
-<!--     Location %in% c("Ahaggo Museum", -->
-<!--                     "Albert's Fine Clothing", -->
-<!--                     "Kronos Mart", -->
-<!--                     "Octavio's Office Supplies", -->
-<!--                     "Shoppers' Delight", -->
-<!--                     "General Grocer", -->
-<!--                     "Roberts and Sons") ~ "Leisure & Shopping", -->
-<!--     Location %in% c("Abila Airport", -->
-<!--                     "Chostus Hotel", -->
-<!--                     "Desafio Golf Course", -->
-<!--                     "Kronos Capital") ~ "Complex", -->
-<!--     Location %in% c("Frank's Fuel", -->
-<!--                     "Frydos Autosupply n' More", -->
-<!--                     "U-Pump") ~ "Transport", -->
-<!--     )) -->
-<!-- spots_median_sf <- st_as_sf(spots_median, coords = c("long.median", "lat.median"), crs = 4326) # Changing into a shapefile -->
-
-<!-- ``` -->
-
-<!-- ### 4.4 Create Custom Map -->
-
-<!-- Using the identified spots, we will create our custom map using the tmap package, as well as use the Abila road network. -->
-
-<!-- ```{r tmap-visualisation, echo = T, message = FALSE} -->
-
-<!-- Abila_st_union <- st_union(Abila_st) # Dissolve Abila road network -->
-<!-- Abila_st_proj <- st_transform(Abila_st_union, crs = 3857) # Transform to necessary projection -->
-<!-- Abila_st_buffer <- st_buffer(Abila_st_proj, dist = 25, nQuadSegs = 5, ) # Create a buffer around the dissolved Abila road network -->
-
-<!-- rm(Abila_st) # Remove unused earlier dataset -->
-<!-- rm(Abila_st_union) # Remove unused earlier dataset -->
-<!-- rm(Abila_st_proj) # Remove unused earlier dataset -->
-
-<!-- gps_path <- gps_sf %>% # Creating a movement path -->
-<!--   group_by(id, day) %>% -->
-<!--     summarize(m = mean(Timestamp),  -->
-<!--               do_union=FALSE,  -->
-<!--               .groups = "drop") %>% -->
-<!--   left_join(dplyr::select(car,CarID,RoleNName), by = c("id" = "CarID")) %>% #Add in RoleNName column -->
-<!--   ungroup() %>% -->
-<!--   st_cast("LINESTRING") -->
-
-<!-- # Create blue polygon as background to mimic sea -->
-<!-- long.sea <- c(24.91075,24.91075,24.8232,24.8232,24.91075) -->
-<!-- lat.sea <- c(36.09543,36.0445,36.0445,36.09543,36.09543) -->
-<!-- sea <-data.frame(long.sea, lat.sea) -->
-
-<!-- rm(gps_sf) # Remove unused earlier dataset -->
-<!-- rm(long.sea) # Remove unused earlier dataset -->
-<!-- rm(lat.sea) # Remove unused earlier dataset -->
-<!-- rm(car) # Remove unused earlier dataset -->
-
-<!-- sea_sf <- st_as_sf(sea, coords = c("long.sea", "lat.sea")) -->
-<!-- st_crs(sea_sf) <- 4326 -->
-<!-- sea_poly<- st_sf( -->
-<!--   st_cast( -->
-<!--     st_combine(sea_sf$geometry),"POLYGON" -->
-<!--   )) -->
-
-<!-- rm(sea) # Remove unused earlier dataset -->
-<!-- rm(sea_sf) # Remove unused earlier dataset -->
-
-<!-- # Clip a smaller Kronos island around Abila -->
-<!-- Kronos_sf_small <- st_crop(Kronos_sf, c(xmin = 24.8232, xmax = 24.91075, ymin = 36.0445, ymax = 36.09543)) -->
-
-<!-- rm(Kronos_sf) # Remove unused earlier dataset -->
-
-<!-- tmap_mode("view") -->
-
-<!-- custom_tmap <- tm_shape(sea_poly) + -->
-<!--   tm_polygons(col="lightblue") + -->
-<!-- tm_shape(Kronos_sf_small) + -->
-<!--   tm_polygons(col = "beige") + -->
-<!-- tm_shape(Abila_st_buffer) + -->
-<!--   tm_polygons(col = "white") + -->
-<!-- tm_shape(gps_path %>% filter(id==2)) + -->
-<!--   tm_lines(id = "RoleNName") + -->
-<!-- tm_shape(spots_median_sf) + -->
-<!--   tm_dots(col = "Location.Type", -->
-<!--           id = "Location", # Bold in group -->
-<!--           popup.vars = "Location Type:" =="Location.Type", -->
-<!--           size = 0.2) -->
-
-<!-- custom_tmap -->
-
-<!-- ``` -->
-
-<!-- ## 5. Data Exploration Analysis -->
-
-<!-- Here we will answer the VAST Challenge questions. -->
-
-<!-- ### 5.1 Question 1 And Its Answers -->
-
-<!-- Using just the credit and loyalty card data, identify the most popular locations, and when they are popular. What anomalies do you see? What corrections would you recommend to correct these anomalies? Please limit your answer to 8 images and 300 words. -->
-
-<!-- #### 5.1.1 Popular Locations Seem To Revolve Ard Food And Beverages -->
-
-<!-- Food and beverage places, such as Brew've Been Served, Guy's Gyros, Hallowed Grounds etc. seem to be the more popular locations, as highlighted in the dark grey tiles below. -->
-
-<!-- ```{r calendar-heatmap} -->
-
-<!-- cc_calendar <- cc %>%  -->
-<!--   count(dayofmonth, location) # Group and tally by day of month and location -->
-<!-- cc_calendar$dayofmonth <- as_factor(cc_calendar$dayofmonth) # CHange day of month to factor type -->
-
-<!-- # Create calendar heatmap using ggplot and geom_tile -->
-<!-- Q5.1.1 <- ggplot(complete(cc_calendar, dayofmonth, location), aes(x = dayofmonth, y = location)) +  -->
-<!--   geom_tile(aes(fill = n), color = "white", size = 0.1) + -->
-<!--   scale_fill_gradient(low = "light grey", high = "black", na.value = "light grey") + -->
-<!--   scale_y_discrete(expand = expansion(add = 1.6), -->
-<!--                    limits=rev) + -->
-<!--   labs(title = "Calendar Heatmap of Location Visit Frequency (From CC Data) By Date", -->
-<!--        subtitle = "Food and coffee outlets seem to be the most frequented, based on credit card data", -->
-<!--        x = "Day of Month", -->
-<!--        fill = "Frequency Of Visit") + -->
-<!--   theme_bw() + -->
-<!--   theme(axis.ticks = element_blank(), -->
-<!--         panel.border = element_blank(), -->
-<!--         panel.spacing = unit(0.1, "cm"), -->
-<!--         panel.grid.major = element_blank(),  -->
-<!--         panel.grid.minor = element_blank(), -->
-<!--         text = element_text(size=7), -->
-<!--         axis.title.x = element_text(vjust=-3), -->
-<!--         axis.title.y = element_blank(), -->
-<!--         legend.position = "bottom") -->
-
-<!-- Q5.1.1 -->
-
-<!-- ``` -->
-
-<!-- #### 5.1.2 Kronos Mart's Txns Suggest Tampering -->
-
-<!-- The txn dates of Kronos Mart differ by exactly one day, comparing either side of the credit card and loyalty data. Investigation needed to ascertain true transaction dates of Kronos Mart's books, perhaps through receipt verification. We will compare the GPS points in section 5.2.1. -->
-
-<!-- ```{r kronos-mart} -->
-
-<!-- Q5.1.2_cc <- cc %>% -->
-<!--   filter(location == "Kronos Mart") %>% # Filter out only Kronos Mart cc txns -->
-<!--   dplyr::select(dayofmonth, price, location) %>% # Select only three columns -->
-<!--   group_by(dayofmonth) %>% # Group by day of month -->
-<!--     summarise(cc_data = sum(price), .groups = "drop") %>% # Create cc_data column which sums prices -->
-<!--   ungroup() -->
-
-<!-- Q5.1.2_loyalty <- loyalty %>% # Same methodology as above but done on loyalty data -->
-<!--   filter(location == "Kronos Mart") %>% -->
-<!--   dplyr::select(dayofmonth, price, location) %>% -->
-<!--   group_by(dayofmonth) %>% -->
-<!--   summarise(loyalty_data = sum(price), .groups = "drop") %>% -->
-<!--   ungroup() -->
-
-<!-- Q5.1.2_combined <- data.frame(dayofmonth = c(6:19)) # Create new df with the 14 days -->
-<!-- Q5.1.2_combined$dayofmonth <- as_factor(Q5.1.2_combined$dayofmonth) # Change to factor type -->
-<!-- Q5.1.2_combined <- Q5.1.2_combined %>% # Merge df to manipulated cc and loyalty data -->
-<!--   left_join(Q5.1.2_cc, by = "dayofmonth") %>% -->
-<!--   left_join(Q5.1.2_loyalty, by = "dayofmonth") -->
-
-<!-- rm(Q5.1.2_cc) # Remove unused earlier dataset -->
-<!-- rm(Q5.1.2_loyalty) # Remove unused earlier dataset -->
-
-<!-- Q5.1.2_combined$cc_data[is.na(Q5.1.2_combined$cc_data)] <- 0 # Replace NA with 0 -->
-<!-- Q5.1.2_combined$loyalty_data[is.na(Q5.1.2_combined$loyalty_data)] <- 0 # Replace NA with 0 -->
-
-<!-- Q5.1.2_combined <-melt(Q5.1.2_combined, id.vars = "dayofmonth", variable.name = "source") # Change from wide to long format -->
-
-<!-- # Create area graph on both cc and loyalty data -->
-<!-- Q5.1.2 <- ggplot(Q5.1.2_combined, aes(dayofmonth, value, group = source)) + -->
-<!--   geom_area(aes(colour = source, fill = source), -->
-<!--             size = 1) + -->
-<!--   geom_point() + -->
-<!--   geom_text(data=subset(Q5.1.2_combined, value != 0), -->
-<!--             aes(label = round(value,0), -->
-<!--             group = source), -->
-<!--             vjust = -1, -->
-<!--             size = 3) + -->
-<!--   facet_grid(source~.) + -->
-<!--   ylim(0,500) + -->
-<!--   labs("title" = "Kronos Mart's Suspicious Delayed Transactions", -->
-<!--        "subtitle" = "Loyalty transactions in Kronos Mart recorded one day earlier than in credit card") + -->
-<!--   theme(axis.text.y = element_blank(), -->
-<!--         axis.ticks.y = element_blank(), -->
-<!--         panel.grid.major.y = element_blank(), -->
-<!--         panel.grid.minor.y = element_blank(), -->
-<!--         legend.position = "none") -->
-
-<!-- Q5.1.2 -->
-
-<!-- ``` -->
-
-<!-- #### 5.1.3 Unknown Locations Need To Be Verified. Existing Data Only Able To Approx. Type Of Location -->
-
-<!-- Ascertaining the location of unknown locations such as Hippokampos and Abila Zacharo seem tricky, given that their location names do not describe its very nature. Thus, we're forced to rely on their time-based transactions to approximate the nature of their locations. -->
-
-<!-- ```{r hippokampos} -->
-
-<!-- # Create ridgeline plot to see activity by location across the hours of the day -->
-<!-- Q5.1.3 <- ggplot(cc,  -->
-<!--                  aes(x = hour,  -->
-<!--                      y = location,  -->
-<!--                      fill = stat(x) -->
-<!--                      )) + -->
-<!--                  geom_density_ridges_gradient(scale=3,rel_min_height = 0.001) + -->
-<!--   scale_x_continuous(breaks = 0:24) + -->
-<!--   scale_y_discrete(limits=rev) + -->
-<!--   scale_fill_viridis_c(name = "ABC", option = "A") + -->
-<!--   theme_ridges(font_size = 7, grid = TRUE) + -->
-<!--   theme(legend.position = "none") + -->
-<!--   labs(title = "Uncovering Location Type Beyond Ambiguous Location Names Using Credit Card Data", -->
-<!--        subtitle = "High Noon Txns Suggests Abila Zacharo and Hippokampos As Food Outlets") -->
-
-<!-- Q5.1.3 -->
-
-<!-- ``` -->
-
-<!-- #### 5.1.4 Selected Coffee Chain Txns Occur Only At Selected Hours Within The Credit Card Data -->
-
-<!-- Coffee chains usually open for longer than just the three hours we see in the data, given the traditionally low beverage costing. -->
-
-<!-- ```{r coffee-hour} -->
-
-<!-- Q5.1.4_cc <- cc %>% # Merge cc with location type data from spots median -->
-<!--   left_join(dplyr::select(spots_median,Location, Location.Type), by = c("location" = "Location")) %>% -->
-<!--   filter(Location.Type == "Coffee Cafe") %>% # Filter only Coffee Cafe location type -->
-<!--   dplyr::select(location, hour, price) %>% -->
-<!--   group_by(location, hour) %>% -->
-<!--   summarise(coffee_money = sum(price), .groups = "drop") %>% -->
-<!--   ungroup() %>% -->
-<!--   dcast(hour ~ location, value.var = "coffee_money") # Change from long to wide format -->
-
-
-<!-- Q5.1.4_cc$hour <- as_factor(Q5.1.4_cc$hour) # Change to factor type -->
-
-<!-- Q5.1.4_combined <- data.frame(hour = c(1:24)) # Create new dataframe with hours -->
-<!-- Q5.1.4_combined$hour <- as_factor(Q5.1.4_combined$hour) # Change to factor type -->
-<!-- Q5.1.4_combined <- Q5.1.4_combined %>%  -->
-<!--   left_join(Q5.1.4_cc, by = "hour") -->
-
-<!-- rm(Q5.1.4_cc) # Remove unused earlier dataset -->
-
-<!-- Q5.1.4_combined <-melt(Q5.1.4_combined, id.vars = "hour", variable.name = "coffee_place") # Change from wide to long format -->
-
-<!-- # Create a clock-like visualisation using ggplot -->
-<!-- Q5.1.4 <- ggplot(Q5.1.4_combined, aes(hour, value, fill = coffee_place)) + -->
-<!--   geom_bar(stat = "identity") + -->
-<!--   coord_polar(theta = "x") + -->
-<!--   labs(title = "Daily CC Txns At Coffee Chains Restricted To Only Three Hours", -->
-<!--        subtitle = "Three Coffee Chains Have CC Txns Only At Noon") + -->
-<!--   xlab("") + -->
-<!--   ylab("") + -->
-<!--   theme( -->
-<!--         axis.ticks = element_blank(),  -->
-<!--         axis.text.y = element_blank(),  -->
-<!--         panel.background = element_blank(),  -->
-<!--         panel.grid.major.x = element_line(colour="grey"), -->
-<!--         axis.text.x = element_text(size = 15),  -->
-<!--         legend.title=element_blank()) -->
-
-<!-- Q5.1.4 -->
-
-<!-- ``` -->
-
-<!-- #### 5.1.5 CC Data Showed No Vehicle Movements On Weekends Before 12 Noon -->
-
-<!-- There were no credit card transactions on weekends before 12 noon. This is odd, considering F&B outlets generally had strong sales on weekday mornings. One would assume for this trend to continue on weekend mornings as well. -->
-
-<!-- ```{r cc-no-vehicles-on-weekends-before-midday} -->
-
-<!-- Q5.1.5_weekday <- data.frame("weekday" = unique(cc[c('weekday')])) %>% -->
-<!--   slice(rep(1:n(), each = 5)) # Create new data frame based on unique values in cc -->
-<!-- Q5.1.5_period <- data.frame("period" = unique(cc[c('period')])) # Create new data frame based on unique values in loyalty -->
-<!-- Q5.1.5_period$period <- factor(Q5.1.5_period$period,  -->
-<!--                                 levels = c("Morning 6am to 11.59am",  -->
-<!--                                            "Afternoon 12noon to 5.59pm",  -->
-<!--                                            "Evening 6pm to 8.59pm", -->
-<!--                                            "Late Evening 9pm to 11.59pm", -->
-<!--                                            "Late Night 12mn to 5.59am")) -->
-<!-- Q5.1.5_period <- as.data.frame(lapply(Q5.1.5_period,rep,7)) -->
-<!-- Q5.1.5_combined <- cbind(Q5.1.5_weekday,Q5.1.5_period) -->
-
-<!-- rm(Q5.1.5_weekday) # Remove unused earlier dataset -->
-<!-- rm(Q5.1.5_period) # Remove unused earlier dataset -->
-
-<!-- Q5.1.5_cc <- cc %>% -->
-<!--   group_by(weekday,period) %>% -->
-<!--   tally() %>% -->
-<!--   ungroup() -->
-
-<!-- Q5.1.5_combined <- Q5.1.5_combined %>% -->
-<!--   left_join(Q5.1.5_cc, by = c("weekday"="weekday","period"="period")) -->
-<!-- Q5.1.5_combined$id <- seq(1, nrow(Q5.1.5_combined)) -->
-<!-- Q5.1.5_combined[36:63,] <- NA -->
-<!-- Q5.1.5_combined[36,4] <- 5.1 -->
-<!-- Q5.1.5_combined[37,4] <- 5.2 -->
-<!-- Q5.1.5_combined[38,4] <- 5.3 -->
-<!-- Q5.1.5_combined[39,4] <- 5.4 -->
-<!-- Q5.1.5_combined[40,4] <- 10.1 -->
-<!-- Q5.1.5_combined[41,4] <- 10.2 -->
-<!-- Q5.1.5_combined[42,4] <- 10.3 -->
-<!-- Q5.1.5_combined[43,4] <- 10.4 -->
-<!-- Q5.1.5_combined[44,4] <- 15.1 -->
-<!-- Q5.1.5_combined[45,4] <- 15.2 -->
-<!-- Q5.1.5_combined[46,4] <- 15.3 -->
-<!-- Q5.1.5_combined[47,4] <- 15.4 -->
-<!-- Q5.1.5_combined[48,4] <- 20.1 -->
-<!-- Q5.1.5_combined[49,4] <- 20.2 -->
-<!-- Q5.1.5_combined[50,4] <- 20.3 -->
-<!-- Q5.1.5_combined[51,4] <- 20.4 -->
-<!-- Q5.1.5_combined[52,4] <- 25.1 -->
-<!-- Q5.1.5_combined[53,4] <- 25.2 -->
-<!-- Q5.1.5_combined[54,4] <- 25.3 -->
-<!-- Q5.1.5_combined[55,4] <- 25.4 -->
-<!-- Q5.1.5_combined[56,4] <- 30.1 -->
-<!-- Q5.1.5_combined[57,4] <- 30.2 -->
-<!-- Q5.1.5_combined[58,4] <- 30.3 -->
-<!-- Q5.1.5_combined[59,4] <- 30.4 -->
-<!-- Q5.1.5_combined[60,4] <- 35.1 -->
-<!-- Q5.1.5_combined[61,4] <- 35.2 -->
-<!-- Q5.1.5_combined[62,4] <- 35.3 -->
-<!-- Q5.1.5_combined[63,4] <- 35.4 -->
-
-<!-- rm(Q5.1.5_cc) # Remove unused earlier dataset -->
-
-<!-- Q5.1.5_combined <- Q5.1.5_combined %>% -->
-<!--   arrange(id) -->
-<!-- Q5.1.5_combined$id <- seq(1, nrow(Q5.1.5_combined)) -->
-<!-- Q5.1.5_combined$period <- factor(Q5.1.5_combined$period,  -->
-<!--                                 levels = c("Morning 6am to 11.59am",  -->
-<!--                                            "Afternoon 12noon to 5.59pm",  -->
-<!--                                            "Evening 6pm to 8.59pm", -->
-<!--                                            "Late Evening 9pm to 11.59pm", -->
-<!--                                            "Late Night 12mn to 5.59am")) -->
-
-<!-- Q5.1.5_label <- Q5.1.5_combined -->
-<!-- Q5.1.5_number_of_bar <- nrow(Q5.1.5_label) -->
-<!-- Q5.1.5_angle <- 90 - 360 * (Q5.1.5_label$id-0.5) /Q5.1.5_number_of_bar -->
-<!-- Q5.1.5_label$hjust <- ifelse(Q5.1.5_angle < -90, 1, 0) -->
-<!-- Q5.1.5_label$angle <- ifelse(Q5.1.5_angle < -90, Q5.1.5_angle+180, Q5.1.5_angle) -->
-
-<!-- rm(Q5.1.5_angle) # Remove unused earlier dataset -->
-<!-- rm(Q5.1.5_number_of_bar) # Remove unused earlier dataset -->
-
-<!-- Q5.1.5_base <- Q5.1.5_combined %>%  -->
-<!--   group_by(weekday) %>%  -->
-<!--     summarize(start=min(id), end=max(id) - 4, .groups = "drop") %>%  -->
-<!--   rowwise() %>%  -->
-<!--   mutate(title=mean(c(start, end))) %>% -->
-<!--   ungroup() -->
-
-<!-- Q5.1.5_grid <- Q5.1.5_base -->
-<!-- Q5.1.5_grid$end <- Q5.1.5_grid$end[ c( nrow(Q5.1.5_grid), 1:nrow(Q5.1.5_grid)-1)] + 1 -->
-<!-- Q5.1.5_grid$start <- Q5.1.5_grid$start - 1 -->
-<!-- Q5.1.5_grid <- Q5.1.5_grid[-1,] -->
-
-
-<!-- Q5.1.5 <- ggplot(Q5.1.5_combined, aes(x=as_factor(id), y=n, fill=period)) + -->
-<!--   geom_bar(aes(x=as_factor(id), y=n, fill=period), stat="identity", alpha=0.5) + -->
-
-<!--   geom_segment(data=Q5.1.5_grid, aes(x = end, y = 120, xend = start, yend = 120), colour = "grey", alpha=1, size=0.3 , inherit.aes = FALSE ) + -->
-<!--   geom_segment(data=Q5.1.5_grid, aes(x = end, y = 90, xend = start, yend = 90), colour = "grey", alpha=1, size=0.3 , inherit.aes = FALSE ) + -->
-<!--   geom_segment(data=Q5.1.5_grid, aes(x = end, y = 60, xend = start, yend = 60), colour = "grey", alpha=1, size=0.3 , inherit.aes = FALSE ) + -->
-<!--   geom_segment(data=Q5.1.5_grid, aes(x = end, y = 30, xend = start, yend = 30), colour = "grey", alpha=1, size=0.3 , inherit.aes = FALSE ) + -->
-
-<!--   annotate("text", x = rep(max(Q5.1.5_combined$id),4), y = c(30, 60, 90, 120), label = c("30", "60", "90", "120") , color="grey", size=3 , angle=0, fontface="bold", hjust=1) + -->
-
-<!--   geom_bar(aes(x=as_factor(id), y=n, fill=period), stat="identity", alpha=0.5) + -->
-<!--   ylim(-100,150) + -->
-<!--   theme_minimal() + -->
-<!--   theme(axis.text = element_blank(), -->
-<!--         axis.title = element_blank(), -->
-<!--         panel.grid = element_blank(), -->
-<!--         plot.margin = unit(rep(-1,4), "cm")) + -->
-<!--   coord_polar() +  -->
-<!--   geom_text(data=Q5.1.5_label, aes(x=id, y=n+10, label=n, hjust=hjust), color="black", fontface="bold",alpha=0.6, size=3, angle= Q5.1.5_label$angle, inherit.aes = FALSE ) + -->
-
-<!--   geom_segment(data=Q5.1.5_base, aes(x = start, y = -5, xend = end, yend = -5), colour = "black", alpha=0.8, size=0.6 , inherit.aes = FALSE )  + -->
-
-<!--   geom_text(data=Q5.1.5_base, aes(x=title, y=-18, label=weekday), color="black", fontface="bold",alpha=0.6, size=3, inherit.aes = FALSE ) -->
-
-<!-- Q5.1.5  -->
-
-<!-- ``` -->
-
-<!-- #### 5.1.6 1-to-1 Matching of Credit And Loyalty Cards, Except In Selected Instances -->
-
-<!-- Our original dataset contained 55 credit card numbers and 54 loyalty card numbers respectively. As part of our fuzzy matching, we were able to complete a 1-to-1 match of 49 pairs of credit and loyalty cards. The remaining cards were found to have a 1-to-2 matching relationship. More investigation would need to be done on these 1-to-2 matches. -->
-
-<!-- ```{r cc-loyalty-match, fig.height=9} -->
-
-<!-- # Create new df for labeling -->
-<!-- Q5.1.6_label_cc <- data.frame("id" = 1:54, -->
-<!--                               "code" = as_factor(cc_loyalty_1$last4ccnum)) -->
-<!-- Q5.1.6_label_loyalty <- data.frame("id" = 55:108, -->
-<!--                                    "code" = cc_loyalty_1$loyaltynum) -->
-
-<!-- Q5.1.6_label <- bind_rows(Q5.1.6_label_cc, -->
-<!--                       Q5.1.6_label_loyalty) -->
-
-<!-- rm(Q5.1.6_label_cc) # Remove unused earlier dataset -->
-<!-- rm(Q5.1.6_label_loyalty) # Remove unused earlier dataset -->
-
-<!-- Q5.1.6_label <- subset(Q5.1.6_label, select = -1 ) -->
-
-<!-- # Create parallel coordinates plot showing relationship between cc and loyalty. Non-unique matches are visualised in black, whereas 1-to-1 matches are shown in grey. Fig.height changed to 9 to show full height of parallel coordinates plot. -->
-<!-- Q5.1.6 <- ggparcoord(cc_loyalty_1, -->
-<!--                      columns = 1:2, -->
-<!--                      groupColumn = 4, -->
-<!--                      showPoints = TRUE, -->
-<!--                      alphaLines = 1) + -->
-<!--   geom_text(aes(label= Q5.1.6_label$code), -->
-<!--             size = 3, -->
-<!--             nudge_x = 0.07) + -->
-<!--   scale_color_manual(values=c( "#172623", "#E8E8E8")) + -->
-<!--   theme_minimal() + -->
-<!--   scale_y_discrete(breaks = NULL) + -->
-<!--   theme(axis.title.x = element_blank(), -->
-<!--         axis.title.y = element_blank(), -->
-<!--         legend.position = "bottom") + -->
-<!--         labs(title = "Credit Card and Loyalty Number Mostly Matched One-To-One", -->
-<!--              subtitle = "Two Loyalty Numbers Are Each Attached To Two Different Credit Cards; \nOne Credit Card Linked To Two Different Loyalty Numbers") -->
-
-<!-- Q5.1.6 -->
-
-<!-- ``` -->
-
-<!-- ### 5.2 Question 2 And Its Answers -->
-
-<!-- Add the vehicle data to your analysis of the credit and loyalty card data. How does your assessment of the anomalies in question 1 change based on this new data? What discrepancies between vehicle, credit, and loyalty card data do you find? Please limit your answer to 8 images and 500 words. -->
-
-<!-- #### 5.2.1 GPS Seems To Validate Kronos Mart's Loyalty Txns -->
-
-<!-- In section 5.1.2 earlier, we mentioned of the possibility of transactional data tampering specifically relating to Kronos Mart. Here, using looking at the GPS data, single visits on 9th, 11th, 12th, 13th, 15th, 16th and three visits on 18th suggests that these GPS visits matches more to loyalty data than the credit card data. -->
-
-<!-- ```{r kronos-mart-2, fig.height=4} -->
-
-<!-- # Create new df of gps data specifically on Kronos Mart's tracking -->
-<!-- Q5.2.1_gps <- tibble("dayofmonth" = c(6:19)) %>% -->
-<!--                   left_join(spots %>% -->
-<!--                     group_by(Location, dayofmonth) %>% -->
-<!--                     tally() %>% -->
-<!--                     filter(Location == "Kronos Mart") %>% -->
-<!--                     ungroup(), by = "dayofmonth") %>% -->
-<!--                     mutate(n2=n) %>% -->
-<!--                     replace_na(list(n=0)) -->
-
-<!-- # Showcase Kronos Mart's GPS activity via a geom-area visualisation -->
-<!-- Q5.2.1 <- ggplot(Q5.2.1_gps,  -->
-<!--                   aes(x = dayofmonth, y = n)) + -->
-<!--   geom_area(size = 1) + -->
-<!--   geom_point() + -->
-<!--   geom_text(aes(label = n2), na.rm = TRUE, -->
-<!--             vjust = -1, -->
-<!--             size = 3) + -->
-<!--   scale_x_continuous(breaks = seq(6,19,1)) + -->
-<!--   ylim(0,5) + -->
-<!--   labs("title" = "GPS Movements to Kronos Mart Validates Loyalty Data", -->
-<!--        "subtitle" = "GPS data seem to validate the loyalty data, more than the credit card data") + -->
-<!--   theme(axis.text.y = element_blank(), -->
-<!--         axis.ticks.y = element_blank(), -->
-<!--         panel.grid.major.y = element_blank(), -->
-<!--         panel.grid.minor.y = element_blank(), -->
-<!--         legend.position = "none") -->
-
-<!-- Q5.2.1 -->
-
-<!-- ``` -->
-
-<!-- #### 5.2.2 GPS Validates F&B Outlets From Earlier Credit Card Data; Other Outlets Seem To Have Unmatched Visits -->
-
-<!-- Visitations to unknown locations such as Hippokampos and Abila Zacharo during noon / lunch time confirms these locations as food outlets. However, visit frequency to other locations seem to differ:\ -->
-<!-- - Some locations such as Bean There Done That, Brewed Awakenings and Jack's Magical Beans has high gps visits in the morning, whereas credit card data shows stronger transactions during lunch time\ -->
-<!-- - Kronos Mart's GPS data suggests more activity between 12 noon to midnight, but credit card data suggests more activity between midnight and 12 noon -->
-
-<!-- ```{r gps-hippokampos} -->
-
-<!-- # Create ridgeline plot of GPS locations by hours of day, and excluding Home, Anonymous locations and Gastech. -->
-<!-- Q5.2.2 <- ggplot(spots %>% -->
-<!--                    filter(!grepl("Home|Anonymous|GasTech", Location)),  -->
-<!--                  aes(x = hour,  -->
-<!--                      y = Location,  -->
-<!--                      fill = stat(x) -->
-<!--                      )) + -->
-<!--                  geom_density_ridges_gradient(scale=3,rel_min_height = 0.001) + -->
-<!--   scale_x_continuous(breaks = 0:24) + -->
-<!--   scale_y_discrete(limits=rev) + -->
-<!--   scale_fill_viridis_c(name = "ABC", option = "A") + -->
-<!--   theme_ridges(font_size = 7, grid = TRUE) + -->
-<!--   theme(legend.position = "none") + -->
-<!--   labs(title = "Uncovering Location Type Beyond Ambiguous Location Names Using GPS Data", -->
-<!--        subtitle = "High Noon GPS Activity Continue To Suggest Abila Zacharo and Hippokampos As Food Outlets") -->
-
-<!-- Q5.2.2 -->
-
-<!-- ``` -->
-
-<!-- #### 5.2.3 Selected Coffee Chain Activity Still Occur Only At Selected Hours Within The GPS Data -->
-
-<!-- GPS data shows restricted activity coffee chain activity to just two hours within the day. This differs from credit card data, where it occurs in three hours. Noon activity is missing from GPS data. -->
-
-<!-- ```{r gps-coffee-hour} -->
-
-<!-- # Merge spots data with Location Type and change from long to wide format -->
-<!-- Q5.2.3_spots <- spots %>% -->
-<!--   left_join(dplyr::select(spots_median,Location, Location.Type), by = c("Location" = "Location")) %>% -->
-<!--   filter(Location.Type == "Coffee Cafe") %>% -->
-<!--   count(Location, hour) %>% -->
-<!--   ungroup() %>% -->
-<!--   dcast(hour ~ Location,) -->
-
-<!-- Q5.2.3_spots$hour <- as_factor(Q5.2.3_spots$hour) -->
-
-<!-- Q5.2.3_combined <- data.frame(hour = c(1:24)) -->
-<!-- Q5.2.3_combined$hour <- as_factor(Q5.2.3_combined$hour) -->
-<!-- Q5.2.3_combined <- Q5.2.3_combined %>% -->
-<!--   left_join(Q5.2.3_spots, by = "hour") -->
-
-<!-- rm(Q5.2.3_spots) # Remove unused earlier dataset -->
-
-<!-- Q5.2.3_combined <-melt(Q5.2.3_combined, id.vars = "hour", variable.name = "coffee_place") -->
-
-<!-- Q5.2.3 <- ggplot(Q5.2.3_combined, aes(hour, value, fill = coffee_place)) + -->
-<!--   geom_bar(stat = "identity") + -->
-<!--   coord_polar(theta = "x") + -->
-<!--   labs(title = "Daily GPS Activity At Coffee Chains Restricted To Only Two Hours", -->
-<!--        subtitle = "No More Noon Activity Has Compared To Its CC Txns") + -->
-<!--   xlab("") + -->
-<!--   ylab("") + -->
-<!--   theme( -->
-<!--         axis.ticks = element_blank(),  -->
-<!--         axis.text.y = element_blank(),  -->
-<!--         panel.background = element_blank(),  -->
-<!--         panel.grid.major.x = element_line(colour="grey"), -->
-<!--         axis.text.x = element_text(size = 15),  -->
-<!--         legend.title=element_blank()) -->
-
-<!-- Q5.2.3 -->
-
-<!-- ``` -->
-
-<!-- #### 5.2.4 GPS Showed Some Semblance of Vehicle Movement On Weekends Before Midday -->
-
-<!-- On Sat morning, there was around 2,000+ gps points up and about in the city. This differs from a lack of credit card activity during the same period. Looking at the GPS data, these movements revolved around homes and Kronos Capital. Both these locations are not commercial locations, and thus no credit card transaction is to be expected anyways. -->
-
-<!-- ```{r gps-no-vehicles-on-weekends-before-midday} -->
-
-<!-- Q5.2.4_weekday <- data.frame("weekday" = unique(cc[c('weekday')])) %>% -->
-<!--   slice(rep(1:n(), each = 5)) -->
-<!-- Q5.2.4_period <- data.frame("period" = unique(cc[c('period')])) -->
-<!-- Q5.2.4_period$period <- factor(Q5.2.4_period$period,  -->
-<!--                                 levels = c("Morning 6am to 11.59am",  -->
-<!--                                            "Afternoon 12noon to 5.59pm",  -->
-<!--                                            "Evening 6pm to 8.59pm", -->
-<!--                                            "Late Evening 9pm to 11.59pm", -->
-<!--                                            "Late Night 12mn to 5.59am")) -->
-<!-- Q5.2.4_period <- as.data.frame(lapply(Q5.2.4_period,rep,7)) -->
-<!-- Q5.2.4_combined <- cbind(Q5.2.4_weekday,Q5.2.4_period) -->
-
-<!-- rm(Q5.2.4_weekday) # Remove unused earlier dataset -->
-<!-- rm(Q5.2.4_period) # Remove unused earlier dataset -->
-
-<!-- Q5.2.4_gps <- gps_name %>% -->
-<!--   group_by(weekday,period) %>% -->
-<!--   tally() %>% -->
-<!--   ungroup() -->
-
-<!-- Q5.2.4_combined <- Q5.2.4_combined %>% -->
-<!--   left_join(Q5.2.4_gps, by = c("weekday"="weekday","period"="period")) -->
-<!-- Q5.2.4_combined$id <- seq(1, nrow(Q5.2.4_combined)) -->
-<!-- Q5.2.4_combined[36:63,] <- NA -->
-<!-- Q5.2.4_combined[36,4] <- 5.1 -->
-<!-- Q5.2.4_combined[37,4] <- 5.2 -->
-<!-- Q5.2.4_combined[38,4] <- 5.3 -->
-<!-- Q5.2.4_combined[39,4] <- 5.4 -->
-<!-- Q5.2.4_combined[40,4] <- 10.1 -->
-<!-- Q5.2.4_combined[41,4] <- 10.2 -->
-<!-- Q5.2.4_combined[42,4] <- 10.3 -->
-<!-- Q5.2.4_combined[43,4] <- 10.4 -->
-<!-- Q5.2.4_combined[44,4] <- 15.1 -->
-<!-- Q5.2.4_combined[45,4] <- 15.2 -->
-<!-- Q5.2.4_combined[46,4] <- 15.3 -->
-<!-- Q5.2.4_combined[47,4] <- 15.4 -->
-<!-- Q5.2.4_combined[48,4] <- 20.1 -->
-<!-- Q5.2.4_combined[49,4] <- 20.2 -->
-<!-- Q5.2.4_combined[50,4] <- 20.3 -->
-<!-- Q5.2.4_combined[51,4] <- 20.4 -->
-<!-- Q5.2.4_combined[52,4] <- 25.1 -->
-<!-- Q5.2.4_combined[53,4] <- 25.2 -->
-<!-- Q5.2.4_combined[54,4] <- 25.3 -->
-<!-- Q5.2.4_combined[55,4] <- 25.4 -->
-<!-- Q5.2.4_combined[56,4] <- 30.1 -->
-<!-- Q5.2.4_combined[57,4] <- 30.2 -->
-<!-- Q5.2.4_combined[58,4] <- 30.3 -->
-<!-- Q5.2.4_combined[59,4] <- 30.4 -->
-<!-- Q5.2.4_combined[60,4] <- 35.1 -->
-<!-- Q5.2.4_combined[61,4] <- 35.2 -->
-<!-- Q5.2.4_combined[62,4] <- 35.3 -->
-<!-- Q5.2.4_combined[63,4] <- 35.4 -->
-
-<!-- rm(Q5.2.4_gps) # Remove unused earlier dataset -->
-
-<!-- Q5.2.4_combined <- Q5.2.4_combined %>% -->
-<!--   arrange(id) -->
-<!-- Q5.2.4_combined$id <- seq(1, nrow(Q5.2.4_combined)) -->
-<!-- Q5.2.4_combined$period <- factor(Q5.2.4_combined$period,  -->
-<!--                                 levels = c("Morning 6am to 11.59am",  -->
-<!--                                            "Afternoon 12noon to 5.59pm",  -->
-<!--                                            "Evening 6pm to 8.59pm", -->
-<!--                                            "Late Evening 9pm to 11.59pm", -->
-<!--                                            "Late Night 12mn to 5.59am")) -->
-
-<!-- Q5.2.4_label <- Q5.2.4_combined -->
-<!-- Q5.2.4_number_of_bar <- nrow(Q5.2.4_label) -->
-<!-- Q5.2.4_angle <- 90 - 360 * (Q5.2.4_label$id-0.5) /Q5.2.4_number_of_bar -->
-<!-- Q5.2.4_label$hjust <- ifelse(Q5.2.4_angle < -90, 1, 0) -->
-<!-- Q5.2.4_label$angle <- ifelse(Q5.2.4_angle < -90, Q5.2.4_angle+180, Q5.2.4_angle) -->
-
-<!-- rm(Q5.2.4_angle) # Remove unused earlier dataset -->
-<!-- rm(Q5.2.4_number_of_bar) # Remove unused earlier dataset -->
-
-<!-- Q5.2.4_base <- Q5.2.4_combined %>%  -->
-<!--   group_by(weekday) %>%  -->
-<!--   summarize(start=min(id), end=max(id) - 4, .groups = "drop") %>%  -->
-<!--   rowwise() %>%  -->
-<!--   mutate(title=mean(c(start, end))) %>% -->
-<!--   ungroup() -->
-
-<!-- Q5.2.4_grid <- Q5.2.4_base -->
-<!-- Q5.2.4_grid$end <- Q5.2.4_grid$end[ c( nrow(Q5.2.4_grid), 1:nrow(Q5.2.4_grid)-1)] + 1 -->
-<!-- Q5.2.4_grid$start <- Q5.2.4_grid$start - 1 -->
-<!-- Q5.2.4_grid <- Q5.2.4_grid[-1,] -->
-
-
-<!-- Q5.2.4 <- ggplot(Q5.2.4_combined, aes(x=as_factor(id), y=n, fill=period)) + -->
-<!--   geom_bar(aes(x=as_factor(id), y=n, fill=period), stat="identity", alpha=0.5) + -->
-
-<!--   geom_segment(data=Q5.2.4_grid, aes(x = end, y = 80000, xend = start, yend = 80000), colour = "grey", alpha=1, size=0.3 , inherit.aes = FALSE ) + -->
-<!--   geom_segment(data=Q5.2.4_grid, aes(x = end, y = 60000, xend = start, yend = 60000), colour = "grey", alpha=1, size=0.3 , inherit.aes = FALSE ) + -->
-<!--   geom_segment(data=Q5.2.4_grid, aes(x = end, y = 40000, xend = start, yend = 40000), colour = "grey", alpha=1, size=0.3 , inherit.aes = FALSE ) + -->
-<!--   geom_segment(data=Q5.2.4_grid, aes(x = end, y = 20000, xend = start, yend = 20000), colour = "grey", alpha=1, size=0.3 , inherit.aes = FALSE ) + -->
-
-<!--   annotate("text", x = rep(max(Q5.2.4_combined$id),4), y = c(20000, 40000, 60000, 80000), label = c("20000", "40000", "60000", "80000") , color="grey", size=3 , angle=0, fontface="bold", hjust=1) + -->
-
-<!--   geom_bar(aes(x=as_factor(id), y=n, fill=period), stat="identity", alpha=0.5) + -->
-<!--   ylim(-80000,100000) + -->
-<!--   theme_minimal() + -->
-<!--   theme(axis.text = element_blank(), -->
-<!--         axis.title = element_blank(), -->
-<!--         panel.grid = element_blank(), -->
-<!--         plot.margin = unit(rep(-1,4), "cm")) + -->
-<!--   coord_polar() +  -->
-<!--   geom_text(data=Q5.2.4_label, aes(x=id, y=n+10, label=n, hjust=hjust), color="black", fontface="bold",alpha=0.6, size=3, angle= Q5.2.4_label$angle, inherit.aes = FALSE ) + -->
-
-<!--   geom_segment(data=Q5.2.4_base, aes(x = start, y = -5, xend = end, yend = -5), colour = "black", alpha=0.8, size=0.6 , inherit.aes = FALSE )  + -->
-
-<!--   geom_text(data=Q5.2.4_base, aes(x=title, y=-10000, label=weekday), color="black", fontface="bold",alpha=0.6, size=3, inherit.aes = FALSE ) -->
-
-<!-- Q5.2.4  -->
-
-<!-- ``` -->
-
-<!-- ### 5.3 Question 3 And Its Answers -->
-
-<!-- Can you infer the owners of each credit card and loyalty card? What is your evidence? Where are there uncertainties in your method? Where are there uncertainties in the data? Please limit your answer to 8 images and 500 words. -->
-
-<!-- #### 5.3.1 Combining Both Credit Card and Spots Data Using Fuzzy Join (OSA) -->
-
-<!-- We will find matching IDs between the credit card and spots data. Spots data are basically GPS points that have remained stationary for more than 10 mins. The main columns of comparison are the day of month, location and hour, and identical rows are determined as a result. From here, we identify the match, by counting the max number of matching rows between credit card and spots data. -->
-
-<!-- These matching is on a best match basis, and uncertainties lie in the following areas:\ -->
-<!-- - Spots data may show a visit to that location, but no purchase may have been made\ -->
-<!-- - Discrepancy in the credit card data's date or hour may cause ill-matches -->
-
-<!-- ```{r fuzzyjoin-innerjoin-stringdist-cc-spots} -->
-
-<!-- cc_spots <- cc %>% # Create a new df that shows matches with a max distance difference of 0 -->
-<!--   stringdist_inner_join(spots,  -->
-<!--                         by = c("concat_cc_spots" = "concat_spots_cc"), -->
-<!--                         method = "osa", -->
-<!--                         max_dist = 0, -->
-<!--                         distance_col = "distance") -->
-
-<!-- cc_spots_1 <- cc_spots %>% # Isolate best matching cc and spots with more than 2 counts -->
-<!--   filter(!is.na(FullName)) %>% # Remove unknown drivers -->
-<!--   group_by(RoleNName,last4ccnum) %>% -->
-<!--   count() %>% -->
-<!--   arrange(RoleNName,-n) %>% # Arrange the highest to lowest count in each group -->
-<!--   ungroup() -->
-
-<!-- colnames(cc_spots_1)[colnames(cc_spots_1)=="n"] = "matches" # Rename last column to matches -->
-
-<!-- cc_summary <- cc %>% -->
-<!--   group_by(last4ccnum) %>% -->
-<!--   count() %>% -->
-<!--   ungroup() -->
-
-<!-- cc_spots_1 <- cc_spots_1[!duplicated(cc_spots_1$RoleNName),] # Isolating 1 cc to 1 driver -->
-
-<!-- knitr::kable(cc_spots_1, caption = "Matched Credit Card to ID And Name") %>% -->
-<!--   kable_styling(bootstrap_options = "striped",  -->
-<!--                 full_width = F) # Output matched table -->
-
-<!-- ``` -->
+While it makes sense to convert our GPS points into spatial lines, using the furnished map pic as a basemap is less than ideal. As shown below, it's unclear whether the GPS path coincides with the location icons shown on the map. These icons are far too large, and does not reflect whether these GPS points either stopped at or merely drove past these points. At the same time, the GPS path seem to run on a road network, that is not reflected within the furnished map pic.\
+\
+```{r mc2, warning=FALSE, message=FALSE}
+#| code-fold: show
+
+gps$Timestamp <- date_time_parse(gps$Timestamp,
+                                 zone = "UTC",
+                                 format = "%m/%d/%Y %H:%M:%S") # Readjust loyalty timestamp
+gps$day <- as_factor(get_day(gps$Timestamp))                   # Extract day of month and convert to factor data type
+gps$id <- as_factor(gps$id)                                    # Change to factor data type
+
+gps_sf <- st_as_sf(gps, 
+                   coords = c("long", 
+                              "lat"), 
+                   crs = 4326)                                 # Changing into a shapefile
+
+gps_path1 <- gps_sf %>% # Grouping gps lines according to id and day of month
+  group_by(id, day) %>%
+  summarize(m = mean(Timestamp),
+            do_union=FALSE,
+            .groups = "drop") %>%
+  st_cast("LINESTRING") # Change GPS into a line
+
+tmap_mode("view")
+Q2.2_mc2 <- tm_shape(mc2) +
+              tm_raster(legend.show = FALSE) +
+              # tm_raster(palette = c("#979D9D",
+              #                       # "#A3A7A7",
+              #                       # "#B1B2B2",
+              #                       # "#B6B5B3",
+              #                       # "#B4AFA9",
+              #                       "#B3A9A1")
+              #        ,alpha = NA
+              #        # ,
+              #        # saturation = 1,
+              #        # interpolate = TRUE,
+              #        # max.value = 255
+              #        ) +
+              # tm_raster(palette = c("#D2D9DA",
+              #                       "#FFFFFF",
+              #                       "#F6EBDE"),
+              #        alpha = NA,
+              #        saturation = 1,
+              #        interpolate = TRUE,
+              #        max.value = 255) +
+              # tm_rgb(tm_mv)
+              # tm_rgb(mc2,
+              #        r = 1,
+              #        g = 2,
+              #        b = 3,
+              #        alpha = NA,
+              #        saturation = 1,
+              #        interpolate = TRUE,
+              #        max.value = 255) +
+            tm_shape(gps_path1 %>%
+                     filter(id==1)) +
+              tm_lines()
+
+# nlayers(mc2)
+# nbands(mc2)
+# names(mc2)
+# plotRGB(mc2)
+Q2.2_mc2
+
+```
+\
+At the same time, we are provided with the Abila road network. This granular road network is not reflected at all within the map pic. Taking inspiration from [City University London's entry](https://www.cs.umd.edu/hcil/varepository/VAST%20Challenge%202014/challenges/MC2%20-%20Patterns%20of%20Life%20Analysis/entries/giCentre%20-%20City%20University%20London/), they made great use of the Abila road network to create their own map (reproduced below). They then coupled this road network with actual location points that they have derived from the data. We will borrow this visualisation format as a basis for our own visualisation. To bring it a step further, we will recreate this map in an interactive fashion in subsequent sections. For now, let's prepare the necessary data.\
+\
+![City University London's MC2 Sample Map Entry](img/ferro.png)\
+
+## 3. Data Comprehension
+
+As always, we review each dataset in greater detail. This is a necessary step in order to accurately prepare the data for subsequent use.\
+\
+While reviewing the four csv data, we immediately noticed a few potential issues:\
+1. Date format within the timestamp were in a MM-DD-YYYY H:M format\
+2. Katerina's Cafe contains unique characters, which may cause downstream problems during our analysis\
+3. ID and Last4CCNum are treated as regular double numbers, instead of a character type\
+4. Names and roles are broken up into multiple columns within the car data\
+\
+Thus, we address these potential issues as well as create and simplify other columns for subsequent ease in analysis.\
+\
+```{r csv-data-cleaning, warning=FALSE, message=FALSE}
+#| code-fold: show
+
+#--------------- Cleaning CC data ---------------
+
+cc$timestamp <- date_time_parse(cc$timestamp,
+                zone = "UTC",
+                format = "%m/%d/%Y  %H:%M") # Readjust CC timestamp
+cc[grep("Katerina", cc$location),2] <- "Katerina's Cafe" # Replace unique characters in Katerina's Cafe
+cc$last4ccnum <- as_factor(cc$last4ccnum) # Change the column format to nominal format
+cc$hour <- as.numeric(format(cc$timestamp,"%H")) # Create a separate column just for hours in the cc data
+cc$period <- case_when( # Segment hour into 5 separate periods
+  cc$hour >= 21 ~ "Late Evening 9pm to 11.59pm",
+  cc$hour >= 18 ~ "Evening 6pm to 8.59pm",
+  cc$hour >= 12 ~ "Afternoon 12noon to 5.59pm",
+  cc$hour >= 6 ~ "Morning 6am to 11.59am",
+  TRUE ~ "Late Night 12mn to 5.59am"
+)
+
+cc$period <- factor(cc$period, # Order periods accordingly
+                    levels = c("Morning 6am to 11.59am",
+                               "Afternoon 12noon to 5.59pm",
+                               "Evening 6pm to 8.59pm",
+                               "Late Evening 9pm to 11.59pm",
+                               "Late Night 12mn to 5.59am"))
+
+cc$dayofmonth <- day(cc$timestamp) # Extract day of month from timestamp in a new column
+cc$dayofmonth <- as_factor(cc$dayofmonth) # Change to nominal format
+cc$weekday <- wday(cc$timestamp, label = TRUE) # Extract day of week from timestamp in a new column
+cc <- tibble::rowid_to_column(cc, "ID") # Create a numeric id column
+cc$date <- as.Date(cc$timestamp) # Create a separate column just for dates in the cc data
+cc$concat_cc_loyalty <- paste(cc$date,cc$location,cc$price) # Create a separate column of unique values using concatenated values in the cc data
+cc$concat_cc_spots <- paste(cc$date,cc$location,cc$hour) # Create a second separate column of unique values using concatenated values in the cc data
+cc$ID <- as_factor(cc$ID) # Change the column format to nominal format
+
+#--------------- Cleaning Loyalty data ---------------
+
+loyalty$timestamp <- date_time_parse(loyalty$timestamp,
+                zone = "UTC",
+                format = "%m/%d/%Y") # Readjust loyalty timestamp
+loyalty[grep("Katerina", loyalty$location),2] <- "Katerina's Cafe" # Replace unique characters in Katerina's Cafe
+loyalty$dayofmonth <- day(loyalty$timestamp) # Extract day of month from timestamp in a new column
+loyalty$dayofmonth <- as_factor(loyalty$dayofmonth) # Change to nominal format
+loyalty$weekday <- wday(loyalty$timestamp, label = TRUE) # Extract day of week from timestamp in a new column
+loyalty$concat_loyalty_cc <- paste(loyalty$timestamp,loyalty$location,loyalty$price) # Create a separate column of unique values using concatenated values in the loyalty data
+loyalty <- tibble::rowid_to_column(loyalty, "ID") # Create a numeric id column
+loyalty$ID <- as_factor(loyalty$ID) # Change the column format to nominal format
+
+#--------------- Cleaning Car Assignment data ---------------
+
+car$CarID <- as_factor(car$CarID) # Change the column format to nominal format
+car$FullName <- paste(car$FirstName,car$LastName, sep = " ") # Create new column with combined first and last name
+car$RoleNName <- paste(car$CarID, car$CurrentEmploymentTitle, car$FullName, sep = " ") # Create new column with combined ID, Role and Full Name
+
+#--------------- Cleaning GPS data ---------------
+
+gps$date <- as_date(gps$Timestamp) # Create a separate column just for dates in the gps data
+gps$hour <- hour(gps$Timestamp) # Create a separate column just for hours in the gps data
+gps$period <- case_when( # Segment hour into 5 separate periods
+  gps$hour >= 21 ~ "Late Evening 9pm to 11.59pm",
+  gps$hour >= 18 ~ "Evening 6pm to 8.59pm",
+  gps$hour >= 12 ~ "Afternoon 12noon to 5.59pm",
+  gps$hour >= 6 ~ "Morning 6am to 11.59am",
+  TRUE ~ "Late Night 12mn to 5.59am"
+)
+gps$period <- factor(gps$period, # Order periods accordingly
+                     levels = c("Morning 6am to 11.59am",
+                                "Afternoon 12noon to 5.59pm",
+                                "Evening 6pm to 8.59pm",
+                                "Late Evening 9pm to 11.59pm",
+                                "Late Night 12mn to 5.59am"))
+gps$dayofmonth <- day(gps$Timestamp) # Extract day of month from timestamp in a new column
+gps$weekday <- wday(gps$Timestamp, label = TRUE) # Extract day of week from timestamp in a new column
+
+```
+
+## 4. Data Preparation
+
+### 4.1 Combining Both Credit Card and Loyalty Data Using Fuzzy Join (OSA)
+
+We will now attempt to find matching rows between the cc and loyalty data.\
+\
+```{r fuzzyjoin-innerjoin-stringdist-cc-loyalty, warning=FALSE, message=FALSE}
+#| code-fold: show
+
+cc_loyalty <- cc %>% # Create a new df showing matches with a max distance difference of 1
+  stringdist_inner_join(loyalty,
+                        by = c("concat_cc_loyalty" = "concat_loyalty_cc"),
+                        method = "osa",
+                        max_dist = 1,
+                        distance_col = "distance")
+
+cc_loyalty_1 <- cc_loyalty %>% # Isolate best matching cc and loyalty with more than 2 counts
+    group_by(last4ccnum,loyaltynum) %>%
+    count() %>%
+    filter(n>2) %>%
+    ungroup()
+
+cc_loyalty_duplicate_cc <- cc_loyalty_1 %>% # Extract duplicates in cc data
+  filter(cc_loyalty_1$last4ccnum == cc_loyalty_1$last4ccnum[duplicated(cc_loyalty_1$last4ccnum)])
+
+cc_loyalty_duplicate_loyalty <- subset(cc_loyalty_1,loyaltynum == "L6267" | loyaltynum == "L3288") # Extract duplicates in loyalty data
+
+cc_loyalty_1$type <- "unique" # Creating a new type column with 'unique' as value
+cc_loyalty_1[which(cc_loyalty_1$last4ccnum == cc_loyalty_duplicate_cc$last4ccnum),4] <- "duplicate" # Identifying duplicate in type column
+cc_loyalty_1[which(cc_loyalty_1$loyaltynum ==  "L6267" |
+                   cc_loyalty_1$loyaltynum ==  "L3288"),4] <- "duplicate" # Identifying duplicate in type column
+
+```
+
+### 4.2 Combining Both GPS and Car Assignment Data
+
+First, we will merge the GPS data with the car assignments. Next, we will isolate GPS points, that have been stationary for at least 10 mins.\
+\
+```{r GPS-data-manipulation, warning=FALSE, message=FALSE}
+#| code-fold: show
+
+gps_name <- left_join(gps,car, by = c("id" = "CarID")) # Merge car assignments to gps data
+gps_name$Timestamp <- as.POSIXct(gps_name$Timestamp, format = "%m/%d/%Y  %H:%M:%S", tz = "GMT") # Timestamp switching to month-day-year format
+gps_name <- gps_name[with(gps_name,order(id,Timestamp)),] # Sort first by ID in ascending order and then Timestamp by oldest to newest
+gps_name <- gps_name %>% # Add running number in the first column
+  mutate(No = 1:n()) %>%
+  dplyr::select(No, everything())
+gps_name <- gps_name %>% # Create additional column indicating time taken from previous timestamp for same ID
+    mutate(Delta = Timestamp - lag(Timestamp, default = first(Timestamp)))
+gps_name$Delta <- as.numeric(gps_name$Delta) # Convert Delta column to numeric format
+gps_name$Delta_Hours <- round(gps_name$Delta / 60 / 60, 1) # Create column to convert Delta seconds into hours with one decimal place
+
+rm(gps) # Remove unused earlier dataset
+
+spots <- gps_name %>% # Filtering out stationary gps coordinates of more than 10 mins
+  filter(Delta > 600)
+spots$No <- rep(1:2965, times = 1) # Redo running number in the first column
+
+```
+
+### 4.3 Identifying Stationary GPS Points
+
+Next, using the map and other data sources, we identify the locations of each of these stationary GPS points. Through a visual inspection of the map, credit card and loyalty data, we found 66 unique locations.\
+\
+```{r identifying-stationary-GPS-points, warning=FALSE, message=FALSE}
+#| code-fold: show
+
+spots$Location <- 1 # Create a Location column
+spots <- spots %>% mutate( # Create additional column with location names based on latlong
+  Location = case_when(
+    between(lat, 36.05092013, 36.05102938) &
+      between(long, 24.82586806, 24.82598723)  ~ "Abila Airport", # 35 features
+    between(lat, 36.07434876, 36.07443715) &
+      between(long, 24.84592966, 24.84598782)  ~ "Abila Scrapyard", # 4 features
+    between(lat, 36.06342076, 36.06349309) &
+      between(long, 24.85096457, 24.85103679)  ~ "Abila Zacharo", # 66 features
+    between(lat, 36.07712237, 36.07715385) &
+      between(long, 24.87617634, 24.87621582)  ~ "Ahaggo Museum", # 5 features
+    between(lat, 36.07522801, 36.07530344) &
+      between(long, 24.85626503, 24.85634849)  ~ "Albert's Fine Clothing", # 20 features
+    between(lat, 36.08172086, 36.08182543) &
+      between(long, 24.85086882, 24.85096705)  ~ "Bean There Done That", # 46 features
+    between(lat, 36.05402149, 36.05413903) &
+      between(long, 24.90116515, 24.90128202)  ~ "Brew've Been Served", # 106 features
+    between(lat, 36.07332048, 36.07336116) &
+      between(long, 24.86416419, 24.86420583)  ~ "Brewed Awakenings", # 36 features
+    between(lat, 36.06582469, 36.065941) &
+      between(long, 24.90097567, 24.90108865)  ~ "20 Building Control Stenig's Home", # 20 features
+    between(lat, 36.05851786, 36.05860144) &
+      between(long, 24.8808655, 24.88092654)  ~ "Carlyle Chemical Inc.", # 30 features
+    between(lat, 36.07818062, 36.07821857) &
+      between(long, 24.87211555, 24.8721508)  ~ "4 CFO Ingrid's Home", # 27 features
+    between(lat, 36.07682044, 36.07685752) &
+      between(long, 24.8658641, 24.86589901)  ~ "10 CIO Ada's Home", # 35 features
+    between(lat, 36.0721156, 36.07215701) &
+      between(long, 24.87458425, 24.8746267)  ~ "32 COO Orhan's Home", # 29 features
+    between(lat, 36.07062423, 36.07073983) &
+      between(long, 24.89517609, 24.89526281)  ~ "Chostus Hotel", # 11 features
+    between(lat, 36.05462322, 36.05469486) &
+      between(long, 24.88977034, 24.88983886)  ~ "Coffee Cameleon", # 29 features
+    between(lat, 36.08954231, 36.08962196) &
+      between(long, 24.86066508, 24.8607611)  ~ "Desafio Golf Course", # 10 features
+    between(lat, 36.07292088, 36.07301365) &
+      between(long, 24.88396447, 24.88405897)  ~ "26 Drill Site Manager Marin's Home", # 26 features
+    between(lat, 36.08442031, 36.08449538) &
+      between(long, 24.86416741, 24.8642387)  ~ "7 Drill Technician Elsa's Home", # 25 features
+    between(lat, 36.08424703, 36.08432477) &
+      between(long, 24.8563809, 24.8564637)  ~ "9 Drill Technician Gustav's Home", # 13 features
+    between(lat, 36.0726185, 36.07380904) &
+      between(long, 24.87510166, 24.87613744)  ~ "28 Drill Technician Isande's Home", # 26 features
+    between(lat, 36.06922564, 36.06931513) &
+      between(long, 24.88416486, 24.88426267)  ~ "27 Drill Technician Kare's Home", # 20 features
+    between(lat, 36.08542073, 36.08550845) &
+      between(long, 24.86036422, 24.86045943)  ~ "2 Engineer Lars's Home", # 37 features
+    between(lat, 36.08664252, 36.08672442) &
+      between(long, 24.85756416, 24.85766744)  ~ "3 Engineer Felix's Home", # 22 features
+    between(lat, 36.07622023, 36.07626546) &
+      between(long, 24.87466429, 24.87471053)  ~ "35 Environmental Safety Advisor Willem's Home", # 33 features
+    between(lat, 36.07212045, 36.07213193) &
+      between(long, 24.84132949, 24.84134818)  ~ "Frank's Fuel", # 2 features
+    between(lat, 36.05492145, 36.05503511) &
+      between(long, 24.90176782, 24.90188061)  ~ "Frydos Autosupply n' More", # 29 features
+    between(lat, 36.04802098, 36.04805422) &
+      between(long, 24.87956497, 24.87957691)  ~ "GasTech", # 738 features
+    between(lat, 36.05970763, 36.05981097) &
+      between(long, 24.85797552, 24.8580772)  ~ "Gelatogalore", # 47 features
+    between(lat, 36.06034564, 36.06043016) &
+      between(long, 24.85646426, 24.85657454)  ~ "General Grocer", # 12 features
+    between(lat, 36.05572125, 36.05584094) &
+      between(long, 24.90246542, 24.90258487)  ~ "Guy's Gyros", # 143 features
+    between(lat, 36.06362146, 36.06371539) &
+      between(long, 24.88586605, 24.88595859)  ~ "Hallowed Grounds", # 70 features
+    between(lat, 36.07660977, 36.07669909) &
+      between(long, 24.85756408, 24.85764247)  ~ "Hippokampos", # 155 features
+    between(lat, 36.08412146, 36.08420924) &
+      between(long, 24.85896842, 24.85905081)  ~ "11 Hydraulic Technician Axel's Home", # 23 features
+    between(lat, 36.08782802, 36.08793196) &
+      between(long, 24.85627136, 24.8563725)  ~ "19 Hydraulic Technician Vira's Home", # 24 features
+    between(lat, 36.06641679, 36.06650723) &
+      between(long, 24.88256875, 24.88265687)  ~ "1 IT Helpdesk Nils's Home", # 31 features
+    between(lat, 36.06729646, 36.06736745) &
+      between(long, 24.87788423, 24.87795559)  ~ "5 IT Technician Isak's Home", # 21 features
+    between(lat, 36.06722012, 36.06731624) &
+      between(long, 24.8858687, 24.88596759)  ~ "8 IT Technician Lucas's Home", # 23 features
+    between(lat, 36.06749651, 36.0675518) &
+      between(long, 24.87330651, 24.873366)  ~ "Jack's Magical Beans", # 31 features
+    between(lat, 36.06582037, 36.06584879) &
+      between(long, 24.85236427, 24.85241027)  ~ "Kalami Kafenion", # 47 features
+    between(lat, 36.05442247, 36.05453641) &
+      between(long, 24.89986596, 24.89998054)  ~ "Katerina's Cafe", # 158 features
+    between(lat, 36.05292229, 36.05296701) &
+      between(long, 24.84936915, 24.84941679)  ~ "Kronos Capital", # 6 features
+    between(lat, 36.06582196, 36.06587998) &
+      between(long, 24.8497762, 24.84983936)  ~ "Kronos Mart", # 9 features
+    between(lat, 36.06523446, 36.06534083) &
+      between(long, 24.83307421, 24.83318494)  ~ "Kronos Pipe and Irrigation", # 7 features
+    between(lat, 36.06402993, 36.06410072) &
+      between(long, 24.84137818, 24.84144338)  ~ "Maximum Iron and Steel", # 9 features
+    between(lat, 36.05840347, 36.05849041) &
+      between(long, 24.88546548, 24.88553455)  ~ "Nationwide Refinery", # 41 features
+    between(lat, 36.05859158, 36.05859887) &
+      between(long, 24.85790261, 24.85799357)  ~ "Octavio's Office Supplies", # 3 features
+    between(lat, 36.05192066, 36.05197575) &
+      between(long, 24.87076418, 24.87082137)  ~ "Ouzeri Elian", # 67 features
+    between(lat, 36.06764972, 36.06775002) &
+      between(long, 24.90243213, 24.9025445)  ~ "34 Perimeter Control Edvard's Home", # 20 features
+    between(lat, 36.06324941, 36.06330782) &
+      between(long, 24.85226894, 24.8523291)  ~ "Roberts and Sons", # 9 features
+    between(lat, 36.05942407, 36.05952152) &
+      between(long, 24.89476557, 24.8948649)  ~ "Shared Home A - 6 Linnea 25 Kanon 29 Bertrand", # 72 features
+    between(lat, 36.06332304, 36.06343537) &
+      between(long, 24.89607033, 24.89617856)  ~ "Shared Home B - 14 Lidelse 18 Birgitta 21 Hennie", # 60 features
+    between(lat, 36.06242283, 36.06253955) &
+      between(long, 24.89877023, 24.89888179)  ~ "Shared Home C - 17 Sven 24 Minke 33 Brand", # 68 features
+    between(lat, 36.05842222, 36.05853828) &
+      between(long, 24.90096522, 24.90107874)  ~ "Shared Home D - 22 Adra 23 Varja 30 Felix", # 73 features
+    between(lat, 36.0603222, 36.06044736) &
+      between(long, 24.90556693, 24.90569385)  ~ "Shared Home E - 13 Inga 15 Loreto 16 Isia 21 Hennie", # 85 features
+    between(lat, 36.05282139, 36.05288367) &
+      between(long, 24.86856868, 24.8686314)  ~ "Shoppers' Delight", # 17 features
+    between(lat, 36.06772112, 36.06784956) &
+      between(long, 24.89906521, 24.89917328)  ~ "12 Site Control Hideki's Home", # 21 features
+    between(lat, 36.05409586, 36.05420832) &
+      between(long, 24.90806584, 24.90817838)  ~ "Stewart and Sons Fabrication", # 36 features
+    between(lat, 36.06774029, 36.06776587) &
+      between(long, 24.87148791, 24.87150031)  ~ "U-Pump", # 4 features
+    between(lat, 36.05012433, 36.05021624) &
+      between(long, 24.9003978, 24.90047475)  ~ "Anonymous Site 1", # 6 features
+    between(lat, 36.06314781, 36.06324321) &
+      between(long, 24.90010823, 24.90018668)  ~ "Anonymous Site 2", # 7 features
+    between(lat, 36.05893131, 36.05900826) &
+      between(long, 24.89277554, 24.89284962)  ~ "Anonymous Site 3", # 7 features
+    between(lat, 36.08061881, 36.08067087) &
+      between(long, 24.84681621, 24.84688282)  ~ "Anonymous Site 4", # 7 features
+    between(lat, 36.06944928, 36.0695319) &
+      between(long, 24.84147082, 24.84157048)  ~ "Anonymous Site 5", # 8 features
+    between(lat, 36.05149231, 36.05253234) &
+      between(long, 24.87495168, 24.87611086)  ~ "Anonymous Site 6", # 13 features
+    between(lat, 36.05543848, 36.05657576) &
+      between(long, 24.86618187, 24.86735)  ~ "Anonymous Site 7", # 7 features
+    between(lat, 36.07099038, 36.07200089) &
+      between(long, 24.86869468, 24.86985682)  ~ "Anonymous Site 8", # 10 features
+    ))
+
+spots$concat_spots_cc <- paste(spots$date,spots$Location,spots$hour) # Create a separate column of unique values using concatenated values in the distilled GPS data
+spots_median <- spots %>% # Extract the median lat & long coordinates of locations
+  group_by(Location) %>%
+    summarise(lat.median = median(lat), long.median = median(long), .groups = "drop") %>%
+  filter(!is.na(Location)) %>% # Exclude remaining few unmatched locations
+  ungroup()
+
+spots_median <- spots_median %>% # Add additional column to classify locations into major buckets
+  mutate(Location.Type = case_when(
+    Location %in% c("Anonymous Site 1",
+                    "Anonymous Site 2",
+                    "Anonymous Site 3",
+                    "Anonymous Site 4",
+                    "Anonymous Site 5",
+                    "Anonymous Site 6",
+                    "Anonymous Site 7",
+                    "Anonymous Site 8") ~ "Unknown",
+    Location %in% c("Bean There Done That",
+                    "Brew've Been Served",
+                    "Brewed Awakenings",
+                    "Coffee Cameleon",
+                    "Jack's Magical Beans",
+                    "Hallowed Grounds") ~ "Coffee Cafe",
+    Location %in% c("Abila Zacharo",
+                    "Gelatogalore",
+                    "Guy's Gyros",
+                    "Hippokampos",
+                    "Kalami Kafenion",
+                    "Katerina's Cafe",
+                    "Ouzeri Elian") ~ "Food Joints",
+    Location %in% c("GasTech") ~ "HQ",
+    Location %in% c("1 IT Helpdesk Nils's Home",
+                    "10 CIO Ada's Home",
+                    "11 Hydraulic Technician Axel's Home",
+                    "12 Site Control Hideki's Home",
+                    "19 Hydraulic Technician Vira's Home",
+                    "2 Engineer Lars's Home",
+                    "20 Building Control Stenig's Home",
+                    "26 Drill Site Manager Marin's Home",
+                    "27 Drill Technician Kare's Home",
+                    "28 Drill Technician Isande's Home",
+                    "3 Engineer Felix's Home",
+                    "32 COO Orhan's Home",
+                    "34 Perimeter Control Edvard's Home",
+                    "35 Environmental Safety Advisor Willem's Home",
+                    "4 CFO Ingrid's Home",
+                    "5 IT Technician Isak's Home",
+                    "7 Drill Technician Elsa's Home",
+                    "8 IT Technician Lucas's Home",
+                    "9 Drill Technician Gustav's Home",
+                    "Shared Home A - 6 Linnea 25 Kanon 29 Bertrand",
+                    "Shared Home B - 14 Lidelse 18 Birgitta 21 Hennie",
+                    "Shared Home C - 17 Sven 24 Minke 33 Brand",
+                    "Shared Home D - 22 Adra 23 Varja 30 Felix",
+                    "Shared Home E - 13 Inga 15 Loreto 16 Isia 21 Hennie") ~ "Residential",
+    Location %in% c("Abila Scrapyard",
+                    "Carlyle Chemical Inc.",
+                    "Kronos Pipe and Irrigation",
+                    "Maximum Iron and Steel",
+                    "Nationwide Refinery",
+                    "Stewart and Sons Fabrication") ~ "Industrial",
+    Location %in% c("Ahaggo Museum",
+                    "Albert's Fine Clothing",
+                    "Kronos Mart",
+                    "Octavio's Office Supplies",
+                    "Shoppers' Delight",
+                    "General Grocer",
+                    "Roberts and Sons") ~ "Leisure & Shopping",
+    Location %in% c("Abila Airport",
+                    "Chostus Hotel",
+                    "Desafio Golf Course",
+                    "Kronos Capital") ~ "Complex",
+    Location %in% c("Frank's Fuel",
+                    "Frydos Autosupply n' More",
+                    "U-Pump") ~ "Transport",
+    ))
+spots_median_sf <- st_as_sf(spots_median, coords = c("long.median", "lat.median"), crs = 4326) # Changing into a shapefile
+
+```
+
+### 4.4 Create Custom Map
+
+Using the identified spots, we will create our custom map using the tmap package, as well as use the Abila road network.\
+\
+```{r tmap-visualisation, echo = T, message = FALSE, warning=FALSE}
+#| code-fold: show
+
+Abila_st_union <- st_union(Abila_st) # Dissolve Abila road network
+Abila_st_proj <- st_transform(Abila_st_union, crs = 3857) # Transform to necessary projection
+Abila_st_buffer <- st_buffer(Abila_st_proj, dist = 25, nQuadSegs = 5, ) # Create a buffer around the dissolved Abila road network
+
+rm(Abila_st) # Remove unused earlier dataset
+rm(Abila_st_union) # Remove unused earlier dataset
+rm(Abila_st_proj) # Remove unused earlier dataset
+
+gps_path <- gps_sf %>% # Creating a movement path
+  group_by(id, day) %>%
+    summarize(m = mean(Timestamp),
+              do_union=FALSE,
+              .groups = "drop") %>%
+  left_join(dplyr::select(car,CarID,RoleNName), by = c("id" = "CarID")) %>% #Add in RoleNName column
+  ungroup() %>%
+  st_cast("LINESTRING")
+
+# Create blue polygon as background to mimic sea
+long.sea <- c(24.91075,24.91075,24.8232,24.8232,24.91075)
+lat.sea <- c(36.09543,36.0445,36.0445,36.09543,36.09543)
+sea <-data.frame(long.sea, lat.sea)
+
+rm(gps_sf) # Remove unused earlier dataset
+rm(long.sea) # Remove unused earlier dataset
+rm(lat.sea) # Remove unused earlier dataset
+rm(car) # Remove unused earlier dataset
+
+sea_sf <- st_as_sf(sea, coords = c("long.sea", "lat.sea"))
+st_crs(sea_sf) <- 4326
+sea_poly<- st_sf(
+  st_cast(
+    st_combine(sea_sf$geometry),"POLYGON"
+  ))
+
+rm(sea) # Remove unused earlier dataset
+rm(sea_sf) # Remove unused earlier dataset
+
+# Clip a smaller Kronos island around Abila
+Kronos_sf_small <- st_crop(Kronos_sf, c(xmin = 24.8232, xmax = 24.91075, ymin = 36.0445, ymax = 36.09543))
+
+rm(Kronos_sf) # Remove unused earlier dataset
+
+tmap_mode("view")
+
+custom_tmap <- tm_shape(sea_poly) +
+  tm_polygons(col="lightblue") +
+tm_shape(Kronos_sf_small) +
+  tm_polygons(col = "beige") +
+tm_shape(Abila_st_buffer) +
+  tm_polygons(col = "white") +
+tm_shape(gps_path %>% filter(id==2)) +
+  tm_lines(id = "RoleNName") +
+tm_shape(spots_median_sf) +
+  tm_dots(col = "Location.Type",
+          id = "Location", # Bold in group
+          popup.vars = "Location Type:" =="Location.Type",
+          size = 0.2)
+
+custom_tmap
+
+```
+
+## 5. Data Exploration Analysis
+
+Here we will answer the VAST Challenge questions.
+
+### 5.1 Question 1 And Its Answers
+
+Using just the credit and loyalty card data, identify the most popular locations, and when they are popular. What anomalies do you see? What corrections would you recommend to correct these anomalies? Please limit your answer to 8 images and 300 words.
+
+#### 5.1.1 Popular Locations Seem To Revolve Ard Food And Beverages
+
+Food and beverage places, such as Brew've Been Served, Guy's Gyros, Hallowed Grounds etc. seem to be the more popular locations, as highlighted in the dark grey tiles below.\
+\
+```{r calendar-heatmap, warning=FALSE, message=FALSE}
+#| code-fold: show
+
+cc_calendar <- cc %>%
+  count(dayofmonth, location) # Group and tally by day of month and location
+cc_calendar$dayofmonth <- as_factor(cc_calendar$dayofmonth) # CHange day of month to factor type
+
+# Create calendar heatmap using ggplot and geom_tile
+Q5.1.1 <- ggplot(complete(cc_calendar, dayofmonth, location), aes(x = dayofmonth, y = location)) +
+  geom_tile(aes(fill = n), color = "white", size = 0.1) +
+  scale_fill_gradient(low = "light grey", high = "black", na.value = "light grey") +
+  scale_y_discrete(expand = expansion(add = 1.6),
+                   limits=rev) +
+  labs(title = "Calendar Heatmap of Location Visit Frequency (From CC Data) By Date",
+       subtitle = "Food and coffee outlets seem to be the most frequented, based on credit card data",
+       x = "Day of Month",
+       fill = "Frequency Of Visit") +
+  theme_bw() +
+  theme(axis.ticks = element_blank(),
+        panel.border = element_blank(),
+        panel.spacing = unit(0.1, "cm"),
+        panel.grid.major = element_blank(),
+        panel.grid.minor = element_blank(),
+        text = element_text(size=7),
+        axis.title.x = element_text(vjust=-3),
+        axis.title.y = element_blank(),
+        legend.position = "bottom")
+
+Q5.1.1
+
+```
+
+#### 5.1.2 Kronos Mart's Txns Suggest Tampering
+
+The txn dates of Kronos Mart differ by exactly one day, comparing either side of the credit card and loyalty data. Investigation needed to ascertain true transaction dates of Kronos Mart's books, perhaps through receipt verification. We will compare the GPS points in section 5.2.1.\
+\
+```{r kronos-mart, warning=FALSE, message=FALSE}
+#| code-fold: show
+
+Q5.1.2_cc <- cc %>%
+  filter(location == "Kronos Mart") %>% # Filter out only Kronos Mart cc txns
+  dplyr::select(dayofmonth, price, location) %>% # Select only three columns
+  group_by(dayofmonth) %>% # Group by day of month
+    summarise(cc_data = sum(price), .groups = "drop") %>% # Create cc_data column which sums prices
+  ungroup()
+
+Q5.1.2_loyalty <- loyalty %>% # Same methodology as above but done on loyalty data
+  filter(location == "Kronos Mart") %>%
+  dplyr::select(dayofmonth, price, location) %>%
+  group_by(dayofmonth) %>%
+  summarise(loyalty_data = sum(price), .groups = "drop") %>%
+  ungroup()
+
+Q5.1.2_combined <- data.frame(dayofmonth = c(6:19)) # Create new df with the 14 days
+Q5.1.2_combined$dayofmonth <- as_factor(Q5.1.2_combined$dayofmonth) # Change to factor type
+Q5.1.2_combined <- Q5.1.2_combined %>% # Merge df to manipulated cc and loyalty data
+  left_join(Q5.1.2_cc, by = "dayofmonth") %>%
+  left_join(Q5.1.2_loyalty, by = "dayofmonth")
+
+rm(Q5.1.2_cc) # Remove unused earlier dataset
+rm(Q5.1.2_loyalty) # Remove unused earlier dataset
+
+Q5.1.2_combined$cc_data[is.na(Q5.1.2_combined$cc_data)] <- 0 # Replace NA with 0
+Q5.1.2_combined$loyalty_data[is.na(Q5.1.2_combined$loyalty_data)] <- 0 # Replace NA with 0
+
+Q5.1.2_combined <-melt(Q5.1.2_combined, id.vars = "dayofmonth", variable.name = "source") # Change from wide to long format
+
+# Create area graph on both cc and loyalty data
+Q5.1.2 <- ggplot(Q5.1.2_combined, aes(dayofmonth, value, group = source)) +
+  geom_area(aes(colour = source, fill = source),
+            size = 1) +
+  geom_point() +
+  geom_text(data=subset(Q5.1.2_combined, value != 0),
+            aes(label = round(value,0),
+            group = source),
+            vjust = -1,
+            size = 3) +
+  facet_grid(source~.) +
+  ylim(0,500) +
+  labs("title" = "Kronos Mart's Suspicious Delayed Transactions",
+       "subtitle" = "Loyalty transactions in Kronos Mart recorded one day earlier than in credit card") +
+  theme(axis.text.y = element_blank(),
+        axis.ticks.y = element_blank(),
+        panel.grid.major.y = element_blank(),
+        panel.grid.minor.y = element_blank(),
+        legend.position = "none")
+
+Q5.1.2
+
+```
+
+#### 5.1.3 Unknown Locations Need To Be Verified. Existing Data Only Able To Approx. Type Of Location
+
+Ascertaining the location of unknown locations such as Hippokampos and Abila Zacharo seem tricky, given that their location names do not describe its very nature. Thus, we're forced to rely on their time-based transactions to approximate the nature of their locations.\
+\
+```{r hippokampos, warning=FALSE, message=FALSE}
+#| code-fold: show
+
+# Create ridgeline plot to see activity by location across the hours of the day
+Q5.1.3 <- ggplot(cc,
+                 aes(x = hour,
+                     y = location,
+                     fill = after_stat(x)
+                     )) +
+                 geom_density_ridges_gradient(scale=3,rel_min_height = 0.001) +
+  scale_x_continuous(breaks = 0:24) +
+  scale_y_discrete(limits=rev) +
+  scale_fill_viridis_c(name = "ABC", option = "A") +
+  theme_ridges(font_size = 7, grid = TRUE) +
+  theme(legend.position = "none") +
+  labs(title = "Uncovering Location Type Beyond Ambiguous Location Names Using Credit Card Data",
+       subtitle = "High Noon Txns Suggests Abila Zacharo and Hippokampos As Food Outlets")
+
+Q5.1.3
+
+```
+
+#### 5.1.4 Selected Coffee Chain Txns Occur Only At Selected Hours Within The Credit Card Data
+
+Coffee chains usually open for longer than just the three hours we see in the data, given the traditionally low beverage costing.\
+\
+```{r coffee-hour, warning=FALSE, message=FALSE}
+#| code-fold: show
+
+Q5.1.4_cc <- cc %>% # Merge cc with location type data from spots median
+  left_join(dplyr::select(spots_median,Location, Location.Type), by = c("location" = "Location")) %>%
+  filter(Location.Type == "Coffee Cafe") %>% # Filter only Coffee Cafe location type
+  dplyr::select(location, hour, price) %>%
+  group_by(location, hour) %>%
+  summarise(coffee_money = sum(price), .groups = "drop") %>%
+  ungroup() %>%
+  dcast(hour ~ location, value.var = "coffee_money") # Change from long to wide format
+
+
+Q5.1.4_cc$hour <- as_factor(Q5.1.4_cc$hour) # Change to factor type
+
+Q5.1.4_combined <- data.frame(hour = c(1:24)) # Create new dataframe with hours
+Q5.1.4_combined$hour <- as_factor(Q5.1.4_combined$hour) # Change to factor type
+Q5.1.4_combined <- Q5.1.4_combined %>%
+  left_join(Q5.1.4_cc, by = "hour")
+
+rm(Q5.1.4_cc) # Remove unused earlier dataset
+
+Q5.1.4_combined <-melt(Q5.1.4_combined, id.vars = "hour", variable.name = "coffee_place") # Change from wide to long format
+
+# Create a clock-like visualisation using ggplot
+Q5.1.4 <- ggplot(Q5.1.4_combined, aes(hour, value, fill = coffee_place)) +
+  geom_bar(stat = "identity") +
+  coord_polar(theta = "x") +
+  labs(title = "Daily CC Txns At Coffee Chains Restricted To Only Three Hours",
+       subtitle = "Three Coffee Chains Have CC Txns Only At Noon") +
+  xlab("") +
+  ylab("") +
+  theme(
+        axis.ticks = element_blank(),
+        axis.text.y = element_blank(),
+        panel.background = element_blank(),
+        panel.grid.major.x = element_line(colour="grey"),
+        axis.text.x = element_text(size = 15),
+        legend.title=element_blank())
+
+Q5.1.4
+
+```
+
+#### 5.1.5 CC Data Showed No Vehicle Movements On Weekends Before 12 Noon
+
+There were no credit card transactions on weekends before 12 noon. This is odd, considering F&B outlets generally had strong sales on weekday mornings. One would assume for this trend to continue on weekend mornings as well.\
+\
+```{r cc-no-vehicles-on-weekends-before-midday, warning=FALSE, message=FALSE}
+#| code-fold: show
+
+Q5.1.5_weekday <- data.frame("weekday" = unique(cc[c('weekday')])) %>%
+  slice(rep(1:n(), each = 5)) # Create new data frame based on unique values in cc
+Q5.1.5_period <- data.frame("period" = unique(cc[c('period')])) # Create new data frame based on unique values in loyalty
+Q5.1.5_period$period <- factor(Q5.1.5_period$period,
+                                levels = c("Morning 6am to 11.59am",
+                                           "Afternoon 12noon to 5.59pm",
+                                           "Evening 6pm to 8.59pm",
+                                           "Late Evening 9pm to 11.59pm",
+                                           "Late Night 12mn to 5.59am"))
+Q5.1.5_period <- as.data.frame(lapply(Q5.1.5_period,rep,7))
+Q5.1.5_combined <- cbind(Q5.1.5_weekday,Q5.1.5_period)
+
+rm(Q5.1.5_weekday) # Remove unused earlier dataset
+rm(Q5.1.5_period) # Remove unused earlier dataset
+
+Q5.1.5_cc <- cc %>%
+  group_by(weekday,period) %>%
+  tally() %>%
+  ungroup()
+
+Q5.1.5_combined <- Q5.1.5_combined %>%
+  left_join(Q5.1.5_cc, by = c("weekday"="weekday","period"="period"))
+Q5.1.5_combined$id <- seq(1, nrow(Q5.1.5_combined))
+Q5.1.5_combined[36:63,] <- NA
+Q5.1.5_combined[36,4] <- 5.1
+Q5.1.5_combined[37,4] <- 5.2
+Q5.1.5_combined[38,4] <- 5.3
+Q5.1.5_combined[39,4] <- 5.4
+Q5.1.5_combined[40,4] <- 10.1
+Q5.1.5_combined[41,4] <- 10.2
+Q5.1.5_combined[42,4] <- 10.3
+Q5.1.5_combined[43,4] <- 10.4
+Q5.1.5_combined[44,4] <- 15.1
+Q5.1.5_combined[45,4] <- 15.2
+Q5.1.5_combined[46,4] <- 15.3
+Q5.1.5_combined[47,4] <- 15.4
+Q5.1.5_combined[48,4] <- 20.1
+Q5.1.5_combined[49,4] <- 20.2
+Q5.1.5_combined[50,4] <- 20.3
+Q5.1.5_combined[51,4] <- 20.4
+Q5.1.5_combined[52,4] <- 25.1
+Q5.1.5_combined[53,4] <- 25.2
+Q5.1.5_combined[54,4] <- 25.3
+Q5.1.5_combined[55,4] <- 25.4
+Q5.1.5_combined[56,4] <- 30.1
+Q5.1.5_combined[57,4] <- 30.2
+Q5.1.5_combined[58,4] <- 30.3
+Q5.1.5_combined[59,4] <- 30.4
+Q5.1.5_combined[60,4] <- 35.1
+Q5.1.5_combined[61,4] <- 35.2
+Q5.1.5_combined[62,4] <- 35.3
+Q5.1.5_combined[63,4] <- 35.4
+
+rm(Q5.1.5_cc) # Remove unused earlier dataset
+
+Q5.1.5_combined <- Q5.1.5_combined %>%
+  arrange(id)
+Q5.1.5_combined$id <- seq(1, nrow(Q5.1.5_combined))
+Q5.1.5_combined$period <- factor(Q5.1.5_combined$period,
+                                levels = c("Morning 6am to 11.59am",
+                                           "Afternoon 12noon to 5.59pm",
+                                           "Evening 6pm to 8.59pm",
+                                           "Late Evening 9pm to 11.59pm",
+                                           "Late Night 12mn to 5.59am"))
+
+Q5.1.5_label <- Q5.1.5_combined
+Q5.1.5_number_of_bar <- nrow(Q5.1.5_label)
+Q5.1.5_angle <- 90 - 360 * (Q5.1.5_label$id-0.5) /Q5.1.5_number_of_bar
+Q5.1.5_label$hjust <- ifelse(Q5.1.5_angle < -90, 1, 0)
+Q5.1.5_label$angle <- ifelse(Q5.1.5_angle < -90, Q5.1.5_angle+180, Q5.1.5_angle)
+
+rm(Q5.1.5_angle) # Remove unused earlier dataset
+rm(Q5.1.5_number_of_bar) # Remove unused earlier dataset
+
+Q5.1.5_base <- Q5.1.5_combined %>%
+  group_by(weekday) %>%
+    summarize(start=min(id), end=max(id) - 4, .groups = "drop") %>%
+  rowwise() %>%
+  mutate(title=mean(c(start, end))) %>%
+  ungroup()
+
+Q5.1.5_grid <- Q5.1.5_base
+Q5.1.5_grid$end <- Q5.1.5_grid$end[ c( nrow(Q5.1.5_grid), 1:nrow(Q5.1.5_grid)-1)] + 1
+Q5.1.5_grid$start <- Q5.1.5_grid$start - 1
+Q5.1.5_grid <- Q5.1.5_grid[-1,]
+
+
+Q5.1.5 <- ggplot(Q5.1.5_combined, aes(x=as_factor(id), y=n, fill=period)) +
+  geom_bar(aes(x=as_factor(id), y=n, fill=period), stat="identity", alpha=0.5) +
+
+  geom_segment(data=Q5.1.5_grid, aes(x = end, y = 120, xend = start, yend = 120), colour = "grey", alpha=1, size=0.3 , inherit.aes = FALSE ) +
+  geom_segment(data=Q5.1.5_grid, aes(x = end, y = 90, xend = start, yend = 90), colour = "grey", alpha=1, size=0.3 , inherit.aes = FALSE ) +
+  geom_segment(data=Q5.1.5_grid, aes(x = end, y = 60, xend = start, yend = 60), colour = "grey", alpha=1, size=0.3 , inherit.aes = FALSE ) +
+  geom_segment(data=Q5.1.5_grid, aes(x = end, y = 30, xend = start, yend = 30), colour = "grey", alpha=1, size=0.3 , inherit.aes = FALSE ) +
+
+  annotate("text", x = rep(max(Q5.1.5_combined$id),4), y = c(30, 60, 90, 120), label = c("30", "60", "90", "120") , color="grey", size=3 , angle=0, fontface="bold", hjust=1) +
+
+  geom_bar(aes(x=as_factor(id), y=n, fill=period), stat="identity", alpha=0.5) +
+  ylim(-100,150) +
+  theme_minimal() +
+  theme(axis.text = element_blank(),
+        axis.title = element_blank(),
+        panel.grid = element_blank(),
+        plot.margin = unit(rep(-1,4), "cm")) +
+  coord_polar() +
+  geom_text(data=Q5.1.5_label, aes(x=id, y=n+10, label=n, hjust=hjust), color="black", fontface="bold",alpha=0.6, size=3, angle= Q5.1.5_label$angle, inherit.aes = FALSE ) +
+
+  geom_segment(data=Q5.1.5_base, aes(x = start, y = -5, xend = end, yend = -5), colour = "black", alpha=0.8, size=0.6 , inherit.aes = FALSE )  +
+
+  geom_text(data=Q5.1.5_base, aes(x=title, y=-18, label=weekday), color="black", fontface="bold",alpha=0.6, size=3, inherit.aes = FALSE )
+
+Q5.1.5
+
+```
+
+#### 5.1.6 1-to-1 Matching of Credit And Loyalty Cards, Except In Selected Instances
+
+Our original dataset contained 55 credit card numbers and 54 loyalty card numbers respectively. As part of our fuzzy matching, we were able to complete a 1-to-1 match of 49 pairs of credit and loyalty cards. The remaining cards were found to have a 1-to-2 matching relationship. More investigation would need to be done on these 1-to-2 matches.\
+\
+```{r cc-loyalty-match, fig.height=9, warning=FALSE, message=FALSE}
+#| code-fold: show
+
+# Create new df for labeling
+Q5.1.6_label_cc <- data.frame("id" = 1:54,
+                              "code" = as_factor(cc_loyalty_1$last4ccnum))
+Q5.1.6_label_loyalty <- data.frame("id" = 55:108,
+                                   "code" = cc_loyalty_1$loyaltynum)
+
+Q5.1.6_label <- bind_rows(Q5.1.6_label_cc,
+                      Q5.1.6_label_loyalty)
+
+rm(Q5.1.6_label_cc) # Remove unused earlier dataset
+rm(Q5.1.6_label_loyalty) # Remove unused earlier dataset
+
+Q5.1.6_label <- subset(Q5.1.6_label, select = -1 )
+
+# Create parallel coordinates plot showing relationship between cc and loyalty. Non-unique matches are visualised in black, whereas 1-to-1 matches are shown in grey. Fig.height changed to 9 to show full height of parallel coordinates plot.
+Q5.1.6 <- ggparcoord(cc_loyalty_1,
+                     columns = 1:2,
+                     groupColumn = 4,
+                     showPoints = TRUE,
+                     alphaLines = 1) +
+  geom_text(aes(label= Q5.1.6_label$code),
+            size = 3,
+            nudge_x = 0.07) +
+  scale_color_manual(values=c( "#172623", "#E8E8E8")) +
+  theme_minimal() +
+  scale_y_discrete(breaks = NULL) +
+  theme(axis.title.x = element_blank(),
+        axis.title.y = element_blank(),
+        legend.position = "bottom") +
+        labs(title = "Credit Card and Loyalty Number Mostly Matched One-To-One",
+             subtitle = "Two Loyalty Numbers Are Each Attached To Two Different Credit Cards; \nOne Credit Card Linked To Two Different Loyalty Numbers")
+
+Q5.1.6
+
+```
+
+### 5.2 Question 2 And Its Answers
+
+Add the vehicle data to your analysis of the credit and loyalty card data. How does your assessment of the anomalies in question 1 change based on this new data? What discrepancies between vehicle, credit, and loyalty card data do you find? Please limit your answer to 8 images and 500 words.
+
+#### 5.2.1 GPS Seems To Validate Kronos Mart's Loyalty Txns
+
+In section 5.1.2 earlier, we mentioned of the possibility of transactional data tampering specifically relating to Kronos Mart. Here, using looking at the GPS data, single visits on 9th, 11th, 12th, 13th, 15th, 16th and three visits on 18th suggests that these GPS visits matches more to loyalty data than the credit card data.\
+\
+```{r kronos-mart-2, fig.height=4, warning=FALSE, message=FALSE}
+#| code-fold: show
+
+# Create new df of gps data specifically on Kronos Mart's tracking
+Q5.2.1_gps <- tibble("dayofmonth" = c(6:19)) %>%
+                  left_join(spots %>%
+                    group_by(Location, dayofmonth) %>%
+                    tally() %>%
+                    filter(Location == "Kronos Mart") %>%
+                    ungroup(), by = "dayofmonth") %>%
+                    mutate(n2=n) %>%
+                    replace_na(list(n=0))
+
+# Showcase Kronos Mart's GPS activity via a geom-area visualisation
+Q5.2.1 <- ggplot(Q5.2.1_gps,
+                  aes(x = dayofmonth, y = n)) +
+  geom_area(size = 1) +
+  geom_point() +
+  geom_text(aes(label = n2), na.rm = TRUE,
+            vjust = -1,
+            size = 3) +
+  scale_x_continuous(breaks = seq(6,19,1)) +
+  ylim(0,5) +
+  labs("title" = "GPS Movements to Kronos Mart Validates Loyalty Data",
+       "subtitle" = "GPS data seem to validate the loyalty data, more than the credit card data") +
+  theme(axis.text.y = element_blank(),
+        axis.ticks.y = element_blank(),
+        panel.grid.major.y = element_blank(),
+        panel.grid.minor.y = element_blank(),
+        legend.position = "none")
+
+Q5.2.1
+
+```
+
+#### 5.2.2 GPS Validates F&B Outlets From Earlier Credit Card Data; Other Outlets Seem To Have Unmatched Visits
+
+Visitations to unknown locations such as Hippokampos and Abila Zacharo during noon / lunch time confirms these locations as food outlets. However, visit frequency to other locations seem to differ:\
+- Some locations such as Bean There Done That, Brewed Awakenings and Jack's Magical Beans has high gps visits in the morning, whereas credit card data shows stronger transactions during lunch time\
+- Kronos Mart's GPS data suggests more activity between 12 noon to midnight, but credit card data suggests more activity between midnight and 12 noon\
+\
+```{r gps-hippokampos, warning=FALSE, message=FALSE}
+#| code-fold: show
+
+# Create ridgeline plot of GPS locations by hours of day, and excluding Home, Anonymous locations and Gastech.
+Q5.2.2 <- ggplot(spots %>%
+                   filter(!grepl("Home|Anonymous|GasTech", Location)),
+                 aes(x = hour,
+                     y = Location,
+                     fill = stat(x)
+                     )) +
+                 geom_density_ridges_gradient(scale=3,rel_min_height = 0.001) +
+  scale_x_continuous(breaks = 0:24) +
+  scale_y_discrete(limits=rev) +
+  scale_fill_viridis_c(name = "ABC", option = "A") +
+  theme_ridges(font_size = 7, grid = TRUE) +
+  theme(legend.position = "none") +
+  labs(title = "Uncovering Location Type Beyond Ambiguous Location Names Using GPS Data",
+       subtitle = "High Noon GPS Activity Continue To Suggest Abila Zacharo and Hippokampos As Food Outlets")
+
+Q5.2.2
+
+```
+
+#### 5.2.3 Selected Coffee Chain Activity Still Occur Only At Selected Hours Within The GPS Data
+
+GPS data shows restricted activity coffee chain activity to just two hours within the day. This differs from credit card data, where it occurs in three hours. Noon activity is missing from GPS data.\
+\
+```{r gps-coffee-hour, warning=FALSE, message=FALSE}
+#| code-fold: show
+
+# Merge spots data with Location Type and change from long to wide format
+Q5.2.3_spots <- spots %>%
+  left_join(dplyr::select(spots_median,Location, Location.Type), by = c("Location" = "Location")) %>%
+  filter(Location.Type == "Coffee Cafe") %>%
+  count(Location, hour) %>%
+  ungroup() %>%
+  dcast(hour ~ Location,)
+
+Q5.2.3_spots$hour <- as_factor(Q5.2.3_spots$hour)
+
+Q5.2.3_combined <- data.frame(hour = c(1:24))
+Q5.2.3_combined$hour <- as_factor(Q5.2.3_combined$hour)
+Q5.2.3_combined <- Q5.2.3_combined %>%
+  left_join(Q5.2.3_spots, by = "hour")
+
+rm(Q5.2.3_spots) # Remove unused earlier dataset
+
+Q5.2.3_combined <-melt(Q5.2.3_combined, id.vars = "hour", variable.name = "coffee_place")
+
+Q5.2.3 <- ggplot(Q5.2.3_combined, aes(hour, value, fill = coffee_place)) +
+  geom_bar(stat = "identity") +
+  coord_polar(theta = "x") +
+  labs(title = "Daily GPS Activity At Coffee Chains Restricted To Only Two Hours",
+       subtitle = "No More Noon Activity Has Compared To Its CC Txns") +
+  xlab("") +
+  ylab("") +
+  theme(
+        axis.ticks = element_blank(),
+        axis.text.y = element_blank(),
+        panel.background = element_blank(),
+        panel.grid.major.x = element_line(colour="grey"),
+        axis.text.x = element_text(size = 15),
+        legend.title=element_blank())
+
+Q5.2.3
+
+```
+
+#### 5.2.4 GPS Showed Some Semblance of Vehicle Movement On Weekends Before Midday
+
+On Sat morning, there was around 2,000+ gps points up and about in the city. This differs from a lack of credit card activity during the same period. Looking at the GPS data, these movements revolved around homes and Kronos Capital. Both these locations are not commercial locations, and thus no credit card transaction is to be expected anyways.\
+\
+```{r gps-no-vehicles-on-weekends-before-midday, warning=FALSE, message=FALSE}
+#| code-fold: show
+
+Q5.2.4_weekday <- data.frame("weekday" = unique(cc[c('weekday')])) %>%
+  slice(rep(1:n(), each = 5))
+Q5.2.4_period <- data.frame("period" = unique(cc[c('period')]))
+Q5.2.4_period$period <- factor(Q5.2.4_period$period,
+                                levels = c("Morning 6am to 11.59am",
+                                           "Afternoon 12noon to 5.59pm",
+                                           "Evening 6pm to 8.59pm",
+                                           "Late Evening 9pm to 11.59pm",
+                                           "Late Night 12mn to 5.59am"))
+Q5.2.4_period <- as.data.frame(lapply(Q5.2.4_period,rep,7))
+Q5.2.4_combined <- cbind(Q5.2.4_weekday,Q5.2.4_period)
+
+rm(Q5.2.4_weekday) # Remove unused earlier dataset
+rm(Q5.2.4_period) # Remove unused earlier dataset
+
+Q5.2.4_gps <- gps_name %>%
+  group_by(weekday,period) %>%
+  tally() %>%
+  ungroup()
+
+Q5.2.4_combined <- Q5.2.4_combined %>%
+  left_join(Q5.2.4_gps, by = c("weekday"="weekday","period"="period"))
+Q5.2.4_combined$id <- seq(1, nrow(Q5.2.4_combined))
+Q5.2.4_combined[36:63,] <- NA
+Q5.2.4_combined[36,4] <- 5.1
+Q5.2.4_combined[37,4] <- 5.2
+Q5.2.4_combined[38,4] <- 5.3
+Q5.2.4_combined[39,4] <- 5.4
+Q5.2.4_combined[40,4] <- 10.1
+Q5.2.4_combined[41,4] <- 10.2
+Q5.2.4_combined[42,4] <- 10.3
+Q5.2.4_combined[43,4] <- 10.4
+Q5.2.4_combined[44,4] <- 15.1
+Q5.2.4_combined[45,4] <- 15.2
+Q5.2.4_combined[46,4] <- 15.3
+Q5.2.4_combined[47,4] <- 15.4
+Q5.2.4_combined[48,4] <- 20.1
+Q5.2.4_combined[49,4] <- 20.2
+Q5.2.4_combined[50,4] <- 20.3
+Q5.2.4_combined[51,4] <- 20.4
+Q5.2.4_combined[52,4] <- 25.1
+Q5.2.4_combined[53,4] <- 25.2
+Q5.2.4_combined[54,4] <- 25.3
+Q5.2.4_combined[55,4] <- 25.4
+Q5.2.4_combined[56,4] <- 30.1
+Q5.2.4_combined[57,4] <- 30.2
+Q5.2.4_combined[58,4] <- 30.3
+Q5.2.4_combined[59,4] <- 30.4
+Q5.2.4_combined[60,4] <- 35.1
+Q5.2.4_combined[61,4] <- 35.2
+Q5.2.4_combined[62,4] <- 35.3
+Q5.2.4_combined[63,4] <- 35.4
+
+rm(Q5.2.4_gps) # Remove unused earlier dataset
+
+Q5.2.4_combined <- Q5.2.4_combined %>%
+  arrange(id)
+Q5.2.4_combined$id <- seq(1, nrow(Q5.2.4_combined))
+Q5.2.4_combined$period <- factor(Q5.2.4_combined$period,
+                                levels = c("Morning 6am to 11.59am",
+                                           "Afternoon 12noon to 5.59pm",
+                                           "Evening 6pm to 8.59pm",
+                                           "Late Evening 9pm to 11.59pm",
+                                           "Late Night 12mn to 5.59am"))
+
+Q5.2.4_label <- Q5.2.4_combined
+Q5.2.4_number_of_bar <- nrow(Q5.2.4_label)
+Q5.2.4_angle <- 90 - 360 * (Q5.2.4_label$id-0.5) /Q5.2.4_number_of_bar
+Q5.2.4_label$hjust <- ifelse(Q5.2.4_angle < -90, 1, 0)
+Q5.2.4_label$angle <- ifelse(Q5.2.4_angle < -90, Q5.2.4_angle+180, Q5.2.4_angle)
+
+rm(Q5.2.4_angle) # Remove unused earlier dataset
+rm(Q5.2.4_number_of_bar) # Remove unused earlier dataset
+
+Q5.2.4_base <- Q5.2.4_combined %>%
+  group_by(weekday) %>%
+  summarize(start=min(id), end=max(id) - 4, .groups = "drop") %>%
+  rowwise() %>%
+  mutate(title=mean(c(start, end))) %>%
+  ungroup()
+
+Q5.2.4_grid <- Q5.2.4_base
+Q5.2.4_grid$end <- Q5.2.4_grid$end[ c( nrow(Q5.2.4_grid), 1:nrow(Q5.2.4_grid)-1)] + 1
+Q5.2.4_grid$start <- Q5.2.4_grid$start - 1
+Q5.2.4_grid <- Q5.2.4_grid[-1,]
+
+
+Q5.2.4 <- ggplot(Q5.2.4_combined, aes(x=as_factor(id), y=n, fill=period)) +
+  geom_bar(aes(x=as_factor(id), y=n, fill=period), stat="identity", alpha=0.5) +
+
+  geom_segment(data=Q5.2.4_grid, aes(x = end, y = 80000, xend = start, yend = 80000), colour = "grey", alpha=1, size=0.3 , inherit.aes = FALSE ) +
+  geom_segment(data=Q5.2.4_grid, aes(x = end, y = 60000, xend = start, yend = 60000), colour = "grey", alpha=1, size=0.3 , inherit.aes = FALSE ) +
+  geom_segment(data=Q5.2.4_grid, aes(x = end, y = 40000, xend = start, yend = 40000), colour = "grey", alpha=1, size=0.3 , inherit.aes = FALSE ) +
+  geom_segment(data=Q5.2.4_grid, aes(x = end, y = 20000, xend = start, yend = 20000), colour = "grey", alpha=1, size=0.3 , inherit.aes = FALSE ) +
+
+  annotate("text", x = rep(max(Q5.2.4_combined$id),4), y = c(20000, 40000, 60000, 80000), label = c("20000", "40000", "60000", "80000") , color="grey", size=3 , angle=0, fontface="bold", hjust=1) +
+
+  geom_bar(aes(x=as_factor(id), y=n, fill=period), stat="identity", alpha=0.5) +
+  ylim(-80000,100000) +
+  theme_minimal() +
+  theme(axis.text = element_blank(),
+        axis.title = element_blank(),
+        panel.grid = element_blank(),
+        plot.margin = unit(rep(-1,4), "cm")) +
+  coord_polar() +
+  geom_text(data=Q5.2.4_label, aes(x=id, y=n+10, label=n, hjust=hjust), color="black", fontface="bold",alpha=0.6, size=3, angle= Q5.2.4_label$angle, inherit.aes = FALSE ) +
+
+  geom_segment(data=Q5.2.4_base, aes(x = start, y = -5, xend = end, yend = -5), colour = "black", alpha=0.8, size=0.6 , inherit.aes = FALSE )  +
+
+  geom_text(data=Q5.2.4_base, aes(x=title, y=-10000, label=weekday), color="black", fontface="bold",alpha=0.6, size=3, inherit.aes = FALSE )
+
+Q5.2.4
+
+```
+
+### 5.3 Question 3 And Its Answers
+
+Can you infer the owners of each credit card and loyalty card? What is your evidence? Where are there uncertainties in your method? Where are there uncertainties in the data? Please limit your answer to 8 images and 500 words.
+
+#### 5.3.1 Combining Both Credit Card and Spots Data Using Fuzzy Join (OSA)
+
+We will find matching IDs between the credit card and spots data. Spots data are basically GPS points that have remained stationary for more than 10 mins. The main columns of comparison are the day of month, location and hour, and identical rows are determined as a result. From here, we identify the match, by counting the max number of matching rows between credit card and spots data.\
+\
+These matching is on a best match basis, and uncertainties lie in the following areas:\
+- Spots data may show a visit to that location, but no purchase may have been made\
+- Discrepancy in the credit card data's date or hour may cause ill-matches\
+\
+```{r fuzzyjoin-innerjoin-stringdist-cc-spots, warning=FALSE, message=FALSE}
+#| code-fold: show
+
+cc_spots <- cc %>% # Create a new df that shows matches with a max distance difference of 0
+  stringdist_inner_join(spots,
+                        by = c("concat_cc_spots" = "concat_spots_cc"),
+                        method = "osa",
+                        max_dist = 0,
+                        distance_col = "distance")
+
+cc_spots_1 <- cc_spots %>% # Isolate best matching cc and spots with more than 2 counts
+  filter(!is.na(FullName)) %>% # Remove unknown drivers
+  group_by(RoleNName,last4ccnum) %>%
+  count() %>%
+  arrange(RoleNName,-n) %>% # Arrange the highest to lowest count in each group
+  ungroup()
+
+colnames(cc_spots_1)[colnames(cc_spots_1)=="n"] = "matches" # Rename last column to matches
+
+cc_summary <- cc %>%
+  group_by(last4ccnum) %>%
+  count() %>%
+  ungroup()
+
+cc_spots_1 <- cc_spots_1[!duplicated(cc_spots_1$RoleNName),] # Isolating 1 cc to 1 driver
+
+knitr::kable(cc_spots_1, caption = "Matched Credit Card to ID And Name") %>%
+  kable_styling(bootstrap_options = "striped",
+                full_width = F) # Output matched table
+
+```
