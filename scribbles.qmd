@@ -8,8 +8,6 @@ listing:
     type: grid
     sort: "date desc"
     categories: true
-
 ---
 
-Scribing my musings from everyday interactions and experiences. Also for me to capture and reuse useful information and knowledge.
-\
+Scribbling my musings from everyday interactions and experiences. Also for me to capture and reuse useful information and knowledge.\

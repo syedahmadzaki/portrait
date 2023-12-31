@@ -7,6 +7,7 @@ date: 07-26-2021
 format:
   html: 
     toc: true
+    toc-depth: 4
     code-overflow: wrap
 categories:
   - Fuzzy Matching
@@ -79,7 +80,7 @@ A cursory look at the dataset reveals the following data types:\
 \
 
 |           Data           |    Type    |                    Description                    |
-|:-----------------:|:-----------------:|:---------------------------------:|
+|:-----------------:|:-----------------:|:--------------------------------:|
 |   Credit Card.csv (cc)   |  Aspatial  |  Credit card txns by timestamp, location and amt  |
 |       Loyalty.csv        |  Aspatial  |    Loyalty card txns by date, location and amt    |
 | Car Assignment.csv (car) |  Aspatial  | Car assignment ID with individuals' name and role |
@@ -119,7 +120,7 @@ Unfortunately, deciding on the fuzzy logic package is the easy part. The harder 
 \
 
 | Method Name | Description                                                        |
-|:-------------------|:---------------------------------------------------|
+|:--------------------|:--------------------------------------------------|
 | osa         | Optimal string aligment, (restricted Damerau-Levenshtein distance) |
 | lv          | Levenshtein distance (as in R’s native adist).                     |
 | dl          | Full Damerau-Levenshtein distance.                                 |

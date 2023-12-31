@@ -17,5 +17,4 @@ listing:
 ---
 
 This portfolio includes the various research work i've done, as well as other projects on the side.
-
 \

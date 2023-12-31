@@ -7,6 +7,7 @@ date: 07-26-2021
 format:
   html: 
     toc: true
+    toc-depth: 4
     code-overflow: wrap
 categories:
   - R

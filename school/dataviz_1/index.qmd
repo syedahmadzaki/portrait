@@ -1,0 +1,400 @@
+---
+title: "DataViz Makeover 1"
+description: |
+  "Recasting Visualisation To Better Illuminate Underlying Insights 
+  (Using Data From Singapore’s Department Of Statistics)"
+author: 
+  - name: Syed Ahmad Zaki
+date: 05-26-2021
+tbl-colwidths: [10,70,20]
+format:
+  html: 
+    default-image-extension: png
+    toc: true
+    code-overflow: wrap
+resources: 
+  - img/*
+categories:
+  - Visualisation
+  - kableExtra
+  - gt
+  - gtExtras
+---
+
+```{r install-packages, include = FALSE}
+
+# Install and load necessary packages
+if (!require("pacman")) install.packages("pacman")
+pacman::p_load(tidyverse, kableExtra, gt, gtExtras)
+
+```
+
+## 1. Makeover Requirements
+
+### 1.1. The Task
+
+a.  Critic the visualized graph with at least three points from each evaluation criterion (clarity and aesthetics) respectively.
+b.  Suggest alternative graphical presentation to improve the current design:\
+
+-   Proposed alternative data visualization must be in static form.
+-   Proposed design would need to be sketched.
+-   Support your design by describing the advantages or which part of the issue(s) your alternative design attempts to overcome.
+
+c.  Use Tableau to design the proposed data visualization.
+d.  Provide step-by-step description on how the data visualization was prepared.
+e.  Describe three major observations revealed by the prepared data visualization.
+
+### 1.2. Deliverables
+
+a.  The write-up of the DataViz Makeover must be in distill or blogdown format, and is required to publish the write-up on Netlify.
+b.  The DataViz Makeover must be prepared using Tableau Desktop. The final workbook must be uploaded onto Tableau Public.
+
+## 2. Original Visualisation and Its Perceived Objective
+
+The original visualization (shown below) showcases the merchandise trade, for both export and import, of the top six trading countries with Singapore across 2019 to 2020.
+
+![Figure 1: Original Data Visualisation](img/a.png)
+
+To better understand how best to recast this visualization, we must first understand the intent of the visualization. [Alberto Cairo](https://www.visme.co/make-information-beautiful/alberto-cairo-information-graphics/) succinctly sums up the actual intent of the graphic: *"what is it that you want people to see"*. He went to explain that one should begin not by designing the graphic first but rather, begin by "writing a very long narrative that you want to tell".\
+\
+An attempt on the narrative for the above visualization is as follows:\
+\
+***“The import and export fluctuations within each of its top six trading countries differ greatly between 2019 to 2020, as well as against other top trading countries.”***\
+\
+To further illuminate the narrative, we propose the following questions that the visualization aims to answer:\
+• What are the import and export levels in each of the top six trading countries?\
+• How do these import and export levels fluctuate over time?\
+• Within the top six countries, who has the highest and lowest import and export levels respectively?\
+• (Additional) Do these fluctuations coincide with any event?
+
+## 3. Critiquing Methodology
+
+We attempt to critique the above visualization on two criterions: clarity and aesthetics. [Ben Jones (2012)](https://dataremixed.com/2012/05/data-visualization-clarity-or-aesthetics) nicely captures these criterions within a two-by-two matrix. The ideal quadrant to be in is Quadrant I, where it is both clear and beautiful.
+
+![Figure 2: Data Visualization Matrix: Clarity vs Aesthetics](img/b.png)
+
+From a definition perspective, aesthetics refers to how pleasing the visualization is to the reader’s eye, while clarity refers to how clear and concise the story or the message behind the visualization is conveyed to the reader.
+
+## 4. Critique of Visualisation
+
+A critique of the above visualisation will be based on the earlier two criterions.
+
+### 4.1. Clarity:
+
+**Inconsistent vertical scale values intra and inter-countries**\
+The vertical scales for both the primary and secondary axis denoting the export and import levels are inconsistent with one another for all six countries. For instance in Hong Kong, the export levels are denoted in millions, whereas the import levels are denoted in hundred thousands.\
+\
+**Unmatched vertical scale values intra and inter-countries**\
+Even when the scales are denoted in millions, as shown in Japan, the export and import levels don't match up with each other. In the same Japan instance, export seems to have a higher scale level than its import.\
+\
+**Inconsistent horizontal time scale values intra and inter-countries**\
+The horizontal time scale values are inconsistent for Japan, as compared to the rest of the countries. Japan's horizontal time scale only showcases the months of 2020, whereas the other five countries showcases the months of both 2019 and 2020.\
+\
+**Unclear order of top six countries**\
+There is no clear explanation on how the countries are arranged, and whether its order or arrangement takes into account the level of merchandise trade with Singapore. Can it be considered that HK is a more significant contributor of merchandise trade to Singapore, than US, solely based on its position within the visualisation?\
+\
+
+### 4.2. Aesthetics:
+
+**Legend shows two colour schemes, but visualisation has three**\
+The legend clearly asssigns two distinct colours to export and import respectively, but the graph showcases a third colour. This third colour is a result of the overlapping area between both the export and import portions. Having a third undefined colour forces the reader to decipher for him/herself on what it actually means.\
+\
+**Repeating scale names**\
+The vertical scales of Export and Import, as well the horizontal scales of 'Month of Period' is repeated six times throughout the whole visualisation.\
+\
+**Differing width**\
+Excluding Japan which has only a 2020 time period, the rest of the countries with a 2019-2020 time period have differing graph widths. Hong Kong has a narrower graph width than Malaysia, which is located just below it.\
+\
+**Legend takes up too much valuable real estate**\
+Since the legend position is situated on the top right corner of the visualisation, the space below it on the right side of the visualisation is very much wasted. Relocating this legend either above or below, could have made the visualisation wider.
+
+## 5. Alternative Design
+
+### 5.1. Suggested Improvements
+
+The use of an area chart in the original visualisation is ideal, given the fluctuations between the export and import levels across the time period. As such, the following suggestions are mere tweaks to the original visualisation:\
+• Consistent and matching vertical and horizontal scales\
+• Countries ordered in terms of overall merchandise trade\
+• Keep to two colour schemes\
+• Reduce repeated scale names\
+• Consistent chart widths\
+• Reposition or replace legend\
+• Presence of a header/sub-header indicating the storyline of the visualisation (with leading commentaries on visualisation itself)
+
+### 5.2. Finding Inspiration
+
+Reusing the same area charts, we now scour everywhere for great inspiration!\
+\
+Taking a leaf from history, the visualisation on [Commercial and Political Atlas by William Playfair](https://en.wikipedia.org/wiki/William_Playfair) intuitively showcases the difference in levels within the area chart. The use of different colour schemes allow the reader to understand which areas have higher amounts than another. Though it only uses one area chart, it helps that this inspired visualisation is also based on exports and imports, similar to this makeover!
+
+![Figure 3: Historical Visualisation on Export and Import Levels Between England and Two Other Countries (Denmark and Norway)](img/import-export.png)
+
+### 5.3. Sketch
+
+The following sketch strives to find common ground between the original visualisation and its critiques, as well as the historical inspiration above.\
+\
+![Figure 4: Sktech of Eventual Visualisation](img/sketch.jpeg)
+
+## 6. Step-by-Step Guide
+
+### 6.1. Data Preparation
+
+The original raw data reside within the following links: [Merchandise Trade Webpage](https://www.singstat.gov.sg/find-data/search-by-theme/trade-and-investment/merchandise-trade/latest-data) and [Merchandise Trade Excel Download](https://www.tablebuilder.singstat.gov.sg/publicfacing/downloadMultiple.action?id=106)\
+\
+The Excel file contains the following three sheets:\
+\
+
+```{r}
+#| code-fold: true
+
+merc_contents_table <- tibble(
+  `Sheet Name` = c("Content",
+                "T1",
+                "T2"),
+  Description = c("Explaining sheets T1 and T2 contain the “Merchandise Imports By Region/Market, Monthly” and “Merchandise Exports By Region/Market, Monthly” respectively",
+                 "Contains the monthly merchandise imports by country/region in dollars (thousands for individual countries or millions for regions) spanning Jan-1976 to Apr-2021",
+                 "Contains the monthly merchandise exports by country/region in dollars (thousands for individual countries or millions for regions) spanning Jan-1976 to Apr-2021")
+  ) |>
+  gt() |>
+  opt_row_striping() |>
+  tab_header(
+    title = "Contents of Merchandise Trade Excel File"
+  ) |>  
+  cols_width(
+    `Sheet Name` ~ px(120)
+  ) |>
+  cols_align(
+    align = "center",
+    columns = `Sheet Name`
+  ) |>
+  tab_style(style = cell_text(weight = "bold"), 
+            locations = cells_column_labels()
+            )
+
+merc_contents_table
+
+```
+
+Microsoft Excel will be utilised first for the following data preparation steps.\
+\
+
+```{r data-prep-1}
+#| code-fold: true
+
+instruction_table <- tibble(
+  `No.` = c(1:17),
+  Steps = c("Using Microsoft Excel file, open the raw data (outputFile.xlsx).",
+           "Since we need to make sure that the headers are in the first row, we will remove the first 5 rows in spreadsheet T1. Repeat step in spreadsheet T2.",
+           "Remove rows 2 to 8 in both spreadsheet T1 and T2, since these rows showcase cumulative amounts.",
+           "Trim the bottom of the table with commentary and no data, by removing rows 115 to 128 in spreadsheet T1. Similarly, remove rows 87 to 100 in T2.",
+           "Since the visualization is based on data only between the years 2019 and 2020, we will remove columns B to SW and TV to TY in both spreadsheet T1 and T2.",
+           "Since the dates in row 1 are not in proper date format, reformat dates to the first of the month from Jan-2019 onwards. Similarly, do this step on spreadsheet T2. Then rename cell A1 to Country.",
+           "Since we would need to differentiate both these spreadsheets after we consolidate them, we would first insert a column in column B and name it “Type”. Then fill the column with the value “Import” in T1.Insert a similar column in T2 but fill the column with the value “Export”.",
+           "For subsequent use in Tableau Desktop, we would need to change the table layout from a wide table to a long table. From the Data ribbon, select the button “From Table/Range”.",
+           "Ensure that $A$1:$Z$114 is selected and click OK. A Power Query Editor program will then launch.",
+           "Highlight the first two columns (Country and Type), and then within the Transform ribbon, select Unpivot Other Columns.",
+           "Rename the third and fourth column to Period and Trade_Amt.",
+           "To load the results back into Excel, within the Home (tab), select Close & Load. The transformed table will appear in a new worksheet called Table1.",
+           "To only extract the country name in the first column, insert a new column in column B and then use the following formula: \"=TRIM(LEFT([@Country],SEARCH(\"(\",[@Country])-1))\". To keep these values, copy and paste back these same values only.",
+           "Remove column A with the old values. Rename the header of the latest column A to Country. Since the Trade_Amt values are actually in thousands, we would need to reflect this accordingly. Multiply the values within the Trade_Amt column by a thousand. You have now completed the transformation for sheet T1.",
+           "Repeat steps 8 to 14 for sheet T2. Ensure that $A$1:$Z$86 is selected.",
+           "To create a consolidated file, copy and combine the transformed tables in steps 14 and 15 into a new workbook.",
+           "Since we just need the six countries, we will remove the other countries. Highlight columns A to D and go to the Data ribbon and select Filter. Uncheck the six countries (Hong Kong, Japan, Mainland China, Malaysia, Taiwan and US) from the Country filter and delete all rows from row 2 onwards. Then remove filter to repopulate the table with only the six countries. Save this file as \"Consol.xlsx\". This file will then be used for the visualisation on Tableau Desktop."),
+  Screenshots = c(local_image("img/1.png", height = 100),
+                  local_image("img/2.png", height = 100),
+                  local_image("img/3.png", height = 100),
+                  local_image("img/4.png", height = 100),
+                  local_image("img/5.png", height = 100),
+                  local_image("img/6.png", height = 50),
+                  local_image("img/7.png", height = 75),
+                  local_image("img/8.png", height = 75),
+                  local_image("img/9.png", height = 100),
+                  local_image("img/10.png", height = 50),
+                  local_image("img/11.png", height = 50),
+                  local_image("img/12.png", height = 100),
+                  local_image("img/13.png", height = 50),
+                  local_image("img/14.png", height = 75),
+                  local_image("img/15.png", height = 50),
+                  local_image("img/16.png", height = 100),
+                  local_image("img/17.png", height = 200))
+) |>
+  mutate(Screenshots = map(Screenshots, html)) |>
+  gt() |> 
+  tab_header(
+    title = "Data Preparation Steps Using MS Excel"
+  ) |>  
+  opt_row_striping() |>
+  cols_width(
+    `No.` ~ px(30)
+  ) |> 
+  cols_align(
+    align = "center",
+    columns = `No.`
+  ) |>
+  tab_style(style = cell_text(weight = "bold"), 
+            locations = cells_column_labels()
+            )
+
+instruction_table
+
+```
+
+### 6.2. Data Visualisation
+
+Having prepared the data, we will now utilize Tableau Desktop for the eventual visualisation.\
+\
+
+```{r data-prep-2}
+#| code-fold: true
+
+instruction_table2 <- tibble(
+  `No.` = c(1:29),
+  Steps = c("Open Tableau Desktop. Then connect to MS Excel and import the earlier Consol file.",
+           "From the bottom bar, select Sheet 1. Then drag Country and Period to Columns, and Trade Amt to Rows.",
+           "Let's change the Period to a Month-Year date format. On the left Data bar, select the dropdown menu for Period. Change Data Type to Date.",
+           "From the Columns bar at the top of the screen, select the dropdown menu for Period. Select Month-Year.",
+           "To differentiate Export and Import using colour, drag Type to Colour Marks",
+           "Within the Marks dropdown menu, select Area.",
+           "Within the Colour Marks, select 100% Opacity.",
+           "Since the Export and Import values should not be stacked on top of each other, we will need to separate them. Select Analysis from the toolbar, then select Stack Marks, then select Off",
+           "To know the lowest level of either Export and Import for each month, a calculated field will need to be created. Select Trade Amt from the left Data bar, and create a Calculated Field",
+           "Name this calculated field, Lowest_Level. Then use the following formula: {EXCLUDE [Type]:MIN([Trade Amt])}. Check that the calculation is valid.",
+           "Drag the newly created Lowest_Level field to the vertical axis of Trade Amt. An icon with two verical bars should appear on the cursor.",
+           "Drag Measure Names from Rows at the top onto Detail Marks.",
+           "Click on the Detail Marks icon beside Measure Names and select Colour",
+           "To hide the Lowest_Level area, select Measure Names in the Marks column, then select Colour marks and Edit Colours. Select the colour White on both Lowest_Level fields",
+           "Drag Trade Amt to Rows and change Sum Trade Amt to Line.",
+           "Remove Measure Names from the Marks section, by dragging it out of the window.",
+           "To combine both graphs, right-click on Trade Amt vertical axis and select Dual Axis.",
+           "Right-click on the Trade Amt secondary axis, and select both Synchronize Axis and hide Show Header.",
+           "To remove the Country header, select Country at the top and Hide Fields Labels for Columns.",
+           "Likewise to hide the Sheet 1 header, select Sheet 1 at the top and select Hide Title.",
+           "To remove the horizontal grid lines, select Format and choose Lines. Then within the Format Lines window, select None for Grid Lines within the Rows tab.",
+           "We will manually reorder the countries in descending order of trade from left to right. Since Hong Kong is an anomaly with a large export-import gap, we will place it at the right most placement. Reorder the countries by dragging the country names into their respective positions as per the image.",
+           "Rename the Y-axis to Merchandise Trade Amt by right-clicking on the Y-axis and select Edit Axis.",
+           "Right-click on the horizontal time axis and select Edit Axis. Within the Tick Marks tab, select Fixed major tick marks, input 1/1/2019 as the tick origin and set the Interval at 2.",
+           "Then within the General tab, remove Month of Period from the Axis Title. Click OK. ",
+           "To remove the vertical lines that separate the countries, right click on the visualisation, and select Format. At the top, choose the fourth icon called Borders. Under Column Divider, select Pane and then choose None. ",
+           "To change the area under the lowest level lines to a grey tinge, select Measure Values within the Marks window and edit colors. For each of the Lowest Level data items, choose Val 245 or HTML color of #f5f5f5.",
+           "To change the area above the graphs to the same grey tinge, right-click on the horizontal time axis and select Add Reference Line. Then choose the Band icon, and select Entire Table as the Scope. Within the Band From, input 1/1/2019 and Constant within the value and choose None for the label. Within the Band To, input 1/12/2020 and Constant within the value and choose None for the label. Lastly within Fill, choose More Colors and select Val 245 or HTML color of #f5f5f5. ",
+           "To change the fonts of the Country Headers, right-click on the countries and select Format. Choose Tableau Semibold for its font, size 18 and choose Bold. Then rename Sheet 1 to Viz and save your work."),
+  Screenshots = c(local_image("img/18.png", height = 150),
+                  local_image("img/19.png", height = 100),
+                  local_image("img/20.png", height = 200),
+                  local_image("img/21.png", height = 200),
+                  local_image("img/22.png", height = 150),
+                  local_image("img/23.png", height = 200),
+                  local_image("img/24.png", height = 200),
+                  local_image("img/25.png", height = 200),
+                  local_image("img/26.png", height = 200),
+                  local_image("img/27.png", height = 100),
+                  local_image("img/28.png", height = 150),
+                  local_image("img/29.png", height = 100),
+                  local_image("img/30.png", height = 200),
+                  local_image("img/31.png", height = 100),
+                  local_image("img/32.png", height = 200),
+                  local_image("img/33.png", height = 200),
+                  local_image("img/34.png", height = 200),
+                  local_image("img/35.png", height = 200),
+                  local_image("img/36.png", height = 50),
+                  local_image("img/37.png", height = 100),
+                  local_image("img/38.png", height = 200),
+                  local_image("img/39.png", height = 150),
+                  local_image("img/40.png", height = 200),
+                  local_image("img/41.png", height = 100),
+                  local_image("img/42.png", height = 200),
+                  local_image("img/43.png", height = 300),
+                  local_image("img/44.png", height = 100),
+                  local_image("img/45.png", height = 200),
+                  local_image("img/46.png", height = 200))
+) |>
+  mutate(Screenshots = map(Screenshots, html)) |>
+  gt() |> 
+  tab_header(
+    title = "Data Visualisation Steps Using Tableau Desktop"
+  ) |>  
+  opt_row_striping() |>
+  cols_width(
+    `No.` ~ px(30)
+  ) |> 
+  cols_align(
+    align = "center",
+    columns = `No.`
+  ) |>
+  tab_style(style = cell_text(weight = "bold"), 
+            locations = cells_column_labels()
+            )
+
+instruction_table2
+
+```
+
+### 6.3. Creating the Static Dashboard
+
+Having visualised the data, we will now put the final touches on a dashboard.\
+\
+
+```{r data-prep-3}
+#| code-fold: true
+
+instruction_table3 <- tibble(
+  `No.` = c(1:11),
+  Steps = c("Create a new Dashboard. On the top left, select Default Dashboard, and then select Automatic as its size",
+           "Let's create a header. Within Objects, click on Floating. Drag Text to the main window. Type 'Singapore's Top Six Trading Countries Greatly Differ in Both Export And Import'. Choose Tableau Semibold font, size 18 and black colour.",
+           "To replace the legend, we will colour code the words Export and Import. Highlight the Export word, and choose HTML color #4e79a7. Do the same for the Import word, but this time, choose HTML color #f28e2b",
+           "To perfectly align the header, select the text and then the layout column. Follow these dimensions, x of 2, y of 1, w of 1639 and h of 58. Do note that your width might differ from the picture, given your respective screen resolution.",
+           "Let's now create a sub-header in similar fashion. Within Objects, click on Floating. Drag Text to the main window. Type 'The import and export fluctuations within each of its top six trading countries differ greatly between 2018 to 2020, as well as against other top trading countries.'. Choose Tableau Book font, size 12 and black colour.",
+           "As per before, to perfectly align the sub-header, select the text and then the layout column. Follow these dimensions, x of 2, y of 46, w of 1639 and h of 69.",
+           "Next drag the newly created Viz sheet into the dashboard and remove its legend.",
+           "To nicely align the Viz sheet, follow these dimensions, x of 2, y of 90, w of 1639 and h of 780.",
+           "Reorder the Item Hierarchy such that Viz is on the lowest level.",
+           "To annotate our comments, go back to the Viz worksheet, right-click a point on the graph and select Annotate, Point. Then enter the necessary comments and choose size 8 font, and click OK. To remove the background box shading, select None for shading within the Format Annotation window.",
+           "Rename your dashboard as Viz1 and then save this dashboard to Tableau Public."),
+  Screenshots = c(local_image("img/47.png", height = 200),
+                  local_image("img/48.png", height = 100),
+                  local_image("img/49.png", height = 100),
+                  local_image("img/50.png", height = 50),
+                  local_image("img/51.png", height = 100),
+                  local_image("img/52.png", height = 50),
+                  local_image("img/53.png", height = 100),
+                  local_image("img/54.png", height = 100),
+                  local_image("img/55.png", height = 100),
+                  local_image("img/55a.png", height = 100),
+                  local_image("img/56.png", height = 200))
+) |>
+  mutate(Screenshots = map(Screenshots, html)) |>
+  gt() |> 
+  tab_header(
+    title = "Data Visualisation Steps Using Tableau Desktop"
+  ) |>  
+  opt_row_striping() |>
+  cols_width(
+    `No.` ~ px(30)
+  ) |> 
+  cols_align(
+    align = "center",
+    columns = `No.`
+  ) |>
+  tab_style(style = cell_text(weight = "bold"), 
+            locations = cells_column_labels()
+            )
+
+instruction_table3
+
+```
+
+## 7. Final Visualisation
+
+### 7.1. Visualisation Snapshot
+
+To gain access to this dashboard on Tableau Public, click on this [link](https://public.tableau.com/app/profile/zaki.syed/viz/DataViz1_16221314059450/Main). This dashboard is best viewed on a secondary monitor.\
+\
+![Figure 5: Final Tableau Visualisation](img/tableau1.png)
+
+### 7.2. Derived Insights
+
+1.  Amongst the six countries, Hong Kong had the biggest gap in merchandise trade amount between export and import. Singapore's exports to HK far outstrip HK's imports into Singapore, with Mar-2020 recording the widest 2 year gap.\
+2.  The converse is true for Taiwan. Taiwan's imports to Singapore consistently outstrip Singapore's exports to Taiwan, with Oct-2020 recording the widest 2 year gap.\
+3.  For the United States, import levels were consistently higher prior to Apr-2020. From this point onwards, export to the United States became consistently higher.\
+4.  Similarly for Malaysia, from Dec-2021 onwards, import consistently outgrew export. Prior to this, export and import levels greatly overlapped each other.\
+5.  Though at different levels, both the export and import levels within Mainland China and Japan fluctuate consistently.
