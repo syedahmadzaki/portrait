@@ -1,12 +1,13 @@
 ---
 title: "Books"
 page-layout: full
+include-back-link: false
+toc-location: right
+listing:
+    contents: "books/*/index.qmd"
+    type: grid
+    sort: "date desc"
+    categories: true
 ---
 
-About this site
-
-```{r}
-
-1 + 1
-
-```
+Scribing my book reviews here.\
