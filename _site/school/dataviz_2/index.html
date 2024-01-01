@@ -1,0 +1,1180 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.3.450">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+<meta name="author" content="Syed Ahmad Zaki">
+<meta name="dcterms.date" content="2021-06-08">
+<meta name="description" content="“Recasting Visualisation To Better Illuminate Underlying Insights (Again Using Data From Singapore’s Department Of Statistics)”">
+
+<title>Syed Ahmad Zaki - DataViz Makeover 2</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+  vertical-align: middle;
+}
+/* CSS for syntax highlighting */
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+</style>
+
+
+<script src="../../site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="../../site_libs/quarto-nav/headroom.min.js"></script>
+<script src="../../site_libs/clipboard/clipboard.min.js"></script>
+<script src="../../site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="../../site_libs/quarto-search/fuse.min.js"></script>
+<script src="../../site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="../../">
+<script src="../../site_libs/quarto-html/quarto.js"></script>
+<script src="../../site_libs/quarto-html/popper.min.js"></script>
+<script src="../../site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="../../site_libs/quarto-html/anchor.min.js"></script>
+<link href="../../site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="../../site_libs/quarto-html/quarto-syntax-highlighting.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="../../site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="../../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="../../site_libs/bootstrap/bootstrap.min.css" rel="stylesheet" id="quarto-bootstrap" data-mode="light">
+<script id="quarto-search-options" type="application/json">{
+  "location": "navbar",
+  "copy-button": false,
+  "collapse-after": 3,
+  "panel-placement": "end",
+  "type": "overlay",
+  "limit": 20,
+  "language": {
+    "search-no-results-text": "No results",
+    "search-matching-documents-text": "matching documents",
+    "search-copy-link-title": "Copy link to search",
+    "search-hide-matches-text": "Hide additional matches",
+    "search-more-match-text": "more match in this document",
+    "search-more-matches-text": "more matches in this document",
+    "search-clear-button-title": "Clear",
+    "search-detached-cancel-button-title": "Cancel",
+    "search-submit-button-title": "Submit",
+    "search-label": "Search"
+  }
+}</script>
+<link rel="stylesheet" media="screen" href="https://fontlibrary.org//face/lato" type="text/css">
+
+
+<link rel="stylesheet" href="../../styles.css">
+</head>
+
+<body class="nav-fixed">
+
+<div id="quarto-search-results"></div>
+  <header id="quarto-header" class="headroom fixed-top">
+    <nav class="navbar navbar-expand-lg navbar-dark ">
+      <div class="navbar-container container-fluid">
+      <div class="navbar-brand-container">
+    <a class="navbar-brand" href="../../index.html">
+    <span class="navbar-title">Syed Ahmad Zaki</span>
+    </a>
+  </div>
+            <div id="quarto-search" class="" title="Search"></div>
+          <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse" aria-controls="navbarCollapse" aria-expanded="false" aria-label="Toggle navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+  <span class="navbar-toggler-icon"></span>
+</button>
+          <div class="collapse navbar-collapse" id="navbarCollapse">
+            <ul class="navbar-nav navbar-nav-scroll me-auto">
+  <li class="nav-item">
+    <a class="nav-link" href="../../index.html" rel="" target="">
+ <span class="menu-text">Home</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="../../about.html" rel="" target="">
+ <span class="menu-text">About</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="../../projects.html" rel="" target="">
+ <span class="menu-text">Projects</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="../../scribbles.html" rel="" target="">
+ <span class="menu-text">Scribbles</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="../../books.html" rel="" target="">
+ <span class="menu-text">Books</span></a>
+  </li>  
+</ul>
+            <ul class="navbar-nav navbar-nav-scroll ms-auto">
+  <li class="nav-item compact">
+    <a class="nav-link" href="https://www.linkedin.com/in/syed-ahmad-zaki-bin-syed-sakaf-al-attas/" rel="" target=""><i class="bi bi-linkedin" role="img">
+</i> 
+ <span class="menu-text"></span></a>
+  </li>  
+  <li class="nav-item compact">
+    <a class="nav-link" href="mailto:syedahmadzaki@yahoo.com.sg" rel="" target=""><i class="bi bi-envelope" role="img">
+</i> 
+ <span class="menu-text"></span></a>
+  </li>  
+  <li class="nav-item compact">
+    <a class="nav-link" href="https://github.com/syedahmadzaki" rel="" target=""><i class="bi bi-github" role="img">
+</i> 
+ <span class="menu-text"></span></a>
+  </li>  
+</ul>
+            <div class="quarto-navbar-tools">
+</div>
+          </div> <!-- /navcollapse -->
+      </div> <!-- /container-fluid -->
+    </nav>
+</header>
+<!-- content -->
+<div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article page-navbar">
+<!-- sidebar -->
+<!-- margin-sidebar -->
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+        <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">On this page</h2>
+   
+  <ul>
+  <li><a href="#makeover-requirements" id="toc-makeover-requirements" class="nav-link active" data-scroll-target="#makeover-requirements">1. Makeover Requirements</a>
+  <ul class="collapse">
+  <li><a href="#the-task" id="toc-the-task" class="nav-link" data-scroll-target="#the-task">1.1. The Task</a></li>
+  <li><a href="#deliverables" id="toc-deliverables" class="nav-link" data-scroll-target="#deliverables">1.2. Deliverables</a></li>
+  </ul></li>
+  <li><a href="#original-visualisation-and-its-perceived-objective" id="toc-original-visualisation-and-its-perceived-objective" class="nav-link" data-scroll-target="#original-visualisation-and-its-perceived-objective">2. Original Visualisation and Its Perceived Objective</a></li>
+  <li><a href="#critiquing-methodology" id="toc-critiquing-methodology" class="nav-link" data-scroll-target="#critiquing-methodology">3. Critiquing Methodology</a></li>
+  <li><a href="#critique-of-visualisation" id="toc-critique-of-visualisation" class="nav-link" data-scroll-target="#critique-of-visualisation">4. Critique of Visualisation</a>
+  <ul class="collapse">
+  <li><a href="#clarity" id="toc-clarity" class="nav-link" data-scroll-target="#clarity">4.1. Clarity:</a></li>
+  <li><a href="#aesthetics" id="toc-aesthetics" class="nav-link" data-scroll-target="#aesthetics">4.2. Aesthetics:</a></li>
+  </ul></li>
+  <li><a href="#alternative-design-considerations" id="toc-alternative-design-considerations" class="nav-link" data-scroll-target="#alternative-design-considerations">5. Alternative Design Considerations</a>
+  <ul class="collapse">
+  <li><a href="#suggested-improvements" id="toc-suggested-improvements" class="nav-link" data-scroll-target="#suggested-improvements">5.1. Suggested Improvements</a></li>
+  <li><a href="#finding-inspiration" id="toc-finding-inspiration" class="nav-link" data-scroll-target="#finding-inspiration">5.2. Finding Inspiration</a></li>
+  <li><a href="#sketch" id="toc-sketch" class="nav-link" data-scroll-target="#sketch">5.3. Sketch</a></li>
+  </ul></li>
+  <li><a href="#proposed-tableau-visualisation" id="toc-proposed-tableau-visualisation" class="nav-link" data-scroll-target="#proposed-tableau-visualisation">6. Proposed Tableau Visualisation</a></li>
+  <li><a href="#step-by-step-guide" id="toc-step-by-step-guide" class="nav-link" data-scroll-target="#step-by-step-guide">7. Step-by-Step Guide</a>
+  <ul class="collapse">
+  <li><a href="#data-preparation" id="toc-data-preparation" class="nav-link" data-scroll-target="#data-preparation">6.1. Data Preparation</a></li>
+  <li><a href="#data-visualisation" id="toc-data-visualisation" class="nav-link" data-scroll-target="#data-visualisation">6.2. Data Visualisation</a></li>
+  <li><a href="#derived-insights" id="toc-derived-insights" class="nav-link" data-scroll-target="#derived-insights">7.2. Derived Insights</a></li>
+  </ul></li>
+  </ul>
+</nav>
+    </div>
+<!-- main -->
+<main class="content" id="quarto-document-content">
+
+<header id="title-block-header" class="quarto-title-block default">
+<div class="quarto-title">
+<h1 class="title">DataViz Makeover 2</h1>
+  <div class="quarto-categories">
+    <div class="quarto-category">Visualisation</div>
+    <div class="quarto-category">kable</div>
+  </div>
+  </div>
+
+<div>
+  <div class="description">
+    <p>“Recasting Visualisation To Better Illuminate Underlying Insights (Again Using Data From Singapore’s Department Of Statistics)”</p>
+  </div>
+</div>
+
+
+<div class="quarto-title-meta">
+
+    <div>
+    <div class="quarto-title-meta-heading">Author</div>
+    <div class="quarto-title-meta-contents">
+             <p>Syed Ahmad Zaki </p>
+          </div>
+  </div>
+    
+    <div>
+    <div class="quarto-title-meta-heading">Published</div>
+    <div class="quarto-title-meta-contents">
+      <p class="date">June 8, 2021</p>
+    </div>
+  </div>
+  
+    
+  </div>
+  
+
+</header>
+
+<section id="makeover-requirements" class="level2">
+<h2 class="anchored" data-anchor-id="makeover-requirements">1. Makeover Requirements</h2>
+<section id="the-task" class="level3">
+<h3 class="anchored" data-anchor-id="the-task">1.1. The Task</h3>
+<ol type="1">
+<li>Critic the visualized graph with at least three points from each evaluation criterion (clarity and aesthetics) respectively.</li>
+<li>Suggest alternative graphical presentation to improve the current design:
+<ol type="i">
+<li>Proposed alternative data visualization must be in static form.</li>
+<li>Proposed design would need to be sketched.</li>
+<li>Support your design by describing the advantages or which part of the issue(s) your alternative design attempts to overcome.</li>
+</ol></li>
+<li>Use Tableau to design the proposed data visualization.</li>
+<li>Provide step-by-step description on how the data visualization was prepared.</li>
+<li>Describe three major observations revealed by the prepared data visualization.</li>
+</ol>
+</section>
+<section id="deliverables" class="level3">
+<h3 class="anchored" data-anchor-id="deliverables">1.2. Deliverables</h3>
+<ol type="1">
+<li>The study period should be between January 2011-December 2020. No additional data sets are required.<br>
+</li>
+<li>Focus on telling data story using appropriate statistical graphic methods, graphical design principles and interactive techniques, including animation.</li>
+</ol>
+</section>
+</section>
+<section id="original-visualisation-and-its-perceived-objective" class="level2">
+<h2 class="anchored" data-anchor-id="original-visualisation-and-its-perceived-objective">2. Original Visualisation and Its Perceived Objective</h2>
+<p>The original visualization (shown below) showcases the merchandise trade, for both export and import, of ten of Singapore’s major trading partners in 2020.<br>
+<br>
+<img src="img/a.jpeg" class="img-fluid" alt="Figure 1: Original Data Visualisation"><br>
+<br>
+Using the same methodology in our earlier <a href="https://syedahmadzakidataviz.netlify.app/posts/2021-05-26-dataviz-makeover-1/">DataViz Makeover 1</a>, the intent of the visualisation would need to be defined first. We attempt the narrative for the above visualization, as follows:<br>
+<br>
+<strong><em>“In 2020, each of our top ten trading countries (Mainland China, Malaysia, EU, United States, Taiwan, Japan, Republic of Korea, Indonesia, Hong Kong and Thailand) differ greatly in their respective export, import as well as total merchandise trade value.”</em></strong><br>
+<br>
+To further illuminate the narrative, we propose the following questions that the visualization aim to answer. Given the subject matter, these questions are very similar to those proposed in our earlier <a href="https://syedahmadzakidataviz.netlify.app/posts/2021-05-26-dataviz-makeover-1/">makeover</a>:</p>
+<ul>
+<li>What are the import and export levels in each of the top ten trading countries?<br>
+</li>
+<li>How do these import and export levels fluctuate over time?<br>
+</li>
+<li>Which countries are net exporter or net importer at varying periods in time?<br>
+</li>
+<li>Within the top ten countries, who has the highest and lowest import and export levels respectively?<br>
+</li>
+<li>(Additional) Do these fluctuations coincide with any event?</li>
+</ul>
+</section>
+<section id="critiquing-methodology" class="level2">
+<h2 class="anchored" data-anchor-id="critiquing-methodology">3. Critiquing Methodology</h2>
+<p>The methodology will remain the same as before, where we will assess on clarity and aesthetics.</p>
+</section>
+<section id="critique-of-visualisation" class="level2">
+<h2 class="anchored" data-anchor-id="critique-of-visualisation">4. Critique of Visualisation</h2>
+<section id="clarity" class="level3">
+<h3 class="anchored" data-anchor-id="clarity">4.1. Clarity:</h3>
+<ul>
+<li><strong>Lack of proper scales on both x and y axis</strong><br>
+Though each bubble has a merchandise trading amount, the x and y axis lacks such a scale. The values within both the merchandise trading amount and the xy axis does not match either. We’re unsure whether the scales refer to millions, billions or even kilograms.<br>
+<br>
+</li>
+<li><strong>Bottom insight does not match with the visualisation</strong><br>
+The bottom insight made reference to the difference in Singapore’s standing between two separate trading partner from 2006 and 2009 respectively. The visualisation however shows the trading values only for the year 2020.<br>
+<br>
+</li>
+<li><strong>Axis names are misleading</strong><br>
+‘Imports’,though situated near to the x-axis, actually refers to the y-axis, and vice-versa for the ‘Exports’ icon. The reader would need to take into account the wordings of ‘net importers’ and ‘net exporters’ to realise that the axis names are somewhat incorrectly placed.</li>
+</ul>
+</section>
+<section id="aesthetics" class="level3">
+<h3 class="anchored" data-anchor-id="aesthetics">4.2. Aesthetics:</h3>
+<ul>
+<li><strong>Unnecessary colours for each country</strong><br>
+The ten countries each have their own colour scheme to differentiate one from the other. Differentiation has already been achieved from the names of the countries within their respective infographic bubbles.<br>
+<br>
+</li>
+<li><strong>The bubbles hide behind each other</strong><br>
+Similar sized bubbles seem to be grouped closely together. Naturally some would be hidden behind others. When the cursor hovers each bubble, the bubbles move forward to display the country name and merchandise trade value. The user wouldn’t have noticed the availability of such interactivity, given the design is very much like a static image.<br>
+<br>
+</li>
+<li><strong>The infographic bubbles take up too much space</strong><br>
+The infographic bubbles indicating the name of the trading partner, as well as its total merchandise trade value take up far too much space within the small visualisation.</li>
+</ul>
+</section>
+</section>
+<section id="alternative-design-considerations" class="level2">
+<h2 class="anchored" data-anchor-id="alternative-design-considerations">5. Alternative Design Considerations</h2>
+<section id="suggested-improvements" class="level3">
+<h3 class="anchored" data-anchor-id="suggested-improvements">5.1. Suggested Improvements</h3>
+<p>The use of the bubble chart as per the original visualisation will be continued, given the use of three continuous data (export, import and merchandise trade value). As such, the following suggestions are mere tweaks to the original visualisation:</p>
+<ul>
+<li>Proper scales on both x and y axis<br>
+</li>
+<li>Rightly sized infographic bubbles (if needed)<br>
+</li>
+<li>Showing trade movements on and before 2020 (perhaps from 2011 onwards)<br>
+</li>
+<li>Right level of transparency to show location of bubbles as well as other overlapping bubbles<br>
+</li>
+<li>Seeing the bubble positions in other years before 2020<br>
+</li>
+<li>Being able to see the export, import and total merchandise trade over time</li>
+</ul>
+</section>
+<section id="finding-inspiration" class="level3">
+<h3 class="anchored" data-anchor-id="finding-inspiration">5.2. Finding Inspiration</h3>
+<p>While we intend to reuse the original bubble chart design, we scour the internet for inspiration!</p>
+<p>The chart that comes to mind when comparing multiple countries across two continuous variable was Dr Hans Rosling’s famous charts on global trends. In his famous <a href="https://www.ted.com/talks/hans_rosling_the_best_stats_you_ve_ever_seen">Ted talk</a>, he covered two charts across a lengthy time frame: one chart covers the life expectancy in each country against its fertility rate, while the other chart covers the child survival rate in each country against its GDP per capita.<br>
+<br>
+<img src="img/gapminder_bubbles.png" class="img-fluid" alt="Figure 2: Another chart from Dr Han Rosling’s GapMinder organisation"><br>
+<br>
+Separately, while the original bubble chart design will be reused, it’s not able to show the change across time. This <a href="https://www.upslide.net/en/ways-to-make-beautiful-financial-charts-and-graphs-in-excel/">infographic</a> from Upslide below shows the right chart type to consider, based on the nature of data that needs to be presented. Though this infographic is meant for charts within Excel, its application is universal. From the infographic, the best chart to compare non-cyclical data over many periods is the line chart. Though we will use this as a complement to the bubble chart, we would need to have a solution of fitting lines for ten different countries in a visually appealing manner.<br>
+<br>
+<img src="img/upslide.png" class="img-fluid" alt="Figure 3: Infographic showcasing the right chart type"><br>
+<br>
+Yvan Fornes’s work on visualising ten different categories across ten years (2005 to 2014) seems an apt approach to follow, as we visualise ten different countries’ and their respective export and import volumes across 2011 to 2020.<br>
+<br>
+<img src="img/Fornes.png" class="img-fluid" alt="Figure 4: Yvan Fornes’s Visualisation on the New Indicators of Wealth"></p>
+</section>
+<section id="sketch" class="level3">
+<h3 class="anchored" data-anchor-id="sketch">5.3. Sketch</h3>
+<p>The following sketch strives to find common ground between the original visualisation and its critiques, as well as incorporating the inspirations above.<br>
+<br>
+<img src="img/sketch.png" class="img-fluid" alt="Figure 5: Sktech of Eventual Visualisation"></p>
+</section>
+</section>
+<section id="proposed-tableau-visualisation" class="level2">
+<h2 class="anchored" data-anchor-id="proposed-tableau-visualisation">6. Proposed Tableau Visualisation</h2>
+<p>Click on this <a href="https://public.tableau.com/app/profile/zaki.syed/viz/DataViz2_16239151424830/Main">Tableau Public</a> link to view the visualisation.<br>
+<br>
+<img src="img/Tableau.png" class="img-fluid" alt="Figure 6: Proposed Tableau Visualisation Hosted on Tableau Public"></p>
+</section>
+<section id="step-by-step-guide" class="level2">
+<h2 class="anchored" data-anchor-id="step-by-step-guide">7. Step-by-Step Guide</h2>
+<section id="data-preparation" class="level3">
+<h3 class="anchored" data-anchor-id="data-preparation">6.1. Data Preparation</h3>
+<p>The original raw data reside within the following links: <a href="https://www.singstat.gov.sg/find-data/search-by-theme/trade-and-investment/merchandise-trade/latest-data">Merchandise Trade Webpage</a> and <a href="https://www.tablebuilder.singstat.gov.sg/publicfacing/downloadMultiple.action?id=106">Merchandise Trade Excel Download</a><br>
+<br>
+The Excel file contains the following three sheets:<br>
+<br>
+</p>
+<div class="cell">
+<details>
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a>Sheet_Name <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">"Content"</span>,<span class="st">"T1"</span>,<span class="st">"T2"</span>)</span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a>Description <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">"Explaining sheets T1 and T2 contain the “Merchandise Imports By Region/Market, Monthly” and “Merchandise Exports By Region/Market, Monthly” respectively"</span>,</span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a>                 <span class="st">"Contains the monthly merchandise imports by country/region in dollars (thousands for individual countries or millions for regions) spanning Jan-1976 to Apr-2021"</span>,</span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a>                 <span class="st">"Contains the monthly merchandise exports by country/region in dollars (thousands for individual countries or millions for regions) spanning Jan-1976 to Apr-2021"</span>)</span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a>table1 <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(Sheet_Name,Description)</span>
+<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a>knitr<span class="sc">::</span><span class="fu">kable</span>(table1, <span class="at">booktabs =</span> <span class="cn">TRUE</span>,</span>
+<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a>  <span class="at">caption =</span> <span class="st">'Contents of Merchandise Trade Excel File'</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output-display">
+<table class="table table-sm table-striped small">
+<caption>Contents of Merchandise Trade Excel File</caption>
+<colgroup>
+<col style="width: 10%">
+<col style="width: 70%">
+</colgroup>
+<thead>
+<tr class="header">
+<th style="text-align: left;">Sheet_Name</th>
+<th style="text-align: left;">Description</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: left;">Content</td>
+<td style="text-align: left;">Explaining sheets T1 and T2 contain the “Merchandise Imports By Region/Market, Monthly” and “Merchandise Exports By Region/Market, Monthly” respectively</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">T1</td>
+<td style="text-align: left;">Contains the monthly merchandise imports by country/region in dollars (thousands for individual countries or millions for regions) spanning Jan-1976 to Apr-2021</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">T2</td>
+<td style="text-align: left;">Contains the monthly merchandise exports by country/region in dollars (thousands for individual countries or millions for regions) spanning Jan-1976 to Apr-2021</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<p>Unlike the earlier <a href="https://syedahmadzakidataviz.netlify.app/posts/2021-05-26-dataviz-makeover-1/">makeover</a>, this makeover will utilise Tableau Prep Builder to prepare the data.<br>
+<br>
+</p>
+<div class="cell">
+<details>
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb2"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a>No. <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="dv">1</span><span class="sc">:</span><span class="dv">19</span>)</span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a>Steps <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">"To bring the data into Tableau Prep Builder, first unzip the output folder. Then load the output Excel file into Prep Builder. Drag spreadsheet T1 into the main window. Rename T1 to Import and start the cleaning node."</span>,</span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a>           <span class="st">"To cleanly separate the country names, split the Variables column using the Custom Split and select </span><span class="sc">\"</span><span class="st">(</span><span class="sc">\"</span><span class="st">."</span>,</span>
+<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a>           <span class="st">"After renaming this newly split column as Country, filter using Selected Values. Exclude Africa, America, Asia, Europe, Oceania and Total Merchandise Imports"</span>,</span>
+<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a>           <span class="st">"Add a Pivot node to the Clean 1 node. To pivot just the dates, select all date values from 1976 Apr to 2021 Apr and drag to the central pane. "</span>,</span>
+<span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a>           <span class="st">"Then change format to Date."</span>,</span>
+<span id="cb2-7"><a href="#cb2-7" aria-hidden="true" tabindex="-1"></a>           <span class="st">"Rename to Month and Import (Thousand Dollars)."</span>,</span>
+<span id="cb2-8"><a href="#cb2-8" aria-hidden="true" tabindex="-1"></a>           <span class="st">"We will now replicate these same steps for the Export file. First, drag spreadsheet T2 into the main window."</span>,</span>
+<span id="cb2-9"><a href="#cb2-9" aria-hidden="true" tabindex="-1"></a>           <span class="st">"Rename T2 to Export. Then copy both the Clean 1 and Pivot nodes and paste them next to the Export node"</span>,</span>
+<span id="cb2-10"><a href="#cb2-10" aria-hidden="true" tabindex="-1"></a>           <span class="st">"To connect these nodes together, drag the Export node to the Clean 1(1) node over the Add function."</span>,</span>
+<span id="cb2-11"><a href="#cb2-11" aria-hidden="true" tabindex="-1"></a>           <span class="st">"Since these are export values, replace the Import (Thousand Dollars) to Export (Thousand Dollars) in the Pivot 1(1) node."</span>,</span>
+<span id="cb2-12"><a href="#cb2-12" aria-hidden="true" tabindex="-1"></a>           <span class="st">"To combine both the Import and Export data, drag Pivot 1 to Pivot 1(1) to create a new Join node."</span>,</span>
+<span id="cb2-13"><a href="#cb2-13" aria-hidden="true" tabindex="-1"></a>           <span class="st">"Within the Join Clauses, match both the Country and Month columns to each other. Ensure that the full Join Type is selected."</span>,</span>
+<span id="cb2-14"><a href="#cb2-14" aria-hidden="true" tabindex="-1"></a>           <span class="st">"Attach a new Clean node to the Join 1 node. Since there are duplicate columns, merge both Month columns first. Then merge both Country columns."</span>,</span>
+<span id="cb2-15"><a href="#cb2-15" aria-hidden="true" tabindex="-1"></a>           <span class="st">"We will now need to pivot the export and import fields. We will add a Pivot node to the Clean 3 node. We then drag the Export and Import columns into the centre pane."</span>,</span>
+<span id="cb2-16"><a href="#cb2-16" aria-hidden="true" tabindex="-1"></a>           <span class="st">"We will extract out just the Export and Import words, through the use of the Automatic Split. The newly created column will be renamed as Trade Type."</span>,</span>
+<span id="cb2-17"><a href="#cb2-17" aria-hidden="true" tabindex="-1"></a>           <span class="st">"Most of the trade value are in thousands. We now need to convert this to its proper format. Taking into account that European Union is the only trading partner whose trade value is in the millions, we will create a calculated field using the following formula."</span>,</span>
+<span id="cb2-18"><a href="#cb2-18" aria-hidden="true" tabindex="-1"></a>           <span class="st">"To limit our timeframe, we will add a Clean node. We will then keep only the months between 2011 to 2020."</span>,</span>
+<span id="cb2-19"><a href="#cb2-19" aria-hidden="true" tabindex="-1"></a>           <span class="st">"At the same time, we will select our countries of choice by keeping these ten countries using the Filter function."</span>,</span>
+<span id="cb2-20"><a href="#cb2-20" aria-hidden="true" tabindex="-1"></a>           <span class="st">"After keeping only the Trade Value, Trade Type, Country and Month columns, we will then add the Output node. Save the file in a Tableau hyper format for use in Tableau Desktop."</span>)</span>
+<span id="cb2-21"><a href="#cb2-21" aria-hidden="true" tabindex="-1"></a>Screenshots <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">"img/a.png"</span>,</span>
+<span id="cb2-22"><a href="#cb2-22" aria-hidden="true" tabindex="-1"></a>                 <span class="st">"img/b.png"</span>,</span>
+<span id="cb2-23"><a href="#cb2-23" aria-hidden="true" tabindex="-1"></a>                 <span class="st">"img/de.png"</span>,</span>
+<span id="cb2-24"><a href="#cb2-24" aria-hidden="true" tabindex="-1"></a>                 <span class="st">"img/f.png"</span>,</span>
+<span id="cb2-25"><a href="#cb2-25" aria-hidden="true" tabindex="-1"></a>                 <span class="st">"img/g.png"</span>,</span>
+<span id="cb2-26"><a href="#cb2-26" aria-hidden="true" tabindex="-1"></a>                 <span class="st">"img/h.png"</span>,</span>
+<span id="cb2-27"><a href="#cb2-27" aria-hidden="true" tabindex="-1"></a>                 <span class="st">"img/i.png"</span>,</span>
+<span id="cb2-28"><a href="#cb2-28" aria-hidden="true" tabindex="-1"></a>                 <span class="st">"img/j.png"</span>,</span>
+<span id="cb2-29"><a href="#cb2-29" aria-hidden="true" tabindex="-1"></a>                 <span class="st">"img/k.png"</span>,</span>
+<span id="cb2-30"><a href="#cb2-30" aria-hidden="true" tabindex="-1"></a>                 <span class="st">"img/l.png"</span>,</span>
+<span id="cb2-31"><a href="#cb2-31" aria-hidden="true" tabindex="-1"></a>                 <span class="st">"img/m.png"</span>,</span>
+<span id="cb2-32"><a href="#cb2-32" aria-hidden="true" tabindex="-1"></a>                 <span class="st">"img/n.png"</span>,</span>
+<span id="cb2-33"><a href="#cb2-33" aria-hidden="true" tabindex="-1"></a>                 <span class="st">"img/o.png"</span>,</span>
+<span id="cb2-34"><a href="#cb2-34" aria-hidden="true" tabindex="-1"></a>                 <span class="st">"img/p.png"</span>,</span>
+<span id="cb2-35"><a href="#cb2-35" aria-hidden="true" tabindex="-1"></a>                 <span class="st">"img/q.png"</span>,</span>
+<span id="cb2-36"><a href="#cb2-36" aria-hidden="true" tabindex="-1"></a>                 <span class="st">"img/r.png"</span>,</span>
+<span id="cb2-37"><a href="#cb2-37" aria-hidden="true" tabindex="-1"></a>                 <span class="st">"img/s.png"</span>,</span>
+<span id="cb2-38"><a href="#cb2-38" aria-hidden="true" tabindex="-1"></a>                 <span class="st">"img/t.png"</span>,</span>
+<span id="cb2-39"><a href="#cb2-39" aria-hidden="true" tabindex="-1"></a>                 <span class="st">"img/u.png"</span>)</span>
+<span id="cb2-40"><a href="#cb2-40" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-41"><a href="#cb2-41" aria-hidden="true" tabindex="-1"></a>table2 <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(No.,Steps,Screenshots)</span>
+<span id="cb2-42"><a href="#cb2-42" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-43"><a href="#cb2-43" aria-hidden="true" tabindex="-1"></a><span class="co"># Add appropriate rmarkdown tagging</span></span>
+<span id="cb2-44"><a href="#cb2-44" aria-hidden="true" tabindex="-1"></a>table2<span class="sc">$</span>Screenshots <span class="ot">=</span> <span class="fu">sprintf</span>(<span class="st">"![](%s)"</span>, table2<span class="sc">$</span>Screenshots)</span>
+<span id="cb2-45"><a href="#cb2-45" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-46"><a href="#cb2-46" aria-hidden="true" tabindex="-1"></a>knitr<span class="sc">::</span><span class="fu">kable</span>(table2, <span class="at">booktabs =</span> <span class="cn">TRUE</span>,</span>
+<span id="cb2-47"><a href="#cb2-47" aria-hidden="true" tabindex="-1"></a>  <span class="at">caption =</span> <span class="st">'Data Preparation Steps Using Tableau Prep Builder'</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output-display">
+<table class="table table-sm table-striped small">
+<caption>Data Preparation Steps Using Tableau Prep Builder</caption>
+<colgroup>
+<col style="width: 10%">
+<col style="width: 70%">
+<col style="width: 20%">
+</colgroup>
+<thead>
+<tr class="header">
+<th style="text-align: right;">No.</th>
+<th style="text-align: left;">Steps</th>
+<th style="text-align: left;">Screenshots</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: right;">1</td>
+<td style="text-align: left;">To bring the data into Tableau Prep Builder, first unzip the output folder. Then load the output Excel file into Prep Builder. Drag spreadsheet T1 into the main window. Rename T1 to Import and start the cleaning node.</td>
+<td style="text-align: left;"><img src="img/a.png" class="img-fluid"></td>
+</tr>
+<tr class="even">
+<td style="text-align: right;">2</td>
+<td style="text-align: left;">To cleanly separate the country names, split the Variables column using the Custom Split and select “(”.</td>
+<td style="text-align: left;"><img src="img/b.png" class="img-fluid"></td>
+</tr>
+<tr class="odd">
+<td style="text-align: right;">3</td>
+<td style="text-align: left;">After renaming this newly split column as Country, filter using Selected Values. Exclude Africa, America, Asia, Europe, Oceania and Total Merchandise Imports</td>
+<td style="text-align: left;"><img src="img/de.png" class="img-fluid"></td>
+</tr>
+<tr class="even">
+<td style="text-align: right;">4</td>
+<td style="text-align: left;">Add a Pivot node to the Clean 1 node. To pivot just the dates, select all date values from 1976 Apr to 2021 Apr and drag to the central pane.</td>
+<td style="text-align: left;"><img src="img/f.png" class="img-fluid"></td>
+</tr>
+<tr class="odd">
+<td style="text-align: right;">5</td>
+<td style="text-align: left;">Then change format to Date.</td>
+<td style="text-align: left;"><img src="img/g.png" class="img-fluid"></td>
+</tr>
+<tr class="even">
+<td style="text-align: right;">6</td>
+<td style="text-align: left;">Rename to Month and Import (Thousand Dollars).</td>
+<td style="text-align: left;"><img src="img/h.png" class="img-fluid"></td>
+</tr>
+<tr class="odd">
+<td style="text-align: right;">7</td>
+<td style="text-align: left;">We will now replicate these same steps for the Export file. First, drag spreadsheet T2 into the main window.</td>
+<td style="text-align: left;"><img src="img/i.png" class="img-fluid"></td>
+</tr>
+<tr class="even">
+<td style="text-align: right;">8</td>
+<td style="text-align: left;">Rename T2 to Export. Then copy both the Clean 1 and Pivot nodes and paste them next to the Export node</td>
+<td style="text-align: left;"><img src="img/j.png" class="img-fluid"></td>
+</tr>
+<tr class="odd">
+<td style="text-align: right;">9</td>
+<td style="text-align: left;">To connect these nodes together, drag the Export node to the Clean 1(1) node over the Add function.</td>
+<td style="text-align: left;"><img src="img/k.png" class="img-fluid"></td>
+</tr>
+<tr class="even">
+<td style="text-align: right;">10</td>
+<td style="text-align: left;">Since these are export values, replace the Import (Thousand Dollars) to Export (Thousand Dollars) in the Pivot 1(1) node.</td>
+<td style="text-align: left;"><img src="img/l.png" class="img-fluid"></td>
+</tr>
+<tr class="odd">
+<td style="text-align: right;">11</td>
+<td style="text-align: left;">To combine both the Import and Export data, drag Pivot 1 to Pivot 1(1) to create a new Join node.</td>
+<td style="text-align: left;"><img src="img/m.png" class="img-fluid"></td>
+</tr>
+<tr class="even">
+<td style="text-align: right;">12</td>
+<td style="text-align: left;">Within the Join Clauses, match both the Country and Month columns to each other. Ensure that the full Join Type is selected.</td>
+<td style="text-align: left;"><img src="img/n.png" class="img-fluid"></td>
+</tr>
+<tr class="odd">
+<td style="text-align: right;">13</td>
+<td style="text-align: left;">Attach a new Clean node to the Join 1 node. Since there are duplicate columns, merge both Month columns first. Then merge both Country columns.</td>
+<td style="text-align: left;"><img src="img/o.png" class="img-fluid"></td>
+</tr>
+<tr class="even">
+<td style="text-align: right;">14</td>
+<td style="text-align: left;">We will now need to pivot the export and import fields. We will add a Pivot node to the Clean 3 node. We then drag the Export and Import columns into the centre pane.</td>
+<td style="text-align: left;"><img src="img/p.png" class="img-fluid"></td>
+</tr>
+<tr class="odd">
+<td style="text-align: right;">15</td>
+<td style="text-align: left;">We will extract out just the Export and Import words, through the use of the Automatic Split. The newly created column will be renamed as Trade Type.</td>
+<td style="text-align: left;"><img src="img/q.png" class="img-fluid"></td>
+</tr>
+<tr class="even">
+<td style="text-align: right;">16</td>
+<td style="text-align: left;">Most of the trade value are in thousands. We now need to convert this to its proper format. Taking into account that European Union is the only trading partner whose trade value is in the millions, we will create a calculated field using the following formula.</td>
+<td style="text-align: left;"><img src="img/r.png" class="img-fluid"></td>
+</tr>
+<tr class="odd">
+<td style="text-align: right;">17</td>
+<td style="text-align: left;">To limit our timeframe, we will add a Clean node. We will then keep only the months between 2011 to 2020.</td>
+<td style="text-align: left;"><img src="img/s.png" class="img-fluid"></td>
+</tr>
+<tr class="even">
+<td style="text-align: right;">18</td>
+<td style="text-align: left;">At the same time, we will select our countries of choice by keeping these ten countries using the Filter function.</td>
+<td style="text-align: left;"><img src="img/t.png" class="img-fluid"></td>
+</tr>
+<tr class="odd">
+<td style="text-align: right;">19</td>
+<td style="text-align: left;">After keeping only the Trade Value, Trade Type, Country and Month columns, we will then add the Output node. Save the file in a Tableau hyper format for use in Tableau Desktop.</td>
+<td style="text-align: left;"><img src="img/u.png" class="img-fluid"></td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+</section>
+<section id="data-visualisation" class="level3">
+<h3 class="anchored" data-anchor-id="data-visualisation">6.2. Data Visualisation</h3>
+<p>Having prepared the data, we will now utilize Tableau Desktop for the eventual visualisation.<br>
+<br>
+</p>
+<div class="cell">
+<details>
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb3"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a>No. <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="dv">1</span><span class="sc">:</span><span class="dv">32</span>)</span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a>Steps <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">"Launch Tableau Desktop by double-clicking on the newly created hyper file. You should get this view. To start creating the first chart (bubble chart), let's click on Sheet 1 at the bottom."</span>,</span>
+<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a>           <span class="st">"We will need to create a few Calculated Fields. To create the first calculated field, click on the Analysis tab, and choose Calculated Field from the dropdown menu."</span>,</span>
+<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a>           <span class="st">"First we need to separate the export and import values. We create a calculated field and then rename to Export. Then enter the following formula: IF [Trade Type] = </span><span class="sc">\"</span><span class="st">Export</span><span class="sc">\"</span><span class="st"> THEN [Trade Value] END. Ensure that there is a remark indicating that the calculation is valid. Then click OK. To repeat the same step for Import, create a calculated field and then rename to Import. Enter the following formula: IF [Trade Type] = </span><span class="sc">\"</span><span class="st">Import</span><span class="sc">\"</span><span class="st"> THEN [Trade Value] END. Thereafter, click OK."</span>,</span>
+<span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a>           <span class="st">"Our last calculated field for this chart will be to create a total trade value, combining both export and import. Name this calculated field as Total Trade Value. Enter the following formula: SUM([Export])+SUM([Import])"</span>,</span>
+<span id="cb3-6"><a href="#cb3-6" aria-hidden="true" tabindex="-1"></a>           <span class="st">"Drag Export to Columns, Import to Rows, Country to Detail Marks and Total Trade Value to Size Marks."</span>,</span>
+<span id="cb3-7"><a href="#cb3-7" aria-hidden="true" tabindex="-1"></a>           <span class="st">"To mimic Hans Rosling's yearly animation, we will then drag Month to Pages. Then right-click this and choose Cumulative Year."</span>,</span>
+<span id="cb3-8"><a href="#cb3-8" aria-hidden="true" tabindex="-1"></a>           <span class="st">"To switch on the animation feature, select the Format tab, and choose Animations from the dropdown menu. Then select On."</span>,</span>
+<span id="cb3-9"><a href="#cb3-9" aria-hidden="true" tabindex="-1"></a>           <span class="st">"To fix the axis ranges as the animation plays, first right-click on the vertical Import axis. Choose Edit Axis. Then select Fixed Range and enter 0 and 90,000,000,000. Repeat the same step for the horizontal Export axis by right-clicking on it."</span>,</span>
+<span id="cb3-10"><a href="#cb3-10" aria-hidden="true" tabindex="-1"></a>           <span class="st">"To format the bubbles accordingly, we first resize them by clicking on the Size marks and choosing the centre. Then we change the marks type, by clicking on Automatic and choosing Circle. This will allow us to have a fill colour. To colour this circle, click on the Color marks and choose a dark grey tone (HTML #555555) Within the same window, choose 70% opacity. Overlapping circles will now be seen easily, compared to full opacity. Lastly, to include the Country names to each bubble, drag Country to the Label marks."</span>,</span>
+<span id="cb3-11"><a href="#cb3-11" aria-hidden="true" tabindex="-1"></a>           <span class="st">"A few more formatting to go before we're done with the bubble chart. To remove the gridlines, select the Format tab and click on Lines from the dropdown menu. Within the Rows tab, select None within the Grid Lines. Repeat this step for the Columns tab. To rename the Title, right-click on the Title and select Edit Title. Enter the following phrase. Then select OK."</span>,</span>
+<span id="cb3-12"><a href="#cb3-12" aria-hidden="true" tabindex="-1"></a>           <span class="st">"Dr Hans Rosling's bubble chart featured a large Year label in the centre. We would need to first create this Year label in a separate worksheet and then bring it in during our dashboard stage. First, create a new worksheet, and rename it Bubble Year. Then drag Month to Pages. Then right-click this and choose Cumulative Year. Again drag Month to the Text Marks. Then again, right-click this and choose Cumulative Year."</span>,</span>
+<span id="cb3-13"><a href="#cb3-13" aria-hidden="true" tabindex="-1"></a>           <span class="st">"To realign to middle centre, click on the Text marks. Select Alignment and choose centre of both Horizontal and Vertical alignments. Next to adjust the font colour and size, right-click on the Year(Month) text mark and choose Format. Then choose font size 72, light grey colour (HTML #e6e6e6) and bold. Then lastly, to remove the title, right-click on the Title and select Hide Title."</span>,</span>
+<span id="cb3-14"><a href="#cb3-14" aria-hidden="true" tabindex="-1"></a>           <span class="st">"Now we would need to create a line graph for Total Trade Value. First create a new worksheet and name it Total. Then drag Country and Month to Columns, and Total Trade Value to Rows. Change the date format by right-clicking on Month and choosing Cumulative Year. Drag Month to Pages and repeat the date format change."</span>,</span>
+<span id="cb3-15"><a href="#cb3-15" aria-hidden="true" tabindex="-1"></a>           <span class="st">"Next choose Circle marks. To add labels, drag Total Trade Value to the Text marks. Since the label is too long, right-click on the Total Trade Value text marks and select Format. Within the Numbers dropdown menu, select Number (Custom). Choose zero decimal places and display units as billions."</span>,</span>
+<span id="cb3-16"><a href="#cb3-16" aria-hidden="true" tabindex="-1"></a>           <span class="st">"Click on Format Borders to remove unnecessary lines on the graph. Within the Sheet tab, select None for both the Column and Row Divider. Then select Format Lines, and select None for Grid Lines within the Rows tab."</span>,</span>
+<span id="cb3-17"><a href="#cb3-17" aria-hidden="true" tabindex="-1"></a>           <span class="st">"To give a nice background shade per country, we will add a reference line. Right-click on the horizontal year axis and choose Add Reference Line. From the top, choose Band and Entire Table as Scope. Then for Band From, choose Constant, and 1st Jan 2011 as its Value. Choose None for Label. Then for Band To, choose Constant, and 1st Dec 2020 as its Value. Choose None for Label. Lastly for the Fill, choose a light grey colour (HTML #f5f5f5)."</span>,</span>
+<span id="cb3-18"><a href="#cb3-18" aria-hidden="true" tabindex="-1"></a>           <span class="st">"To hide all unnecessary wordings, we start with right-clicking on the Title and Hide Title. Next we will remove the vertical axis by right-clicking on it and unchecking Show Header. Next we will remove the word Country by right-clicking on it and selecting Hide Field Labels for Columns. Lastly to remove the horizontal axis, right-click on it and uncheck Show Header."</span>,</span>
+<span id="cb3-19"><a href="#cb3-19" aria-hidden="true" tabindex="-1"></a>           <span class="st">"To bold the Country name font, right-click on the country and click on Format. Then choose Bold. Separately, change the colour of the circle by selecting on the Color mark and choosing a dark grey colour (HTML #555555)."</span>,</span>
+<span id="cb3-20"><a href="#cb3-20" aria-hidden="true" tabindex="-1"></a>           <span class="st">"To ensure that animation applies to this chart, select the Format tab and click on Animations from the dropdown menu. On the right hand side of the chart, an animation pane would appear. Select a Fast speed, check the Show History box, and then click the down arrow button to reveal more options. Select All Marks To Show History For, and show Both marks and trails. You can then play this animation to see how the circles moves across the years."</span>,</span>
+<span id="cb3-21"><a href="#cb3-21" aria-hidden="true" tabindex="-1"></a>           <span class="st">"Now let's finalise its tooltip. Since our intention is to show more digits in the tooltip than on axis, we will need to duplicate the total trade value. First, right-click on the Total Trade Value and select Duplicate. Then drag this Total Trade Value (copy) to the Tooltip marks, together with Export and Import. Then click on the Tooltip marks. Remove the sentence with Year(Month)(2). And then insert AGG(Total Trade Value(copy)) just beside the sentence of Total Trade Value. Add two more sentences (Total Export and Total Import) and insert their respective fields."</span>,</span>
+<span id="cb3-22"><a href="#cb3-22" aria-hidden="true" tabindex="-1"></a>           <span class="st">"Now we would need to create a similar line chart for both Export and Import. Duplicate the sheet Total and rename it as Export Import. Remove AGG(Total Trade Value) from Rows, as well as the Label and Tooltip marks. Then drag Trade Value to Rows, and Trade Type to the Colour marks."</span>,</span>
+<span id="cb3-23"><a href="#cb3-23" aria-hidden="true" tabindex="-1"></a>           <span class="st">"Next to add labels, drag Trade Value to the Text marks. The labels do not appear, since it is too long. We would need to shrink the labels for it to appear. First right-click on the Trade Value text marks and select Format. Within the Numbers dropdown menu, select Number (Custom). Choose zero decimal places and display units as billions."</span>,</span>
+<span id="cb3-24"><a href="#cb3-24" aria-hidden="true" tabindex="-1"></a>           <span class="st">"Next we will need to have the horizontal annual axis reappear, while all other axis and titles would need to be hidden. First, right-click on the Year(Month) on the Columns and Show Header. To remove the repeated Year of Month, right-click on the horizontal annual axis and select Edit Axis. Within the General tab, remove Year of Month within the Title of Axis Titles. Then to just show 2011 and 2020 within the axis, select the Tick Marks tab. Under the Major Tick Marks, select Fixed and choose 1st Jan 2011 and 9 Years interval."</span>,</span>
+<span id="cb3-25"><a href="#cb3-25" aria-hidden="true" tabindex="-1"></a>           <span class="st">"To finalise the tooltip, we would need to create a calculated field to indicate whether the line is an Export or Import line. We create a calculated field named Custom TT, and enter the following formula: IF ISNULL([Import]) THEN </span><span class="sc">\"</span><span class="st">Export</span><span class="sc">\"</span><span class="st"> ELSE </span><span class="sc">\"</span><span class="st">Import</span><span class="sc">\"</span><span class="st"> END. Then drag Custom TT to the Tooltip marks. Also, drag Export and Import into the Tooltip marks. Then click on the Tooltip marks. Type Total and then insert ATTR(Custom TT). Press Tab on the keyboard and insert both Sum(Export) and Sum(Import). Then click OK."</span>,</span>
+<span id="cb3-26"><a href="#cb3-26" aria-hidden="true" tabindex="-1"></a>           <span class="st">"Now we're ready to create the dashboard. First, create a new dashboard and name it DataViz2. To ensure that our dashboard fits all screen resolutions, we will need to click on Size and choose Automatic. We will then make use of containers to right size our dashboard. The plan is to have three horizontal containers stacked on top of each other. First, drag the Vertical container into the main window. Then drag the Horizontal container over the lower half of the main window such that it gets highlighted. Next drag the Vertical container over the lowest quarter of the main window such that this too gets highlighted. Now we have three horizontal containers, of which the top and bottom are of a vertical nature and the middle is of a horizontal nature. For easy reference, any box with blue boundaries are containers, whereas any box with green boundaries are charts."</span>,</span>
+<span id="cb3-27"><a href="#cb3-27" aria-hidden="true" tabindex="-1"></a>           <span class="st">"Drag the Bubble worksheet to the middle container. Then drag a Vertical container to the right of this Bubble chart. Drag Total into this Vertical container, and then drag Import Export just below this Total chart."</span>,</span>
+<span id="cb3-28"><a href="#cb3-28" aria-hidden="true" tabindex="-1"></a>           <span class="st">"Within the top container, remove Total Trade Value, Year of Month (2020) and Trade Type. Drag Text box to just below the remaining Year of Month within the top container and enter the following text. Resize to font size 16 and bold. Then drag the Year of Month from the top container to the bottom."</span>,</span>
+<span id="cb3-29"><a href="#cb3-29" aria-hidden="true" tabindex="-1"></a>           <span class="st">"Now let's focus on the top container. Let's drag another text box as the sub-Title below the earlier Title. Enter your short paragraph and enlarge font size to 12. We create a line separator by dragging another text box below this sub-title. Without entering any text, click OK. Reduce its Outer Padding to zero, and select its background colour as dark grey (HTML #555555). We then right-click on this text box and Edit Height to 3 pixels."</span>,</span>
+<span id="cb3-30"><a href="#cb3-30" aria-hidden="true" tabindex="-1"></a>           <span class="st">"For the bottom container, drag a Horizontal container below the Year of Month. To create another line separator, drag a Text Box in between this Year of Month and the Horizontal container. Without entering any text, click OK. Reduce its Outer Padding to zero, and select its background colour as dark grey (HTML #555555). We then right-click on this text box and Edit Height to 3 pixels. Below this line, drag a Text Box. Enter details on the source of the data. Drag another Text Box to the right of this data source text box. Enter the reason for this dashboard. Your eventual bottom container should look like this."</span>,</span>
+<span id="cb3-31"><a href="#cb3-31" aria-hidden="true" tabindex="-1"></a>           <span class="st">"For the middle right container. hide both Titles (Total and Export Import). For the Trade Value chart, we'll remove the country names by right-clicking on it and unchecking Show Header. Then remove the vertical Trade Value axis by right-clicking on it and uncheck Show Header. Your eventual arrangement should look like this picture on the right. To create a Title above the top line chart, drag a Text box just above the Country Names. Enter commentary below the Total Merchandise Trade Volumes and click OK. To create a Title below the bottom line chart, drag another Text box below the years. Enter commentary on the Export and Import Volumes. Colour the words Export and Import according to its respective lines (HTML #4e79a7 and #f28e2b). Your arrangement should now look like the picture on the right."</span>,</span>
+<span id="cb3-32"><a href="#cb3-32" aria-hidden="true" tabindex="-1"></a>           <span class="st">"Now focusing our attention on the animation bar. Drag a Text box above this animation bar to provide instructions to the viewer that the charts can be played with this animation bar. Input the necessary instructions in this text, and click OK. Then right-click on the animation bar. Uncheck Show Title, Show Page Readout and Show History Controls. Your animation bar should now look like this pic."</span>,</span>
+<span id="cb3-33"><a href="#cb3-33" aria-hidden="true" tabindex="-1"></a>           <span class="st">"Lastly, while pressing on the Shift button, drag Bubble Year to just above the Bubble Chart. Remove its Title by right-clicking on it and uncheck Show Header. Then to move it behind the Bubble Chart, right-click on it,  move to Floating ORder and select Send to Back. The reason why you can no longer see the Bubble Year, is due to a white background within the Bubble Chart. Right-click on Bubble chart and select Format. Change the colour of the Fill worksheet to None. Your chart should now look like this."</span>)</span>
+<span id="cb3-34"><a href="#cb3-34" aria-hidden="true" tabindex="-1"></a>Screenshots <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">"img/1.png"</span>,</span>
+<span id="cb3-35"><a href="#cb3-35" aria-hidden="true" tabindex="-1"></a>                 <span class="st">"img/2.png"</span>,</span>
+<span id="cb3-36"><a href="#cb3-36" aria-hidden="true" tabindex="-1"></a>                 <span class="st">"img/3.png"</span>,</span>
+<span id="cb3-37"><a href="#cb3-37" aria-hidden="true" tabindex="-1"></a>                 <span class="st">"img/4.png"</span>,</span>
+<span id="cb3-38"><a href="#cb3-38" aria-hidden="true" tabindex="-1"></a>                 <span class="st">"img/5.png"</span>,</span>
+<span id="cb3-39"><a href="#cb3-39" aria-hidden="true" tabindex="-1"></a>                 <span class="st">"img/6.png"</span>,</span>
+<span id="cb3-40"><a href="#cb3-40" aria-hidden="true" tabindex="-1"></a>                 <span class="st">"img/7.png"</span>,</span>
+<span id="cb3-41"><a href="#cb3-41" aria-hidden="true" tabindex="-1"></a>                 <span class="st">"img/8.png"</span>,</span>
+<span id="cb3-42"><a href="#cb3-42" aria-hidden="true" tabindex="-1"></a>                 <span class="st">"img/9.png"</span>,</span>
+<span id="cb3-43"><a href="#cb3-43" aria-hidden="true" tabindex="-1"></a>                 <span class="st">"img/10.png"</span>,</span>
+<span id="cb3-44"><a href="#cb3-44" aria-hidden="true" tabindex="-1"></a>                 <span class="st">"img/11.png"</span>,</span>
+<span id="cb3-45"><a href="#cb3-45" aria-hidden="true" tabindex="-1"></a>                 <span class="st">"img/12.png"</span>,</span>
+<span id="cb3-46"><a href="#cb3-46" aria-hidden="true" tabindex="-1"></a>                 <span class="st">"img/13.png"</span>,</span>
+<span id="cb3-47"><a href="#cb3-47" aria-hidden="true" tabindex="-1"></a>                 <span class="st">"img/14.png"</span>,</span>
+<span id="cb3-48"><a href="#cb3-48" aria-hidden="true" tabindex="-1"></a>                 <span class="st">"img/15.png"</span>,</span>
+<span id="cb3-49"><a href="#cb3-49" aria-hidden="true" tabindex="-1"></a>                 <span class="st">"img/16.png"</span>,</span>
+<span id="cb3-50"><a href="#cb3-50" aria-hidden="true" tabindex="-1"></a>                 <span class="st">"img/17.png"</span>,</span>
+<span id="cb3-51"><a href="#cb3-51" aria-hidden="true" tabindex="-1"></a>                 <span class="st">"img/18.png"</span>,</span>
+<span id="cb3-52"><a href="#cb3-52" aria-hidden="true" tabindex="-1"></a>                 <span class="st">"img/19.png"</span>,</span>
+<span id="cb3-53"><a href="#cb3-53" aria-hidden="true" tabindex="-1"></a>                 <span class="st">"img/20.png"</span>,</span>
+<span id="cb3-54"><a href="#cb3-54" aria-hidden="true" tabindex="-1"></a>                 <span class="st">"img/21.png"</span>,</span>
+<span id="cb3-55"><a href="#cb3-55" aria-hidden="true" tabindex="-1"></a>                 <span class="st">"img/22.png"</span>,</span>
+<span id="cb3-56"><a href="#cb3-56" aria-hidden="true" tabindex="-1"></a>                 <span class="st">"img/23.png"</span>,</span>
+<span id="cb3-57"><a href="#cb3-57" aria-hidden="true" tabindex="-1"></a>                 <span class="st">"img/24.png"</span>,</span>
+<span id="cb3-58"><a href="#cb3-58" aria-hidden="true" tabindex="-1"></a>                 <span class="st">"img/25.png"</span>,</span>
+<span id="cb3-59"><a href="#cb3-59" aria-hidden="true" tabindex="-1"></a>                 <span class="st">"img/26.png"</span>,</span>
+<span id="cb3-60"><a href="#cb3-60" aria-hidden="true" tabindex="-1"></a>                 <span class="st">"img/27.png"</span>,</span>
+<span id="cb3-61"><a href="#cb3-61" aria-hidden="true" tabindex="-1"></a>                 <span class="st">"img/28.png"</span>,</span>
+<span id="cb3-62"><a href="#cb3-62" aria-hidden="true" tabindex="-1"></a>                 <span class="st">"img/29.png"</span>,</span>
+<span id="cb3-63"><a href="#cb3-63" aria-hidden="true" tabindex="-1"></a>                 <span class="st">"img/30.png"</span>,</span>
+<span id="cb3-64"><a href="#cb3-64" aria-hidden="true" tabindex="-1"></a>                 <span class="st">"img/31.png"</span>,</span>
+<span id="cb3-65"><a href="#cb3-65" aria-hidden="true" tabindex="-1"></a>                 <span class="st">"img/32.png"</span>)</span>
+<span id="cb3-66"><a href="#cb3-66" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-67"><a href="#cb3-67" aria-hidden="true" tabindex="-1"></a>table3 <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(No.,Steps,Screenshots)</span>
+<span id="cb3-68"><a href="#cb3-68" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-69"><a href="#cb3-69" aria-hidden="true" tabindex="-1"></a><span class="co"># Add appropriate rmarkdown tagging</span></span>
+<span id="cb3-70"><a href="#cb3-70" aria-hidden="true" tabindex="-1"></a>table3<span class="sc">$</span>Screenshots <span class="ot">=</span> <span class="fu">sprintf</span>(<span class="st">"![](%s)"</span>, table3<span class="sc">$</span>Screenshots)</span>
+<span id="cb3-71"><a href="#cb3-71" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-72"><a href="#cb3-72" aria-hidden="true" tabindex="-1"></a>knitr<span class="sc">::</span><span class="fu">kable</span>(table3, <span class="at">booktabs =</span> <span class="cn">TRUE</span>,</span>
+<span id="cb3-73"><a href="#cb3-73" aria-hidden="true" tabindex="-1"></a>  <span class="at">caption =</span> <span class="st">'Data Visualisation Steps Using Tableau Desktop'</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output-display">
+<table class="table table-sm table-striped small">
+<caption>Data Visualisation Steps Using Tableau Desktop</caption>
+<colgroup>
+<col style="width: 10%">
+<col style="width: 70%">
+<col style="width: 20%">
+</colgroup>
+<thead>
+<tr class="header">
+<th style="text-align: right;">No.</th>
+<th style="text-align: left;">Steps</th>
+<th style="text-align: left;">Screenshots</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: right;">1</td>
+<td style="text-align: left;">Launch Tableau Desktop by double-clicking on the newly created hyper file. You should get this view. To start creating the first chart (bubble chart), let’s click on Sheet 1 at the bottom.</td>
+<td style="text-align: left;"><img src="img/1.png" class="img-fluid"></td>
+</tr>
+<tr class="even">
+<td style="text-align: right;">2</td>
+<td style="text-align: left;">We will need to create a few Calculated Fields. To create the first calculated field, click on the Analysis tab, and choose Calculated Field from the dropdown menu.</td>
+<td style="text-align: left;"><img src="img/2.png" class="img-fluid"></td>
+</tr>
+<tr class="odd">
+<td style="text-align: right;">3</td>
+<td style="text-align: left;">First we need to separate the export and import values. We create a calculated field and then rename to Export. Then enter the following formula: IF [Trade Type] = “Export” THEN [Trade Value] END. Ensure that there is a remark indicating that the calculation is valid. Then click OK. To repeat the same step for Import, create a calculated field and then rename to Import. Enter the following formula: IF [Trade Type] = “Import” THEN [Trade Value] END. Thereafter, click OK.</td>
+<td style="text-align: left;"><img src="img/3.png" class="img-fluid"></td>
+</tr>
+<tr class="even">
+<td style="text-align: right;">4</td>
+<td style="text-align: left;">Our last calculated field for this chart will be to create a total trade value, combining both export and import. Name this calculated field as Total Trade Value. Enter the following formula: SUM([Export])+SUM([Import])</td>
+<td style="text-align: left;"><img src="img/4.png" class="img-fluid"></td>
+</tr>
+<tr class="odd">
+<td style="text-align: right;">5</td>
+<td style="text-align: left;">Drag Export to Columns, Import to Rows, Country to Detail Marks and Total Trade Value to Size Marks.</td>
+<td style="text-align: left;"><img src="img/5.png" class="img-fluid"></td>
+</tr>
+<tr class="even">
+<td style="text-align: right;">6</td>
+<td style="text-align: left;">To mimic Hans Rosling’s yearly animation, we will then drag Month to Pages. Then right-click this and choose Cumulative Year.</td>
+<td style="text-align: left;"><img src="img/6.png" class="img-fluid"></td>
+</tr>
+<tr class="odd">
+<td style="text-align: right;">7</td>
+<td style="text-align: left;">To switch on the animation feature, select the Format tab, and choose Animations from the dropdown menu. Then select On.</td>
+<td style="text-align: left;"><img src="img/7.png" class="img-fluid"></td>
+</tr>
+<tr class="even">
+<td style="text-align: right;">8</td>
+<td style="text-align: left;">To fix the axis ranges as the animation plays, first right-click on the vertical Import axis. Choose Edit Axis. Then select Fixed Range and enter 0 and 90,000,000,000. Repeat the same step for the horizontal Export axis by right-clicking on it.</td>
+<td style="text-align: left;"><img src="img/8.png" class="img-fluid"></td>
+</tr>
+<tr class="odd">
+<td style="text-align: right;">9</td>
+<td style="text-align: left;">To format the bubbles accordingly, we first resize them by clicking on the Size marks and choosing the centre. Then we change the marks type, by clicking on Automatic and choosing Circle. This will allow us to have a fill colour. To colour this circle, click on the Color marks and choose a dark grey tone (HTML #555555) Within the same window, choose 70% opacity. Overlapping circles will now be seen easily, compared to full opacity. Lastly, to include the Country names to each bubble, drag Country to the Label marks.</td>
+<td style="text-align: left;"><img src="img/9.png" class="img-fluid"></td>
+</tr>
+<tr class="even">
+<td style="text-align: right;">10</td>
+<td style="text-align: left;">A few more formatting to go before we’re done with the bubble chart. To remove the gridlines, select the Format tab and click on Lines from the dropdown menu. Within the Rows tab, select None within the Grid Lines. Repeat this step for the Columns tab. To rename the Title, right-click on the Title and select Edit Title. Enter the following phrase. Then select OK.</td>
+<td style="text-align: left;"><img src="img/10.png" class="img-fluid"></td>
+</tr>
+<tr class="odd">
+<td style="text-align: right;">11</td>
+<td style="text-align: left;">Dr Hans Rosling’s bubble chart featured a large Year label in the centre. We would need to first create this Year label in a separate worksheet and then bring it in during our dashboard stage. First, create a new worksheet, and rename it Bubble Year. Then drag Month to Pages. Then right-click this and choose Cumulative Year. Again drag Month to the Text Marks. Then again, right-click this and choose Cumulative Year.</td>
+<td style="text-align: left;"><img src="img/11.png" class="img-fluid"></td>
+</tr>
+<tr class="even">
+<td style="text-align: right;">12</td>
+<td style="text-align: left;">To realign to middle centre, click on the Text marks. Select Alignment and choose centre of both Horizontal and Vertical alignments. Next to adjust the font colour and size, right-click on the Year(Month) text mark and choose Format. Then choose font size 72, light grey colour (HTML #e6e6e6) and bold. Then lastly, to remove the title, right-click on the Title and select Hide Title.</td>
+<td style="text-align: left;"><img src="img/12.png" class="img-fluid"></td>
+</tr>
+<tr class="odd">
+<td style="text-align: right;">13</td>
+<td style="text-align: left;">Now we would need to create a line graph for Total Trade Value. First create a new worksheet and name it Total. Then drag Country and Month to Columns, and Total Trade Value to Rows. Change the date format by right-clicking on Month and choosing Cumulative Year. Drag Month to Pages and repeat the date format change.</td>
+<td style="text-align: left;"><img src="img/13.png" class="img-fluid"></td>
+</tr>
+<tr class="even">
+<td style="text-align: right;">14</td>
+<td style="text-align: left;">Next choose Circle marks. To add labels, drag Total Trade Value to the Text marks. Since the label is too long, right-click on the Total Trade Value text marks and select Format. Within the Numbers dropdown menu, select Number (Custom). Choose zero decimal places and display units as billions.</td>
+<td style="text-align: left;"><img src="img/14.png" class="img-fluid"></td>
+</tr>
+<tr class="odd">
+<td style="text-align: right;">15</td>
+<td style="text-align: left;">Click on Format Borders to remove unnecessary lines on the graph. Within the Sheet tab, select None for both the Column and Row Divider. Then select Format Lines, and select None for Grid Lines within the Rows tab.</td>
+<td style="text-align: left;"><img src="img/15.png" class="img-fluid"></td>
+</tr>
+<tr class="even">
+<td style="text-align: right;">16</td>
+<td style="text-align: left;">To give a nice background shade per country, we will add a reference line. Right-click on the horizontal year axis and choose Add Reference Line. From the top, choose Band and Entire Table as Scope. Then for Band From, choose Constant, and 1st Jan 2011 as its Value. Choose None for Label. Then for Band To, choose Constant, and 1st Dec 2020 as its Value. Choose None for Label. Lastly for the Fill, choose a light grey colour (HTML #f5f5f5).</td>
+<td style="text-align: left;"><img src="img/16.png" class="img-fluid"></td>
+</tr>
+<tr class="odd">
+<td style="text-align: right;">17</td>
+<td style="text-align: left;">To hide all unnecessary wordings, we start with right-clicking on the Title and Hide Title. Next we will remove the vertical axis by right-clicking on it and unchecking Show Header. Next we will remove the word Country by right-clicking on it and selecting Hide Field Labels for Columns. Lastly to remove the horizontal axis, right-click on it and uncheck Show Header.</td>
+<td style="text-align: left;"><img src="img/17.png" class="img-fluid"></td>
+</tr>
+<tr class="even">
+<td style="text-align: right;">18</td>
+<td style="text-align: left;">To bold the Country name font, right-click on the country and click on Format. Then choose Bold. Separately, change the colour of the circle by selecting on the Color mark and choosing a dark grey colour (HTML #555555).</td>
+<td style="text-align: left;"><img src="img/18.png" class="img-fluid"></td>
+</tr>
+<tr class="odd">
+<td style="text-align: right;">19</td>
+<td style="text-align: left;">To ensure that animation applies to this chart, select the Format tab and click on Animations from the dropdown menu. On the right hand side of the chart, an animation pane would appear. Select a Fast speed, check the Show History box, and then click the down arrow button to reveal more options. Select All Marks To Show History For, and show Both marks and trails. You can then play this animation to see how the circles moves across the years.</td>
+<td style="text-align: left;"><img src="img/19.png" class="img-fluid"></td>
+</tr>
+<tr class="even">
+<td style="text-align: right;">20</td>
+<td style="text-align: left;">Now let’s finalise its tooltip. Since our intention is to show more digits in the tooltip than on axis, we will need to duplicate the total trade value. First, right-click on the Total Trade Value and select Duplicate. Then drag this Total Trade Value (copy) to the Tooltip marks, together with Export and Import. Then click on the Tooltip marks. Remove the sentence with Year(Month)(2). And then insert AGG(Total Trade Value(copy)) just beside the sentence of Total Trade Value. Add two more sentences (Total Export and Total Import) and insert their respective fields.</td>
+<td style="text-align: left;"><img src="img/20.png" class="img-fluid"></td>
+</tr>
+<tr class="odd">
+<td style="text-align: right;">21</td>
+<td style="text-align: left;">Now we would need to create a similar line chart for both Export and Import. Duplicate the sheet Total and rename it as Export Import. Remove AGG(Total Trade Value) from Rows, as well as the Label and Tooltip marks. Then drag Trade Value to Rows, and Trade Type to the Colour marks.</td>
+<td style="text-align: left;"><img src="img/21.png" class="img-fluid"></td>
+</tr>
+<tr class="even">
+<td style="text-align: right;">22</td>
+<td style="text-align: left;">Next to add labels, drag Trade Value to the Text marks. The labels do not appear, since it is too long. We would need to shrink the labels for it to appear. First right-click on the Trade Value text marks and select Format. Within the Numbers dropdown menu, select Number (Custom). Choose zero decimal places and display units as billions.</td>
+<td style="text-align: left;"><img src="img/22.png" class="img-fluid"></td>
+</tr>
+<tr class="odd">
+<td style="text-align: right;">23</td>
+<td style="text-align: left;">Next we will need to have the horizontal annual axis reappear, while all other axis and titles would need to be hidden. First, right-click on the Year(Month) on the Columns and Show Header. To remove the repeated Year of Month, right-click on the horizontal annual axis and select Edit Axis. Within the General tab, remove Year of Month within the Title of Axis Titles. Then to just show 2011 and 2020 within the axis, select the Tick Marks tab. Under the Major Tick Marks, select Fixed and choose 1st Jan 2011 and 9 Years interval.</td>
+<td style="text-align: left;"><img src="img/23.png" class="img-fluid"></td>
+</tr>
+<tr class="even">
+<td style="text-align: right;">24</td>
+<td style="text-align: left;">To finalise the tooltip, we would need to create a calculated field to indicate whether the line is an Export or Import line. We create a calculated field named Custom TT, and enter the following formula: IF ISNULL([Import]) THEN “Export” ELSE “Import” END. Then drag Custom TT to the Tooltip marks. Also, drag Export and Import into the Tooltip marks. Then click on the Tooltip marks. Type Total and then insert ATTR(Custom TT). Press Tab on the keyboard and insert both Sum(Export) and Sum(Import). Then click OK.</td>
+<td style="text-align: left;"><img src="img/24.png" class="img-fluid"></td>
+</tr>
+<tr class="odd">
+<td style="text-align: right;">25</td>
+<td style="text-align: left;">Now we’re ready to create the dashboard. First, create a new dashboard and name it DataViz2. To ensure that our dashboard fits all screen resolutions, we will need to click on Size and choose Automatic. We will then make use of containers to right size our dashboard. The plan is to have three horizontal containers stacked on top of each other. First, drag the Vertical container into the main window. Then drag the Horizontal container over the lower half of the main window such that it gets highlighted. Next drag the Vertical container over the lowest quarter of the main window such that this too gets highlighted. Now we have three horizontal containers, of which the top and bottom are of a vertical nature and the middle is of a horizontal nature. For easy reference, any box with blue boundaries are containers, whereas any box with green boundaries are charts.</td>
+<td style="text-align: left;"><img src="img/25.png" class="img-fluid"></td>
+</tr>
+<tr class="even">
+<td style="text-align: right;">26</td>
+<td style="text-align: left;">Drag the Bubble worksheet to the middle container. Then drag a Vertical container to the right of this Bubble chart. Drag Total into this Vertical container, and then drag Import Export just below this Total chart.</td>
+<td style="text-align: left;"><img src="img/26.png" class="img-fluid"></td>
+</tr>
+<tr class="odd">
+<td style="text-align: right;">27</td>
+<td style="text-align: left;">Within the top container, remove Total Trade Value, Year of Month (2020) and Trade Type. Drag Text box to just below the remaining Year of Month within the top container and enter the following text. Resize to font size 16 and bold. Then drag the Year of Month from the top container to the bottom.</td>
+<td style="text-align: left;"><img src="img/27.png" class="img-fluid"></td>
+</tr>
+<tr class="even">
+<td style="text-align: right;">28</td>
+<td style="text-align: left;">Now let’s focus on the top container. Let’s drag another text box as the sub-Title below the earlier Title. Enter your short paragraph and enlarge font size to 12. We create a line separator by dragging another text box below this sub-title. Without entering any text, click OK. Reduce its Outer Padding to zero, and select its background colour as dark grey (HTML #555555). We then right-click on this text box and Edit Height to 3 pixels.</td>
+<td style="text-align: left;"><img src="img/28.png" class="img-fluid"></td>
+</tr>
+<tr class="odd">
+<td style="text-align: right;">29</td>
+<td style="text-align: left;">For the bottom container, drag a Horizontal container below the Year of Month. To create another line separator, drag a Text Box in between this Year of Month and the Horizontal container. Without entering any text, click OK. Reduce its Outer Padding to zero, and select its background colour as dark grey (HTML #555555). We then right-click on this text box and Edit Height to 3 pixels. Below this line, drag a Text Box. Enter details on the source of the data. Drag another Text Box to the right of this data source text box. Enter the reason for this dashboard. Your eventual bottom container should look like this.</td>
+<td style="text-align: left;"><img src="img/29.png" class="img-fluid"></td>
+</tr>
+<tr class="even">
+<td style="text-align: right;">30</td>
+<td style="text-align: left;">For the middle right container. hide both Titles (Total and Export Import). For the Trade Value chart, we’ll remove the country names by right-clicking on it and unchecking Show Header. Then remove the vertical Trade Value axis by right-clicking on it and uncheck Show Header. Your eventual arrangement should look like this picture on the right. To create a Title above the top line chart, drag a Text box just above the Country Names. Enter commentary below the Total Merchandise Trade Volumes and click OK. To create a Title below the bottom line chart, drag another Text box below the years. Enter commentary on the Export and Import Volumes. Colour the words Export and Import according to its respective lines (HTML #4e79a7 and #f28e2b). Your arrangement should now look like the picture on the right.</td>
+<td style="text-align: left;"><img src="img/30.png" class="img-fluid"></td>
+</tr>
+<tr class="odd">
+<td style="text-align: right;">31</td>
+<td style="text-align: left;">Now focusing our attention on the animation bar. Drag a Text box above this animation bar to provide instructions to the viewer that the charts can be played with this animation bar. Input the necessary instructions in this text, and click OK. Then right-click on the animation bar. Uncheck Show Title, Show Page Readout and Show History Controls. Your animation bar should now look like this pic.</td>
+<td style="text-align: left;"><img src="img/31.png" class="img-fluid"></td>
+</tr>
+<tr class="even">
+<td style="text-align: right;">32</td>
+<td style="text-align: left;">Lastly, while pressing on the Shift button, drag Bubble Year to just above the Bubble Chart. Remove its Title by right-clicking on it and uncheck Show Header. Then to move it behind the Bubble Chart, right-click on it, move to Floating ORder and select Send to Back. The reason why you can no longer see the Bubble Year, is due to a white background within the Bubble Chart. Right-click on Bubble chart and select Format. Change the colour of the Fill worksheet to None. Your chart should now look like this.</td>
+<td style="text-align: left;"><img src="img/32.png" class="img-fluid"></td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+</section>
+<section id="derived-insights" class="level3">
+<h3 class="anchored" data-anchor-id="derived-insights">7.2. Derived Insights</h3>
+<div class="cell">
+<details>
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb4"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a>No. <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="dv">1</span><span class="sc">:</span><span class="dv">6</span>)</span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a>Steps <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">"**Overall:** Between 2011 and 2020, Singapore has generally seen flat or increasing trade with some of its top ten trading partners. 2016 was an exceptional year, where there was a sharp decline in trade across the board. This was due to three main reasons, sudden volatility with the China stock market, OPEC oil production cuts as well as Brexit, where UK had decided to leave the EU bloc. Notable trade recovery from 2016 was with EU, US, China and Taiwan. Conversely, trade with its remaining top ten trading partners, of whom are mainly the Asian markets, have stuttered since."</span>,</span>
+<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a>           <span class="st">"**Mainland China:** From being Singapore's 2nd biggest trading partner in 2011 with a trade worth of $101 billion, China outgrew Malaysia to be Singapore's top trading partner in 2020 with a whopping trade worth of $136 billion. This was due to a burgeoning two-way trade between Singapore and China: between 2011 and 2020, export and imports grew from $54 to $71 billion and from $48 to $65 billion respectively. The trading growth was aided by the 2009 China-Singapore Free Trade Agreement. At the same time, with the ever-present US-China tensions causing turmoil to global trade,  China has increasingly focused their efforts in strengthening trade links with its neighbours. This benefits Singapore even further, with it being a part of the recent Regional Comprehensive Economic Partnership (RCEP) agreement with China."</span>,</span>
+<span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a>           <span class="st">"**Indonesia:** Trade with Indonesia slumped from a high of $82 billion in 2011 to $49 billion in 2020. This is mainly due to a sharp decline in exports from $57 billion in 2011 to $30 billion in 2020."</span>,</span>
+<span id="cb4-5"><a href="#cb4-5" aria-hidden="true" tabindex="-1"></a>           <span class="st">"**United States:** Trade with United States remained flat between 2011 and 2016 at $73 billion. Thereafter, trade grew rapidly to $102 billion, driven mainly by export trade from Singapore. Despite US's withdrawal from the Trans-Pacific Partnership in 2017, Singapore could still rely on its 2004 Free Trade Agreement with US."</span>,</span>
+<span id="cb4-6"><a href="#cb4-6" aria-hidden="true" tabindex="-1"></a>           <span class="st">"**Malaysia:** Malaysia was Singapore's biggest trading partner, before being overtaken by China in 2013. Apart from a 2016 trade dip, trade with Singapore's closest neighbour, Malaysia, has largely remained constant at $115 billion. 2018 saw the start of a dip with it reaching $103 billion in 2020. The drop coincided with Mahathir's return to power in the 2018 elections."</span>,</span>
+<span id="cb4-7"><a href="#cb4-7" aria-hidden="true" tabindex="-1"></a>           <span class="st">"**Taiwan:** Singapore's trade with Taiwan has been on an upward trend; trade grew from $46 billion in 2011 to $75 billion in 2020. This trade growth was due to greater imports fuelled by the  2014 trade agreement between Singapore and Taiwan, Penghu, Kinmen and Matsu (ASTEP)."</span>)</span>
+<span id="cb4-8"><a href="#cb4-8" aria-hidden="true" tabindex="-1"></a>Screenshots <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">"img/insight1.png"</span>,</span>
+<span id="cb4-9"><a href="#cb4-9" aria-hidden="true" tabindex="-1"></a>                 <span class="st">"img/insight2.png"</span>,</span>
+<span id="cb4-10"><a href="#cb4-10" aria-hidden="true" tabindex="-1"></a>                 <span class="st">"img/insight3.png"</span>,</span>
+<span id="cb4-11"><a href="#cb4-11" aria-hidden="true" tabindex="-1"></a>                 <span class="st">"img/insight4.png"</span>,</span>
+<span id="cb4-12"><a href="#cb4-12" aria-hidden="true" tabindex="-1"></a>                 <span class="st">"img/insight5.png"</span>,</span>
+<span id="cb4-13"><a href="#cb4-13" aria-hidden="true" tabindex="-1"></a>                 <span class="st">"img/insight6.png"</span>)</span>
+<span id="cb4-14"><a href="#cb4-14" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-15"><a href="#cb4-15" aria-hidden="true" tabindex="-1"></a>table4 <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(No.,Steps,Screenshots)</span>
+<span id="cb4-16"><a href="#cb4-16" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-17"><a href="#cb4-17" aria-hidden="true" tabindex="-1"></a><span class="co"># Add appropriate rmarkdown tagging</span></span>
+<span id="cb4-18"><a href="#cb4-18" aria-hidden="true" tabindex="-1"></a>table4<span class="sc">$</span>Screenshots <span class="ot">=</span> <span class="fu">sprintf</span>(<span class="st">"![](%s)"</span>, table4<span class="sc">$</span>Screenshots)</span>
+<span id="cb4-19"><a href="#cb4-19" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-20"><a href="#cb4-20" aria-hidden="true" tabindex="-1"></a>knitr<span class="sc">::</span><span class="fu">kable</span>(table4, <span class="at">booktabs =</span> <span class="cn">TRUE</span>,</span>
+<span id="cb4-21"><a href="#cb4-21" aria-hidden="true" tabindex="-1"></a>  <span class="at">caption =</span> <span class="st">'Derived Insights'</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output-display">
+<table class="table table-sm table-striped small">
+<caption>Derived Insights</caption>
+<colgroup>
+<col style="width: 10%">
+<col style="width: 70%">
+<col style="width: 20%">
+</colgroup>
+<thead>
+<tr class="header">
+<th style="text-align: right;">No.</th>
+<th style="text-align: left;">Steps</th>
+<th style="text-align: left;">Screenshots</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: right;">1</td>
+<td style="text-align: left;"><strong>Overall:</strong> Between 2011 and 2020, Singapore has generally seen flat or increasing trade with some of its top ten trading partners. 2016 was an exceptional year, where there was a sharp decline in trade across the board. This was due to three main reasons, sudden volatility with the China stock market, OPEC oil production cuts as well as Brexit, where UK had decided to leave the EU bloc. Notable trade recovery from 2016 was with EU, US, China and Taiwan. Conversely, trade with its remaining top ten trading partners, of whom are mainly the Asian markets, have stuttered since.</td>
+<td style="text-align: left;"><img src="img/insight1.png" class="img-fluid"></td>
+</tr>
+<tr class="even">
+<td style="text-align: right;">2</td>
+<td style="text-align: left;"><strong>Mainland China:</strong> From being Singapore’s 2nd biggest trading partner in 2011 with a trade worth of $101 billion, China outgrew Malaysia to be Singapore’s top trading partner in 2020 with a whopping trade worth of $136 billion. This was due to a burgeoning two-way trade between Singapore and China: between 2011 and 2020, export and imports grew from $54 to $71 billion and from $48 to $65 billion respectively. The trading growth was aided by the 2009 China-Singapore Free Trade Agreement. At the same time, with the ever-present US-China tensions causing turmoil to global trade, China has increasingly focused their efforts in strengthening trade links with its neighbours. This benefits Singapore even further, with it being a part of the recent Regional Comprehensive Economic Partnership (RCEP) agreement with China.</td>
+<td style="text-align: left;"><img src="img/insight2.png" class="img-fluid"></td>
+</tr>
+<tr class="odd">
+<td style="text-align: right;">3</td>
+<td style="text-align: left;"><strong>Indonesia:</strong> Trade with Indonesia slumped from a high of $82 billion in 2011 to $49 billion in 2020. This is mainly due to a sharp decline in exports from $57 billion in 2011 to $30 billion in 2020.</td>
+<td style="text-align: left;"><img src="img/insight3.png" class="img-fluid"></td>
+</tr>
+<tr class="even">
+<td style="text-align: right;">4</td>
+<td style="text-align: left;"><strong>United States:</strong> Trade with United States remained flat between 2011 and 2016 at $73 billion. Thereafter, trade grew rapidly to $102 billion, driven mainly by export trade from Singapore. Despite US’s withdrawal from the Trans-Pacific Partnership in 2017, Singapore could still rely on its 2004 Free Trade Agreement with US.</td>
+<td style="text-align: left;"><img src="img/insight4.png" class="img-fluid"></td>
+</tr>
+<tr class="odd">
+<td style="text-align: right;">5</td>
+<td style="text-align: left;"><strong>Malaysia:</strong> Malaysia was Singapore’s biggest trading partner, before being overtaken by China in 2013. Apart from a 2016 trade dip, trade with Singapore’s closest neighbour, Malaysia, has largely remained constant at $115 billion. 2018 saw the start of a dip with it reaching $103 billion in 2020. The drop coincided with Mahathir’s return to power in the 2018 elections.</td>
+<td style="text-align: left;"><img src="img/insight5.png" class="img-fluid"></td>
+</tr>
+<tr class="even">
+<td style="text-align: right;">6</td>
+<td style="text-align: left;"><strong>Taiwan:</strong> Singapore’s trade with Taiwan has been on an upward trend; trade grew from $46 billion in 2011 to $75 billion in 2020. This trade growth was due to greater imports fuelled by the 2014 trade agreement between Singapore and Taiwan, Penghu, Kinmen and Matsu (ASTEP).</td>
+<td style="text-align: left;"><img src="img/insight6.png" class="img-fluid"></td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+
+
+</section>
+</section>
+
+</main> <!-- /main -->
+<script id="quarto-html-after-body" type="application/javascript">
+window.document.addEventListener("DOMContentLoaded", function (event) {
+  const toggleBodyColorMode = (bsSheetEl) => {
+    const mode = bsSheetEl.getAttribute("data-mode");
+    const bodyEl = window.document.querySelector("body");
+    if (mode === "dark") {
+      bodyEl.classList.add("quarto-dark");
+      bodyEl.classList.remove("quarto-light");
+    } else {
+      bodyEl.classList.add("quarto-light");
+      bodyEl.classList.remove("quarto-dark");
+    }
+  }
+  const toggleBodyColorPrimary = () => {
+    const bsSheetEl = window.document.querySelector("link#quarto-bootstrap");
+    if (bsSheetEl) {
+      toggleBodyColorMode(bsSheetEl);
+    }
+  }
+  toggleBodyColorPrimary();  
+  const icon = "";
+  const anchorJS = new window.AnchorJS();
+  anchorJS.options = {
+    placement: 'right',
+    icon: icon
+  };
+  anchorJS.add('.anchored');
+  const isCodeAnnotation = (el) => {
+    for (const clz of el.classList) {
+      if (clz.startsWith('code-annotation-')) {                     
+        return true;
+      }
+    }
+    return false;
+  }
+  const clipboard = new window.ClipboardJS('.code-copy-button', {
+    text: function(trigger) {
+      const codeEl = trigger.previousElementSibling.cloneNode(true);
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
+        }
+      }
+      return codeEl.innerText;
+    }
+  });
+  clipboard.on('success', function(e) {
+    // button target
+    const button = e.trigger;
+    // don't keep focus
+    button.blur();
+    // flash "checked"
+    button.classList.add('code-copy-button-checked');
+    var currentTitle = button.getAttribute("title");
+    button.setAttribute("title", "Copied!");
+    let tooltip;
+    if (window.bootstrap) {
+      button.setAttribute("data-bs-toggle", "tooltip");
+      button.setAttribute("data-bs-placement", "left");
+      button.setAttribute("data-bs-title", "Copied!");
+      tooltip = new bootstrap.Tooltip(button, 
+        { trigger: "manual", 
+          customClass: "code-copy-button-tooltip",
+          offset: [0, -8]});
+      tooltip.show();    
+    }
+    setTimeout(function() {
+      if (tooltip) {
+        tooltip.hide();
+        button.removeAttribute("data-bs-title");
+        button.removeAttribute("data-bs-toggle");
+        button.removeAttribute("data-bs-placement");
+      }
+      button.setAttribute("title", currentTitle);
+      button.classList.remove('code-copy-button-checked');
+    }, 1000);
+    // clear code selection
+    e.clearSelection();
+  });
+  function tippyHover(el, contentFn) {
+    const config = {
+      allowHTML: true,
+      content: contentFn,
+      maxWidth: 500,
+      delay: 100,
+      arrow: false,
+      appendTo: function(el) {
+          return el.parentElement;
+      },
+      interactive: true,
+      interactiveBorder: 10,
+      theme: 'quarto',
+      placement: 'bottom-start'
+    };
+    window.tippy(el, config); 
+  }
+  const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+  for (var i=0; i<noterefs.length; i++) {
+    const ref = noterefs[i];
+    tippyHover(ref, function() {
+      // use id or data attribute instead here
+      let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+      try { href = new URL(href).hash; } catch {}
+      const id = href.replace(/^#\/?/, "");
+      const note = window.document.getElementById(id);
+      return note.innerHTML;
+    });
+  }
+      let selectedAnnoteEl;
+      const selectorForAnnotation = ( cell, annotation) => {
+        let cellAttr = 'data-code-cell="' + cell + '"';
+        let lineAttr = 'data-code-annotation="' +  annotation + '"';
+        const selector = 'span[' + cellAttr + '][' + lineAttr + ']';
+        return selector;
+      }
+      const selectCodeLines = (annoteEl) => {
+        const doc = window.document;
+        const targetCell = annoteEl.getAttribute("data-target-cell");
+        const targetAnnotation = annoteEl.getAttribute("data-target-annotation");
+        const annoteSpan = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
+        const lines = annoteSpan.getAttribute("data-code-lines").split(",");
+        const lineIds = lines.map((line) => {
+          return targetCell + "-" + line;
+        })
+        let top = null;
+        let height = null;
+        let parent = null;
+        if (lineIds.length > 0) {
+            //compute the position of the single el (top and bottom and make a div)
+            const el = window.document.getElementById(lineIds[0]);
+            top = el.offsetTop;
+            height = el.offsetHeight;
+            parent = el.parentElement.parentElement;
+          if (lineIds.length > 1) {
+            const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
+            const bottom = lastEl.offsetTop + lastEl.offsetHeight;
+            height = bottom - top;
+          }
+          if (top !== null && height !== null && parent !== null) {
+            // cook up a div (if necessary) and position it 
+            let div = window.document.getElementById("code-annotation-line-highlight");
+            if (div === null) {
+              div = window.document.createElement("div");
+              div.setAttribute("id", "code-annotation-line-highlight");
+              div.style.position = 'absolute';
+              parent.appendChild(div);
+            }
+            div.style.top = top - 2 + "px";
+            div.style.height = height + 4 + "px";
+            let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
+            if (gutterDiv === null) {
+              gutterDiv = window.document.createElement("div");
+              gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
+              gutterDiv.style.position = 'absolute';
+              const codeCell = window.document.getElementById(targetCell);
+              const gutter = codeCell.querySelector('.code-annotation-gutter');
+              gutter.appendChild(gutterDiv);
+            }
+            gutterDiv.style.top = top - 2 + "px";
+            gutterDiv.style.height = height + 4 + "px";
+          }
+          selectedAnnoteEl = annoteEl;
+        }
+      };
+      const unselectCodeLines = () => {
+        const elementsIds = ["code-annotation-line-highlight", "code-annotation-line-highlight-gutter"];
+        elementsIds.forEach((elId) => {
+          const div = window.document.getElementById(elId);
+          if (div) {
+            div.remove();
+          }
+        });
+        selectedAnnoteEl = undefined;
+      };
+      // Attach click handler to the DT
+      const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
+      for (const annoteDlNode of annoteDls) {
+        annoteDlNode.addEventListener('click', (event) => {
+          const clickedEl = event.target;
+          if (clickedEl !== selectedAnnoteEl) {
+            unselectCodeLines();
+            const activeEl = window.document.querySelector('dt[data-target-cell].code-annotation-active');
+            if (activeEl) {
+              activeEl.classList.remove('code-annotation-active');
+            }
+            selectCodeLines(clickedEl);
+            clickedEl.classList.add('code-annotation-active');
+          } else {
+            // Unselect the line
+            unselectCodeLines();
+            clickedEl.classList.remove('code-annotation-active');
+          }
+        });
+      }
+  const findCites = (el) => {
+    const parentEl = el.parentElement;
+    if (parentEl) {
+      const cites = parentEl.dataset.cites;
+      if (cites) {
+        return {
+          el,
+          cites: cites.split(' ')
+        };
+      } else {
+        return findCites(el.parentElement)
+      }
+    } else {
+      return undefined;
+    }
+  };
+  var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+  for (var i=0; i<bibliorefs.length; i++) {
+    const ref = bibliorefs[i];
+    const citeInfo = findCites(ref);
+    if (citeInfo) {
+      tippyHover(citeInfo.el, function() {
+        var popup = window.document.createElement('div');
+        citeInfo.cites.forEach(function(cite) {
+          var citeDiv = window.document.createElement('div');
+          citeDiv.classList.add('hanging-indent');
+          citeDiv.classList.add('csl-entry');
+          var biblioDiv = window.document.getElementById('ref-' + cite);
+          if (biblioDiv) {
+            citeDiv.innerHTML = biblioDiv.innerHTML;
+          }
+          popup.appendChild(citeDiv);
+        });
+        return popup.innerHTML;
+      });
+    }
+  }
+});
+</script>
+</div> <!-- /content -->
+
+
+
+</body></html>

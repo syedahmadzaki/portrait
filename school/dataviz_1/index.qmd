@@ -16,7 +16,6 @@ resources:
   - img/*
 categories:
   - Visualisation
-  - kableExtra
   - gt
   - gtExtras
 ---
@@ -25,7 +24,7 @@ categories:
 
 # Install and load necessary packages
 if (!require("pacman")) install.packages("pacman")
-pacman::p_load(tidyverse, kableExtra, gt, gtExtras)
+pacman::p_load(tidyverse, gt, gtExtras)
 
 ```
 
