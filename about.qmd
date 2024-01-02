@@ -85,7 +85,7 @@ JUN 2023 – PRESENT
 **Development Services Manager**\
 PIZZA HUT ASIA PACIFIC FRANCHISE PTE. LTD.\
 
--   Leveraged spatial analytics and predictive statistical modeling through the use of R, GIS and SAS, to unlock restaurant growth insights and 1,000+ opportunities within APAC region
+-   Leveraged spatial analytics and predictive statistical modeling on large and disparate datasets through the use of R, GIS and SAS, to unlock restaurant growth insights and 1,000+ opportunities within APAC region
 -   Defined, identified and partnered with best-in-class spatial consulting vendor to complete growth research studies on seven major Asian countries
 -   Developed semi-automated competition tracking dashboard on PowerBI, with data sourced from web-scraping R scripts
 -   Co-designed and tested in-house GIS platform, using RShiny, as a GIS SaaS Proof-of-Concept platform
