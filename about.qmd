@@ -33,7 +33,10 @@ I'm truly blessed to have the opportunity to work with global franchise partners
 **Manager, Market Planning**\
 PIZZA HUT GLOBAL\
 
--   Key thought partner to BMU Development leaders on restaurant growth strategies
+-   Key thought partner to BMU & Franchisee development leaders on unit growth strategies
+-   Champion innovative thinking and continuous improvement in the market planning space (restaurant development analytics)
+-   Scale and manage spatial consulting vendors, beyond Asia, to meet growing research demands, as a complement to in-house research studies
+-   Established future-oriented market planning solutions to fulfill growing in-house research needs
 -   Chief cheerleader to a talented team of market planners spread globally
 :::
 
@@ -83,6 +86,7 @@ JUN 2023 – PRESENT
 PIZZA HUT ASIA PACIFIC FRANCHISE PTE. LTD.\
 
 -   Leveraged Spatial Analytics and Predictive Modeling through the use of R, GIS and SAS, to unlock restaurant growth insights and 1,000+ opportunities within APAC region
+-   Defined, identified and partnered with best-in-class spatial consulting vendor to complete growth research studies on seven major Asian countries
 -   Developed semi-automated competition tracking dashboard on PowerBI, with data sourced from web-scraping R scripts
 -   Co-designed and tested in-house GIS platform, using RShiny, as a GIS SaaS Proof-of-Concept platform
 -   Collaborated with senior management and working level teams of franchise partners to enhance restaurant growth capabilities
