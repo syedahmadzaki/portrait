@@ -16,7 +16,6 @@ resources:
 categories:
   - Visualisation
   - kable
-  
 ---
 
 ```{r install-packages, include = FALSE}
@@ -27,75 +26,85 @@ pacman::p_load(tidyverse, gt, gtExtras)
 
 ```
 
-## 1.	Makeover Requirements
-###  1.1.	The Task
-1. Critic the visualized graph with at least three points from each evaluation criterion (clarity and aesthetics) respectively.
-2. Suggest alternative graphical presentation to improve the current design:
-    i)	Proposed alternative data visualization must be in static form.
-    ii)	Proposed design would need to be sketched.
-    iii)	Support your design by describing the advantages or which part of the issue(s) your alternative design attempts to overcome.
-3. Use Tableau to design the proposed data visualization.
-4. Provide step-by-step description on how the data visualization was prepared.
-5. Describe three major observations revealed by the prepared data visualization.
+## 1. Makeover Requirements
 
-### 1.2.	Deliverables  
-1. The study period should be between January 2011-December 2020. No additional data sets are required.  
-2. Focus on telling data story using appropriate statistical graphic methods, graphical design principles and interactive techniques, including animation.  
+### 1.1. The Task
 
-## 2.	Original Visualisation and Its Perceived Objective
+1.  Critic the visualized graph with at least three points from each evaluation criterion (clarity and aesthetics) respectively.
+2.  Suggest alternative graphical presentation to improve the current design:
+    i)  Proposed alternative data visualization must be in static form.
+    ii) Proposed design would need to be sketched.
+    iii) Support your design by describing the advantages or which part of the issue(s) your alternative design attempts to overcome.
+3.  Use Tableau to design the proposed data visualization.
+4.  Provide step-by-step description on how the data visualization was prepared.
+5.  Describe three major observations revealed by the prepared data visualization.
+
+### 1.2. Deliverables
+
+1.  The study period should be between January 2011-December 2020. No additional data sets are required.\
+2.  Focus on telling data story using appropriate statistical graphic methods, graphical design principles and interactive techniques, including animation.
+
+## 2. Original Visualisation and Its Perceived Objective
+
 The original visualization (shown below) showcases the merchandise trade, for both export and import, of ten of Singapore's major trading partners in 2020.\
 \
 ![Figure 1: Original Data Visualisation](img/a.jpeg)\
 \
 Using the same methodology in our earlier [DataViz Makeover 1](https://syedahmadzakidataviz.netlify.app/posts/2021-05-26-dataviz-makeover-1/), the intent of the visualisation would need to be defined first. We attempt the narrative for the above visualization, as follows:\
 \
-***“In 2020, each of our top ten trading countries (Mainland China, Malaysia, EU, United States, Taiwan, Japan, Republic of Korea, Indonesia, Hong Kong and Thailand) differ greatly in their respective export, import as well as total merchandise trade value.”***  \
+***“In 2020, each of our top ten trading countries (Mainland China, Malaysia, EU, United States, Taiwan, Japan, Republic of Korea, Indonesia, Hong Kong and Thailand) differ greatly in their respective export, import as well as total merchandise trade value.”***\
 \
 To further illuminate the narrative, we propose the following questions that the visualization aim to answer. Given the subject matter, these questions are very similar to those proposed in our earlier [makeover](https://syedahmadzakidataviz.netlify.app/posts/2021-05-26-dataviz-makeover-1/):
 
-*   What are the import and export levels in each of the top ten trading countries?  
-*   How do these import and export levels fluctuate over time?  
-*   Which countries are net exporter or net importer at varying periods in time?  
-*   Within the top ten countries, who has the highest and lowest import and export levels respectively?  
-*   (Additional) Do these fluctuations coincide with any event?  
+-   What are the import and export levels in each of the top ten trading countries?\
+-   How do these import and export levels fluctuate over time?\
+-   Which countries are net exporter or net importer at varying periods in time?\
+-   Within the top ten countries, who has the highest and lowest import and export levels respectively?\
+-   (Additional) Do these fluctuations coincide with any event?
 
-## 3.	Critiquing Methodology  
+## 3. Critiquing Methodology
 
 The methodology will remain the same as before, where we will assess on clarity and aesthetics.
 
-## 4.	Critique of Visualisation
-### 4.1.	Clarity:
-*	**Lack of proper scales on both x and y axis**  
-Though each bubble has a merchandise trading amount, the x and y axis lacks such a scale. The values within both the merchandise trading amount and the xy axis does not match either. We're unsure whether the scales refer to millions, billions or even kilograms.\
-\
-*	**Bottom insight does not match with the visualisation**  
-The bottom insight made reference to the difference in Singapore's standing between two separate trading partner from 2006 and 2009 respectively. The visualisation however shows the trading values only for the year 2020.\
-\
-*	**Axis names are misleading**  
-'Imports',though situated near to the x-axis, actually refers to the y-axis, and vice-versa for the 'Exports' icon. The reader would need to take into account the wordings of 'net importers' and 'net exporters' to realise that the axis names are somewhat incorrectly placed.
+## 4. Critique of Visualisation
 
-### 4.2.	Aesthetics:
-*	**Unnecessary colours for each country**  
-The ten countries each have their own colour scheme to differentiate one from the other. Differentiation has already been achieved from the names of the countries within their respective infographic bubbles.\
-\
-*	**The bubbles hide behind each other**  
-Similar sized bubbles seem to be grouped closely together. Naturally some would be hidden behind others. When the cursor hovers each bubble, the bubbles move forward to display the country name and merchandise trade value. The user wouldn't have noticed the availability of such interactivity, given the design is very much like a static image.\
-\
-*	**The infographic bubbles take up too much space**  
-The infographic bubbles indicating the name of the trading partner, as well as its total merchandise trade value take up far too much space within the small visualisation.
+### 4.1. Clarity:
 
-## 5.	Alternative Design Considerations
-### 5.1.	Suggested Improvements  
+-   **Lack of proper scales on both x and y axis**\
+    Though each bubble has a merchandise trading amount, the x and y axis lacks such a scale. The values within both the merchandise trading amount and the xy axis does not match either. We're unsure whether the scales refer to millions, billions or even kilograms.\
+    \
+-   **Bottom insight does not match with the visualisation**\
+    The bottom insight made reference to the difference in Singapore's standing between two separate trading partner from 2006 and 2009 respectively. The visualisation however shows the trading values only for the year 2020.\
+    \
+-   **Axis names are misleading**\
+    'Imports',though situated near to the x-axis, actually refers to the y-axis, and vice-versa for the 'Exports' icon. The reader would need to take into account the wordings of 'net importers' and 'net exporters' to realise that the axis names are somewhat incorrectly placed.
+
+### 4.2. Aesthetics:
+
+-   **Unnecessary colours for each country**\
+    The ten countries each have their own colour scheme to differentiate one from the other. Differentiation has already been achieved from the names of the countries within their respective infographic bubbles.\
+    \
+-   **The bubbles hide behind each other**\
+    Similar sized bubbles seem to be grouped closely together. Naturally some would be hidden behind others. When the cursor hovers each bubble, the bubbles move forward to display the country name and merchandise trade value. The user wouldn't have noticed the availability of such interactivity, given the design is very much like a static image.\
+    \
+-   **The infographic bubbles take up too much space**\
+    The infographic bubbles indicating the name of the trading partner, as well as its total merchandise trade value take up far too much space within the small visualisation.
+
+## 5. Alternative Design Considerations
+
+### 5.1. Suggested Improvements
+
 The use of the bubble chart as per the original visualisation will be continued, given the use of three continuous data (export, import and merchandise trade value). As such, the following suggestions are mere tweaks to the original visualisation:
 
-*   Proper scales on both x and y axis   
-*   Rightly sized infographic bubbles (if needed)   
-*   Showing trade movements on and before 2020 (perhaps from 2011 onwards)   
-*   Right level of transparency to show location of bubbles as well as other overlapping bubbles   
-*   Seeing the bubble positions in other years before 2020   
-*   Being able to see the export, import and total merchandise trade over time   
+-   Proper scales on both x and y axis\
+-   Rightly sized infographic bubbles (if needed)\
+-   Showing trade movements on and before 2020 (perhaps from 2011 onwards)\
+-   Right level of transparency to show location of bubbles as well as other overlapping bubbles\
+-   Seeing the bubble positions in other years before 2020\
+-   Being able to see the export, import and total merchandise trade over time
 
-### 5.2.	Finding Inspiration  
+### 5.2. Finding Inspiration
+
 While we intend to reuse the original bubble chart design, we scour the internet for inspiration!
 
 The chart that comes to mind when comparing multiple countries across two continuous variable was Dr Hans Rosling's famous charts on global trends. In his famous [Ted talk](https://www.ted.com/talks/hans_rosling_the_best_stats_you_ve_ever_seen), he covered two charts across a lengthy time frame: one chart covers the life expectancy in each country against its fertility rate, while the other chart covers the child survival rate in each country against its GDP per capita.\
@@ -110,23 +119,27 @@ Yvan Fornes's work on visualising ten different categories across ten years (200
 \
 ![Figure 4: Yvan Fornes's Visualisation on the New Indicators of Wealth](img/Fornes.png)
 
-### 5.3.	Sketch  
+### 5.3. Sketch
 
 The following sketch strives to find common ground between the original visualisation and its critiques, as well as incorporating the inspirations above.\
 \
 ![Figure 5: Sktech of Eventual Visualisation](img/sketch.png)
 
-## 6.	Proposed Tableau Visualisation  
+## 6. Proposed Tableau Visualisation
+
 Click on this [Tableau Public](https://public.tableau.com/app/profile/zaki.syed/viz/DataViz2_16239151424830/Main) link to view the visualisation.\
 \
 ![Figure 6: Proposed Tableau Visualisation Hosted on Tableau Public](img/Tableau.png)
 
-## 7.	Step-by-Step Guide
-### 6.1.	Data Preparation
+## 7. Step-by-Step Guide
+
+### 6.1. Data Preparation
+
 The original raw data reside within the following links: [Merchandise Trade Webpage](https://www.singstat.gov.sg/find-data/search-by-theme/trade-and-investment/merchandise-trade/latest-data) and [Merchandise Trade Excel Download](https://www.tablebuilder.singstat.gov.sg/publicfacing/downloadMultiple.action?id=106)\
 \
 The Excel file contains the following three sheets:\
 \
+
 ```{r}
 #| code-fold: true
 
@@ -139,8 +152,9 @@ knitr::kable(table1, booktabs = TRUE,
   caption = 'Contents of Merchandise Trade Excel File')
 ```
 
-Unlike the earlier [makeover](https://syedahmadzakidataviz.netlify.app/posts/2021-05-26-dataviz-makeover-1/), this makeover will utilise Tableau Prep Builder to prepare the data. \
+Unlike the earlier [makeover](https://syedahmadzakidataviz.netlify.app/posts/2021-05-26-dataviz-makeover-1/), this makeover will utilise Tableau Prep Builder to prepare the data.\
 \
+
 ```{r}
 #| code-fold: true
 
@@ -194,9 +208,11 @@ knitr::kable(table2, booktabs = TRUE,
 
 ```
 
-### 6.2.	Data Visualisation
+### 6.2. Data Visualisation
+
 Having prepared the data, we will now utilize Tableau Desktop for the eventual visualisation.\
 \
+
 ```{r}
 #| code-fold: true
 
@@ -276,7 +292,7 @@ knitr::kable(table3, booktabs = TRUE,
 
 ```
 
-### 7.2.	Derived Insights
+### 7.2. Derived Insights
 
 ```{r}
 #| code-fold: true
@@ -304,5 +320,3 @@ knitr::kable(table4, booktabs = TRUE,
   caption = 'Derived Insights')
 
 ```
-
-

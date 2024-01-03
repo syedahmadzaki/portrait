@@ -1,0 +1,1258 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.3.450">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+<meta name="author" content="Syed Ahmad Zaki Bin Syed Sakaf Al-Attas">
+<meta name="dcterms.date" content="2022-12-22">
+
+<title>Syed Ahmad Zaki - Uncovering Retail Customer Segmentation From Large Transaction Records: A Nuanced Comparison Of Clustering Algorithms Using Rough Set Reduced Dataset</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+  vertical-align: middle;
+}
+/* CSS for syntax highlighting */
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+/* CSS for citations */
+div.csl-bib-body { }
+div.csl-entry {
+  clear: both;
+}
+.hanging-indent div.csl-entry {
+  margin-left:2em;
+  text-indent:-2em;
+}
+div.csl-left-margin {
+  min-width:2em;
+  float:left;
+}
+div.csl-right-inline {
+  margin-left:2em;
+  padding-left:1em;
+}
+div.csl-indent {
+  margin-left: 2em;
+}</style>
+
+
+<script src="../../site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="../../site_libs/quarto-nav/headroom.min.js"></script>
+<script src="../../site_libs/clipboard/clipboard.min.js"></script>
+<script src="../../site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="../../site_libs/quarto-search/fuse.min.js"></script>
+<script src="../../site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="../../">
+<script src="../../site_libs/quarto-html/quarto.js"></script>
+<script src="../../site_libs/quarto-html/popper.min.js"></script>
+<script src="../../site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="../../site_libs/quarto-html/anchor.min.js"></script>
+<link href="../../site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="../../site_libs/quarto-html/quarto-syntax-highlighting.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="../../site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="../../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="../../site_libs/bootstrap/bootstrap.min.css" rel="stylesheet" id="quarto-bootstrap" data-mode="light">
+<script id="quarto-search-options" type="application/json">{
+  "location": "navbar",
+  "copy-button": false,
+  "collapse-after": 3,
+  "panel-placement": "end",
+  "type": "overlay",
+  "limit": 20,
+  "language": {
+    "search-no-results-text": "No results",
+    "search-matching-documents-text": "matching documents",
+    "search-copy-link-title": "Copy link to search",
+    "search-hide-matches-text": "Hide additional matches",
+    "search-more-match-text": "more match in this document",
+    "search-more-matches-text": "more matches in this document",
+    "search-clear-button-title": "Clear",
+    "search-detached-cancel-button-title": "Cancel",
+    "search-submit-button-title": "Submit",
+    "search-label": "Search"
+  }
+}</script>
+
+<script src="../../site_libs/kePrint-0.0.1/kePrint.js"></script>
+<link href="../../site_libs/lightable-0.0.1/lightable.css" rel="stylesheet">
+<link rel="stylesheet" media="screen" href="https://fontlibrary.org//face/lato" type="text/css">
+
+  <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+  <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script>
+
+<link rel="stylesheet" href="../../styles.css">
+</head>
+
+<body class="nav-fixed">
+
+<div id="quarto-search-results"></div>
+  <header id="quarto-header" class="headroom fixed-top">
+    <nav class="navbar navbar-expand-lg navbar-dark ">
+      <div class="navbar-container container-fluid">
+      <div class="navbar-brand-container">
+    <a class="navbar-brand" href="../../index.html">
+    <span class="navbar-title">Syed Ahmad Zaki</span>
+    </a>
+  </div>
+            <div id="quarto-search" class="" title="Search"></div>
+          <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse" aria-controls="navbarCollapse" aria-expanded="false" aria-label="Toggle navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+  <span class="navbar-toggler-icon"></span>
+</button>
+          <div class="collapse navbar-collapse" id="navbarCollapse">
+            <ul class="navbar-nav navbar-nav-scroll me-auto">
+  <li class="nav-item">
+    <a class="nav-link" href="../../index.html" rel="" target="">
+ <span class="menu-text">Home</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="../../about.html" rel="" target="">
+ <span class="menu-text">About</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="../../projects.html" rel="" target="">
+ <span class="menu-text">Projects</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="../../scribbles.html" rel="" target="">
+ <span class="menu-text">Scribbles</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="../../books.html" rel="" target="">
+ <span class="menu-text">Books</span></a>
+  </li>  
+</ul>
+            <ul class="navbar-nav navbar-nav-scroll ms-auto">
+  <li class="nav-item compact">
+    <a class="nav-link" href="https://www.linkedin.com/in/syed-ahmad-zaki-bin-syed-sakaf-al-attas/" rel="" target=""><i class="bi bi-linkedin" role="img">
+</i> 
+ <span class="menu-text"></span></a>
+  </li>  
+  <li class="nav-item compact">
+    <a class="nav-link" href="mailto:syedahmadzaki@yahoo.com.sg" rel="" target=""><i class="bi bi-envelope" role="img">
+</i> 
+ <span class="menu-text"></span></a>
+  </li>  
+  <li class="nav-item compact">
+    <a class="nav-link" href="https://github.com/syedahmadzaki" rel="" target=""><i class="bi bi-github" role="img">
+</i> 
+ <span class="menu-text"></span></a>
+  </li>  
+</ul>
+            <div class="quarto-navbar-tools">
+</div>
+          </div> <!-- /navcollapse -->
+      </div> <!-- /container-fluid -->
+    </nav>
+</header>
+<!-- content -->
+<div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article page-navbar">
+<!-- sidebar -->
+<!-- margin-sidebar -->
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+        <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">On this page</h2>
+   
+  <ul>
+  <li><a href="#important-links" id="toc-important-links" class="nav-link active" data-scroll-target="#important-links">Important links</a></li>
+  <li><a href="#abstract" id="toc-abstract" class="nav-link" data-scroll-target="#abstract">Abstract</a></li>
+  <li><a href="#introduction" id="toc-introduction" class="nav-link" data-scroll-target="#introduction">1. Introduction</a></li>
+  <li><a href="#problem-statement-and-objectives" id="toc-problem-statement-and-objectives" class="nav-link" data-scroll-target="#problem-statement-and-objectives">2. Problem Statement and Objectives</a></li>
+  <li><a href="#literature-review" id="toc-literature-review" class="nav-link" data-scroll-target="#literature-review">3. Literature Review</a>
+  <ul class="collapse">
+  <li><a href="#gaussian-mixture-model" id="toc-gaussian-mixture-model" class="nav-link" data-scroll-target="#gaussian-mixture-model">3.1 Gaussian Mixture Model</a></li>
+  <li><a href="#fuzzy-clustering" id="toc-fuzzy-clustering" class="nav-link" data-scroll-target="#fuzzy-clustering">3.2 Fuzzy Clustering</a></li>
+  <li><a href="#rough-set-theory" id="toc-rough-set-theory" class="nav-link" data-scroll-target="#rough-set-theory">3.3 Rough Set Theory</a></li>
+  </ul></li>
+  <li><a href="#research-design-and-methods" id="toc-research-design-and-methods" class="nav-link" data-scroll-target="#research-design-and-methods">4. Research Design and Methods</a>
+  <ul class="collapse">
+  <li><a href="#pre-clustering-rough-set-variable-reduction" id="toc-pre-clustering-rough-set-variable-reduction" class="nav-link" data-scroll-target="#pre-clustering-rough-set-variable-reduction">4.1 <em>Pre</em>-Clustering (Rough Set Variable Reduction)</a></li>
+  <li><a href="#employing-relevant-clustering-methods-k-means-clustering" id="toc-employing-relevant-clustering-methods-k-means-clustering" class="nav-link" data-scroll-target="#employing-relevant-clustering-methods-k-means-clustering">4.2 Employing Relevant Clustering Methods – <em>k</em>-Means Clustering</a></li>
+  </ul></li>
+  </ul>
+</nav>
+    </div>
+<!-- main -->
+<main class="content" id="quarto-document-content">
+
+<header id="title-block-header" class="quarto-title-block default">
+<div class="quarto-title">
+<h1 class="title">Uncovering Retail Customer Segmentation From Large Transaction Records: A Nuanced Comparison Of Clustering Algorithms Using Rough Set Reduced Dataset</h1>
+  <div class="quarto-categories">
+    <div class="quarto-category">Clustering</div>
+    <div class="quarto-category">k-Means Clustering</div>
+    <div class="quarto-category">Fuzzy k-Means Clustering</div>
+    <div class="quarto-category">Gaussian Mixture Model</div>
+    <div class="quarto-category">Rough Set</div>
+    <div class="quarto-category">SAS Enterprise Miner</div>
+    <div class="quarto-category">R</div>
+  </div>
+  </div>
+
+
+<div class="quarto-title-meta-author">
+  <div class="quarto-title-meta-heading">Author</div>
+  <div class="quarto-title-meta-heading">Affiliation</div>
+  
+    <div class="quarto-title-meta-contents">
+    <p class="author"><a href="https://syedahmadzaki.netlify.app/">Syed Ahmad Zaki Bin Syed Sakaf Al-Attas</a> </p>
+  </div>
+    <div class="quarto-title-meta-contents">
+        <p class="affiliation">
+            School of Computing and Information Systems, Singapore Management University (SMU)
+          </p>
+      </div>
+    </div>
+
+<div class="quarto-title-meta">
+
+      
+    <div>
+    <div class="quarto-title-meta-heading">Published</div>
+    <div class="quarto-title-meta-contents">
+      <p class="date">December 22, 2022</p>
+    </div>
+  </div>
+  
+    
+  </div>
+  
+
+</header>
+
+<section id="important-links" class="level2">
+<h2 class="anchored" data-anchor-id="important-links">Important links</h2>
+<ul>
+<li><a href="3. IS602-Capstone Project Final Report_Zaki_221222.pdf">Capstone Project Final Report</a></li>
+<li><a href="4. IS602-Capstone Project Poster_Zaki_221222.pdf">Capstone Project Poster</a></li>
+<li><a href="5. SAS Report-Out v1.1.pdf">Capstone Project - SAS Report-Out</a></li>
+</ul>
+</section>
+<section id="abstract" class="level2">
+<h2 class="anchored" data-anchor-id="abstract">Abstract</h2>
+<p>This project explores the use of Rough Set’s reduct algorithm on synthesizing a dataset down to its most significant variables, and its impact on clustering outcomes. This capstone project also explores and compares the use of non-traditional clustering algorithms such as fuzzy <em>k</em>-means and Gaussian mixture model, against the more traditional <em>k</em>-means clustering. These algorithms would be tested on a retail transaction dataset as an actual real-world application. These algorithms would also be executed primarily by R Code within a SAS Enterprise Miner 14.1 environment. Findings indicate positive contributions and clearer clustering outcomes, from the use of non-traditional algorithms such as fuzzy <em>k</em>-means, Gaussian mixture, and Rough Set’s reduct. It is hoped that these three algorithms would be a welcome addition to a data analyst’s ever burgeoning toolbox.</p>
+</section>
+<section id="introduction" class="level2">
+<h2 class="anchored" data-anchor-id="introduction">1. Introduction</h2>
+<p>Cluster analysis is an important data mining technique, which segregates data into separate groups, which themselves possess uniquely distinct attributes. Hierarchical and <em>k</em>-means clustering are two such established clustering methods, with differing approaches towards a similar clustering outcome. Since the introduction of both these established methods, data has grown increasingly complex and imprecise.<br>
+<br>
+Though today’s technology allows ease of data recording more so than ever before, data remains disparately stored i.e., held in often unconnected sources with differing structures. Putting them together into a single homogenous dataset becomes a gargantuan task, and this is even before any proper analytical work is performed. The combined dataset invariably contains inherent inconsistencies (such as imprecisions or incompleteness), that traditional and established clustering methods are not designed for.<br>
+<br>
+Two different approaches were adopted to resolve these shortcomings. The first approach was to address the limitations of existing clustering methods. Gaussian Mixture Model (GMM) was introduced to specifically address <em>k</em>-means and its limitations, namely its fundamental assumptions of sphericity, equal variance, and hard clustering. Given that its methodology remains akin to <em>k</em>-means, GMM’s application is similarly wide-ranging across diverse fields. That said, analysing such imperfect data was not limited to just tweaking existing clustering methods.<br>
+<br>
+The other approach was to develop entirely new fields, capable of generating meaningful insights from inconsistent data. One novel research field was fuzzy set theory <span class="citation" data-cites="ZADEH1965338">(<a href="#ref-ZADEH1965338" role="doc-biblioref">Zadeh 1965</a>)</span>. All objects are said to belong to all different sets, albeit to varying degrees of membership, similar to ‘soft’ clustering. Conversely, this theory also recognizes objects that have binary set membership ie. that they either belong to a set or not. This is similar to ‘hard’ clustering like <em>k</em>-means. With the success of fuzzy set theory in analysing imperfect data, another novel research field was introduced over a decade later that is equally adaptable to recognizing both soft and hard clustering.<br>
+<br>
+Rough Set theory <span class="citation" data-cites="PawlakUnknownTitle1982">(<a href="#ref-PawlakUnknownTitle1982" role="doc-biblioref">Pawlak 1982</a>)</span> introduces the concept of approximating hard or crisp sets. These approximations are divided into two regions: the lower approximation (positive region) and the upper approximation (negative region). The former (lower approximation) is similar to ‘hard’ clustering, where the objects are unambiguously and positively assigned to a set. Conversely, the latter (upper approximation) recognizes objects that are possibly assigned to a set, similar to ‘soft’ clustering. As such, both fuzzy and rough sets achieve similar outcomes of identifying both ‘hard’ and ‘soft’ sets or clusters, through their own distinctive methodologies.<br>
+<br>
+Whether it be Rough Set or fuzzy set theory, both novel research fields were created out of a need to analyse inconsistent data in a more robust way. This complementary nature has led to numerous works incorporating both theories together. Computationally efficient on managing uncertainty in large complex data, both theories have had major research and applications in machine learning, data mining and other domains <span class="citation" data-cites="PiętaSzmuc+2021+659+683">(<a href="#ref-PiętaSzmuc+2021+659+683" role="doc-biblioref">Pięta and Szmuc 2021</a>)</span>. Despite their robust applications in a highly technical research field such as artificial intelligence (AI), there have been surprisingly little applications in a much less complex, real-world field such as customer segmentation.<br>
+<br>
+Thus, this study aims to understand and compare clustering approaches, both established and novel, specifically on customer segmentation, to the eventual benefit of the everyday data analyst.<br>
+<br>
+The flow of this capstone report starts off with its problem statement and objectives. It is then followed by a literature review of these topics. An explanation of the capstone’s six step approach is covered within the research design and methods and is then followed with an extensive analysis and results exploration, as well as a subsequent discussion section. This capstone then rounds off its study with its conclusions and contributions as well as the author’s milestones and reflections.</p>
+</section>
+<section id="problem-statement-and-objectives" class="level2">
+<h2 class="anchored" data-anchor-id="problem-statement-and-objectives">2. Problem Statement and Objectives</h2>
+<p>Using a real-world dataset, this study explored the impact of Rough Set’s reduct variable selection. Two different forms of dataset are fed into each clustering method: traditional variable manipulation (TVM) and the Rough Set-based variable reduction. TVM was completed during the progress report phase, while the Rough Set-based variable reduction has been expanded in this report.<br>
+<br>
+This study also examined and compared the clustering outcome of <em>k</em>-means (both traditional and fuzzy) and GMM. The comparison would entail the following:</p>
+<ul>
+<li>Detailed the different outcomes</li>
+<li>Uncovered merits and shortcomings of each clustering methods</li>
+<li>Suggested situations where each approach would excel</li>
+</ul>
+<p>Lastly, given SAS scholarship’s requirements, this study used JMP Pro and SAS Enterprise Miner (EM) for data manipulation and clustering respectively. Given that these four algorithms (traditional <em>k</em>-means, fuzzy <em>k</em>-means, GMM and Rough Set) are not available within EM, this study explored the use of R and its statistical packages within EM’s environment.<br>
+<br>
+The table below shows the clustering methods used on the differing dataset.<br>
+<br>
+</p>
+<div class="cell" data-fig-cap-location="bottom">
+<details>
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="st">`</span><span class="at">DATA MANIPULATION &amp; VARIABLE SELECTION METHODS</span><span class="st">`</span> <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">"CLUSTERING METHODS"</span>,</span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a>                                                      <span class="st">"Traditional k-means (TKM)"</span>,</span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a>                                                      <span class="st">"Fuzzy k-means (FKM)"</span>,</span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a>                                                      <span class="st">"Gaussian Mixture Models (GMM)"</span>)</span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a><span class="st">`</span><span class="at">Traditional Variable Manipulation (TVM)</span><span class="st">`</span> <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">""</span>,</span>
+<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a>                                               <span class="st">"TKM-T"</span>,</span>
+<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a>                                               <span class="st">"FKM-T"</span>,</span>
+<span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a>                                               <span class="st">"GMM-T"</span>)</span>
+<span id="cb1-9"><a href="#cb1-9" aria-hidden="true" tabindex="-1"></a><span class="st">`</span><span class="at">Rough Set Based Variable Reduction (RSVR)</span><span class="st">`</span> <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">""</span>,</span>
+<span id="cb1-10"><a href="#cb1-10" aria-hidden="true" tabindex="-1"></a>                                               <span class="st">"TKM-R"</span>,</span>
+<span id="cb1-11"><a href="#cb1-11" aria-hidden="true" tabindex="-1"></a>                                               <span class="st">"FKM-R"</span>,</span>
+<span id="cb1-12"><a href="#cb1-12" aria-hidden="true" tabindex="-1"></a>                                               <span class="st">"GMM-R"</span>)</span>
+<span id="cb1-13"><a href="#cb1-13" aria-hidden="true" tabindex="-1"></a>table1 <span class="ot">&lt;-</span> <span class="fu">tibble</span>(<span class="st">`</span><span class="at">DATA MANIPULATION &amp; VARIABLE SELECTION METHODS</span><span class="st">`</span>,</span>
+<span id="cb1-14"><a href="#cb1-14" aria-hidden="true" tabindex="-1"></a>                     <span class="st">`</span><span class="at">Traditional Variable Manipulation (TVM)</span><span class="st">`</span>,</span>
+<span id="cb1-15"><a href="#cb1-15" aria-hidden="true" tabindex="-1"></a>                     <span class="st">`</span><span class="at">Rough Set Based Variable Reduction (RSVR)</span><span class="st">`</span>)</span>
+<span id="cb1-16"><a href="#cb1-16" aria-hidden="true" tabindex="-1"></a>knitr<span class="sc">::</span><span class="fu">kable</span>(table1, </span>
+<span id="cb1-17"><a href="#cb1-17" aria-hidden="true" tabindex="-1"></a>             <span class="at">booktabs =</span> <span class="cn">TRUE</span>,</span>
+<span id="cb1-18"><a href="#cb1-18" aria-hidden="true" tabindex="-1"></a>             <span class="at">caption =</span> <span class="st">'Clustering Methods'</span>,</span>
+<span id="cb1-19"><a href="#cb1-19" aria-hidden="true" tabindex="-1"></a>             <span class="at">align =</span> <span class="st">"lcc"</span>) <span class="sc">%&gt;%</span></span>
+<span id="cb1-20"><a href="#cb1-20" aria-hidden="true" tabindex="-1"></a>  <span class="fu">row_spec</span>(<span class="dv">1</span>,</span>
+<span id="cb1-21"><a href="#cb1-21" aria-hidden="true" tabindex="-1"></a>           <span class="at">bold =</span> T,</span>
+<span id="cb1-22"><a href="#cb1-22" aria-hidden="true" tabindex="-1"></a>           <span class="at">color =</span> <span class="st">"white"</span>,</span>
+<span id="cb1-23"><a href="#cb1-23" aria-hidden="true" tabindex="-1"></a>           <span class="at">background =</span> <span class="st">"#404040"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output-display">
+
+<table>
+<caption>
+Clustering Methods
+</caption>
+<thead>
+<tr>
+<th style="text-align:left;">
+DATA MANIPULATION &amp; VARIABLE SELECTION METHODS
+</th>
+<th style="text-align:center;">
+Traditional Variable Manipulation (TVM)
+</th>
+<th style="text-align:center;">
+Rough Set Based Variable Reduction (RSVR)
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left;font-weight: bold;color: white !important;background-color: #404040 !important;">
+CLUSTERING METHODS
+</td>
+<td style="text-align:center;font-weight: bold;color: white !important;background-color: #404040 !important;">
+</td>
+<td style="text-align:center;font-weight: bold;color: white !important;background-color: #404040 !important;">
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Traditional k-means (TKM)
+</td>
+<td style="text-align:center;">
+TKM-T
+</td>
+<td style="text-align:center;">
+TKM-R
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Fuzzy k-means (FKM)
+</td>
+<td style="text-align:center;">
+FKM-T
+</td>
+<td style="text-align:center;">
+FKM-R
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Gaussian Mixture Models (GMM)
+</td>
+<td style="text-align:center;">
+GMM-T
+</td>
+<td style="text-align:center;">
+GMM-R
+</td>
+</tr>
+</tbody>
+
+</table>
+<p><em>(A Breakdown of the Clustering Methods and Variable Selection Techniques Involved)</em></p>
+</div>
+</div>
+<p><br>
+In summary, this study aims to understand whether either GMM, Rough Set-based variable reduction, fuzzy <em>k</em>-means, or all of them would be a welcomed complement to current established clustering methods such as <em>k</em>-means clustering.</p>
+</section>
+<section id="literature-review" class="level2">
+<h2 class="anchored" data-anchor-id="literature-review">3. Literature Review</h2>
+<p><span class="citation" data-cites="CormackUnknownTitle1971">Cormack (<a href="#ref-CormackUnknownTitle1971" role="doc-biblioref">1971</a>)</span> explains that a traditional clustering approach assigns individual objects into initially unclear classes, where all entities within a class share similarities with one another. The converse is also true. Objects outside of their assigned classes are highly dissimilar to those within their respective classes. A well-regarded clustering methodology is the <em>k</em>-means clustering. Being an established non-hierarchical clustering approach, objects are partitioned such that the squared Euclidean distance between each object and the centroid of the class it resides in, is as small as the centroids of the other classes <span class="citation" data-cites="SteinleyUnknownTitle2006">(<a href="#ref-SteinleyUnknownTitle2006" role="doc-biblioref">Steinley 2006</a>)</span>. <span class="citation" data-cites="garla2012comparison">Garla et al. (<a href="#ref-garla2012comparison" role="doc-biblioref">2012</a>)</span> and <span class="citation" data-cites="SteinleyUnknownTitle2006">Steinley (<a href="#ref-SteinleyUnknownTitle2006" role="doc-biblioref">2006</a>)</span> explains the iterative <em>k</em>-means algorithm in detail:</p>
+<ol type="1">
+<li>Specify the number of clusters or classes known as <em>k</em>. This number is chosen a priori ie. based on theoretical deduction.</li>
+<li>Randomly select <em>k</em> cluster centres, or initial seeds in the data space, as defined by P-dimensional vectors <span class="math inline">\((S_{1}^{(k)},…, S_{P}^{(k)})\)</span>, for 1 ≤ <em>k</em> ≤ <em>K</em></li>
+<li>Allocate objects to clusters, where the squared Euclidean distance, <span class="math inline">\(d^2(i,k)\)</span>, between <em>i</em>th object and the <em>k</em>th seed vector, is at its minimum</li>
+</ol>
+<div class="grid">
+<div class="g-col-1">
+
+</div>
+<div class="g-col-10">
+<p><span class="math display">\[
+d^2(i,k) = \displaystyle\sum_{j=1}^P(x_{ij}-S_j^{(k)})^2
+\]</span></p>
+</div>
+<div class="g-col-1">
+<p><br>
+( 1 )</p>
+</div>
+</div>
+<ol start="4" type="1">
+<li>Re-compute new cluster centroids by:</li>
+</ol>
+<ol type="a">
+<li>Calculate the centroid value for the <em>j</em>th variable in cluster <span class="math inline">\(C_k\)</span></li>
+</ol>
+<div class="grid">
+<div class="g-col-1">
+
+</div>
+<div class="g-col-10">
+<p><span class="math display">\[
+\bar{x}_j^{(k)} = \frac{1}{n_k}\displaystyle\sum_{i\epsilon{C_k}}x_{ij}
+\]</span></p>
+</div>
+<div class="g-col-1">
+<p><br>
+( 2 )</p>
+</div>
+</div>
+<ol start="2" type="a">
+<li>Calculate complete centroid vector for cluster <span class="math inline">\(C_k\)</span> by averaging all centroid values within</li>
+</ol>
+<div class="grid">
+<div class="g-col-1">
+
+</div>
+<div class="g-col-10">
+<p><span class="math display">\[
+\bar{x}^{(k)} = (\bar{x}_1^{(k)},\bar{x}_2^{(k)},...,\bar{x}_P^{(k)})'.
+\]</span></p>
+</div>
+<div class="g-col-1">
+<p><br>
+( 3 )</p>
+</div>
+</div>
+<ol start="5" type="1">
+<li>Repeat steps 3. and 4. Above until convergence criterion is achieved i.e., the centroids do not change</li>
+</ol>
+<section id="gaussian-mixture-model" class="level3">
+<h3 class="anchored" data-anchor-id="gaussian-mixture-model">3.1 Gaussian Mixture Model</h3>
+<p><span class="citation" data-cites="RaykovUnknownTitle2016">Raykov et al. (<a href="#ref-RaykovUnknownTitle2016" role="doc-biblioref">2016</a>)</span> explains that <em>k</em>-means suffers from sphericity, outliers, and geometric closeness. Sphericity assumes that all clusters, within the dataset, are spherical in nature with the same radius. Conversely, given that <em>k</em>-means heavily relies on linear distance, any outliers that are unusually far away from the rest of the points within the cluster would impair the results of the <em>k</em>-means. Lastly, <em>k</em>-means implicitly assumes each cluster within the dataset has the same volume and fails to take into consideration clusters with differing geometric closeness and densities. These three limitations prevent <em>k</em>-means from clustering improper data in a meaningful way. To overcome this, this capstone is influenced by the work of <span class="citation" data-cites="garla2012comparison">Garla et al. (<a href="#ref-garla2012comparison" role="doc-biblioref">2012</a>)</span>. There, a comparison was made between <em>k</em>-means, normal mixtures, and probabilistic-D clustering for a B2B segmentation study on customers’ perceptions. Given that normal mixtures model, otherwise known as Gaussian Mixture Model (GMM), is not a common clustering method, this capstone aims to explore this, on top of the traditional and fuzzy <em>k</em>-means.<br>
+<br>
+Gaussian Mixture Model (GMM) was introduced to overcome the <em>k</em>-means assumptions of hard clustering, sphericity, outliers, and geometric closeness. It is also suited for an incomplete dataset <span class="citation" data-cites="MelchiorUnknownTitle2018">(<a href="#ref-MelchiorUnknownTitle2018" role="doc-biblioref">Melchior and Goulding 2018</a>)</span>. <span class="citation" data-cites="PatelUnknownTitle2020">Patel and Kushwaha (<a href="#ref-PatelUnknownTitle2020" role="doc-biblioref">2020</a>)</span> denotes each Gaussian or Normal distribution as a continuous probability distribution as follows:<br>
+</p>
+<div class="grid">
+<div class="g-col-1">
+
+</div>
+<div class="g-col-10">
+<p><span class="math display">\[
+N(X|\mu,\sum)=\frac{1}{(2\pi)^\frac{D}{2}\sqrt{|\sum|}}exp\left\{-\frac{(X-\mu)^T\sum^{-1}(X-\mu)}{2}\right\}
+\]</span></p>
+</div>
+<div class="g-col-1">
+<p><br>
+( 4 )</p>
+</div>
+</div>
+<div class="grid">
+<div class="g-col-1">
+<p>where</p>
+</div>
+<div class="g-col-10">
+<ol type="1">
+<li><span class="math inline">\(\mu\)</span> is a D-dimensional mean vector</li>
+<li><span class="math inline">\(\sum\)</span> is a D x D covariance matrix, describing the shape of the Gaussian</li>
+<li><span class="math inline">\(|\sum|\)</span> denotes the determinant of <span class="math inline">\(\sum\)</span></li>
+</ol>
+</div>
+<div class="g-col-1">
+
+</div>
+</div>
+<p>Each dataset is deemed to contain several different Gaussian (normal) distributions on the same linear plane, with each distribution being regarded as one cluster:</p>
+<div class="grid">
+<div class="g-col-1">
+
+</div>
+<div class="g-col-10">
+<p><span class="math display">\[
+p(X)=\displaystyle\sum^K_{k=1}\pi_kN(X|\mu_k,{\sum}_k)
+\]</span></p>
+</div>
+<div class="g-col-1">
+<p><br>
+( 5 )</p>
+</div>
+</div>
+<div class="grid">
+<div class="g-col-1">
+<p>where</p>
+</div>
+<div class="g-col-10">
+<ol type="1">
+<li><em>K</em> is the number of components or clusters in the mixture model</li>
+<li><span class="math inline">\(\pi_k\)</span>π_k denotes the mixing coefficient, giving an estimate of the density of each Gaussian component</li>
+<li><span class="math inline">\(N(X|\mu_k,{\sum}k)\)</span> denotes the Gaussian density as per (5), with mean <span class="math inline">\(\mu_k\)</span>, covariance <span class="math inline">\({\sum}_k\)</span> and the mixing coefficient <span class="math inline">\(\pi_k\)</span></li>
+</ol>
+</div>
+<div class="g-col-1">
+
+</div>
+</div>
+<p>Unlike traditional <em>k</em>-means which assigns each object to only one cluster, GMM assigns each object a probability of how closely it fits to each distribution. It thus has a ‘fit’ score relating to each cluster and would naturally be included in the cluster with the highest score. While it’s akin to a <em>k</em>-means clustering method in that it uses the mean values, GMM goes one step further by incorporating variance into the methodology. This allows it to identify and separate clusters that are close to each other, overcoming some of its limitations.</p>
+</section>
+<section id="fuzzy-clustering" class="level3">
+<h3 class="anchored" data-anchor-id="fuzzy-clustering">3.2 Fuzzy Clustering</h3>
+<p>In the traditional deterministic form of <em>k</em>-means clustering, it is impossible to assess the impact of the imprecise data <span class="citation" data-cites="ChaudhuriUnknownTitle1998">(<a href="#ref-ChaudhuriUnknownTitle1998" role="doc-biblioref">Chaudhuri and Bhowmik 1998</a>)</span>. Given that <em>k</em>-means is a hard clustering methodology, objects are either assigned to a particular set or not. This becomes increasingly difficult with imprecise data, where there is every possibility that an object may not just belong to a single set. For <em>k</em>-means to adopt a soft clustering approach, it would need to be paired with an additional concept. As such, there have been numerous studies to introduce fuzzy logic into the traditional <em>k</em>-means clustering.<br>
+<br>
+Building on classical set theory where objects in a set either belong to a set or otherwise, <span class="citation" data-cites="ZADEH1965338">Zadeh (<a href="#ref-ZADEH1965338" role="doc-biblioref">1965</a>)</span> theorised fuzzy sets, where these same objects have degrees of membership to a set. Granted imprecision within a data space, <span class="citation" data-cites="BezdekUnknownTitle1981">Bezdek (<a href="#ref-BezdekUnknownTitle1981" role="doc-biblioref">1981</a>)</span> explains the use of fuzzy <em>k</em>-means clustering to ‘soft’ classify its observations into <em>k</em> clusters through a minimisation algorithm. This allows the traditional <em>k</em>-means clustering method to adopt a more flexible approach, especially where imprecise data would generally not fit into a ‘hard’ cluster. <span class="citation" data-cites="SteinleyUnknownTitle2006">Steinley (<a href="#ref-SteinleyUnknownTitle2006" role="doc-biblioref">2006</a>)</span> expresses the fuzzy <em>k</em>-means as follows:<br>
+</p>
+<div class="grid">
+<div class="g-col-1">
+
+</div>
+<div class="g-col-10">
+<p><span class="math display">\[
+Fuzzy\quad k-means = \displaystyle\sum^N_{i=1}\displaystyle\sum^K_{k=1}w^r_{ik}d^2(i,k)
+\]</span></p>
+</div>
+<div class="g-col-1">
+<p><br>
+( 6 )</p>
+</div>
+</div>
+<div class="grid">
+<div class="g-col-1">
+<p>where</p>
+</div>
+<div class="g-col-10">
+<ol type="1">
+<li><span class="math inline">\(w_{ik}\)</span> indicates membership values or the degree to which object <em>i</em> belongs to cluster <span class="math inline">\(k\)</span>.</li>
+<li>all <span class="math inline">\(w_{ik}\)</span> sums to unity or 1</li>
+<li><em>r</em> is a hyper-parameter that controls the fuzziness of the solution and is always greater than or equal to 1. The higher the <em>r</em> value is, the ‘fuzzier’ the solution</li>
+<li><span class="math inline">\(d^2(i,k)\)</span> is the squared Euclidean distance between the <em>i</em>th point and the <em>k</em>th seed vector</li>
+</ol>
+</div>
+<div class="g-col-1">
+
+</div>
+</div>
+<p>On reflection, while <em>k</em>-means clustering also tries to minimise (4), its <span class="math inline">\(w_{ik}\)</span> or membership values are only binary in nature. Separately, while <em>r</em> takes values between 1 and <span class="math inline">\(\infty\)</span> ie. <span class="math inline">\(r\in \{1, ∞\}\)</span>, a larger <em>r</em> results in fuzzier clusters. In the case of m → 1, the membership, <span class="math inline">\(w_{ik}\)</span>, converses to either 0 or 1, and Fuzzy <em>k</em>-means would match the behaviour of traditional <em>k</em>-means.</p>
+</section>
+<section id="rough-set-theory" class="level3">
+<h3 class="anchored" data-anchor-id="rough-set-theory">3.3 Rough Set Theory</h3>
+<p>This study thus far has considered traditional <em>k</em>-means, fuzzy <em>k</em>-means and GMM as part of the clustering concepts to explore. To efficiently discover clusters, feature selection is an important <em>pre</em>-clustering process. The task of finding important and significant variables within the unsupervised dataset allows for highly efficient processing, without eroding or compromising the overall quality of the dataset. A common feature selection would be to identify non-collinear variables for subsequent <em>k</em>-means clustering. As an alternative feature selection, this capstone explored Rough Set theory’s reduct algorithm.<br>
+<br>
+The Rough Set theory begins by separating these same objects into indiscernible classes, which can then be constructed as clusters themselves <span class="citation" data-cites="NayakUnknownTitle2012">(<a href="#ref-NayakUnknownTitle2012" role="doc-biblioref">Nayak et al. 2012</a>)</span>. <span class="citation" data-cites="ChellyDagdiaUnknownTitle2020">Dagdia et al. (<a href="#ref-ChellyDagdiaUnknownTitle2020" role="doc-biblioref">2020</a>)</span> expounds the theory by starting with a tuple <span class="math inline">\(S=(U,A)\)</span>, where <span class="math inline">\(U=\{u_1,u_2,…,u_N\}\)</span> is a non-empty finite set of N objects aptly named as <em>universe</em> and A is a non-empty set of <span class="math inline">\((n+k)\)</span> <em>attributes.</em> Feature set <span class="math inline">\(A=C \cup D\)</span> can broken down to two subsets: <em>conditional</em> feature set, <span class="math inline">\(C=\{a_1,a_2,…,a_n\}\)</span>, is made up of <em>n conditional</em> attributes or predictors, while decision attribute, <span class="math inline">\(D=\{d_1,d_2,…,d_k\}\)</span>, is made up of <em>k decision</em> attributes or output variables. Each feature <span class="math inline">\(a \in A\)</span> is defined with a set of possible values <span class="math inline">\(V_a\)</span>, or known as the <em>domain</em> of <em>a</em>. For each non-empty subset of attributes <span class="math inline">\(P \subset C\)</span>, a binary relation named P-indiscernibility relation, is a key tenet of the Rough Set theory and is illustrated as follows:<br>
+</p>
+<div class="grid">
+<div class="g-col-1">
+
+</div>
+<div class="g-col-10">
+<p><span class="math display">\[
+IND(P) = \{(u_1,u_2) \in U x U: \forall_a \in P, a(u_1) = a(U_2) \}
+\]</span></p>
+</div>
+<div class="g-col-1">
+<p>( 7 )</p>
+</div>
+</div>
+<div class="grid">
+<div class="g-col-1">
+<p>where</p>
+</div>
+<div class="g-col-10">
+<p><span class="math inline">\(a(u_i)\)</span> refers to the value of attribute <em>a</em> for the instance <span class="math inline">\(u_i\)</span></p>
+</div>
+<div class="g-col-1">
+
+</div>
+</div>
+<p><br>
+If <span class="math inline">\((u_1,u_2)∈IND(P)\)</span>, then <span class="math inline">\(u_1\)</span> is indiscernible from <span class="math inline">\(u_2\)</span> by the attributes <em>P</em>. The induced set of equivalence classes <span class="math inline">\([u]p\)</span> ,where <span class="math inline">\(u \in U\)</span>, separates <em>U</em> into different parts or blocks denoted as <em>U/P</em>. The Rough Set theory approximates a target set of objects <span class="math inline">\(X \subseteq U\)</span> using the equivalence classes induced using <em>P</em> as follows:<br>
+</p>
+<div class="grid">
+<div class="g-col-1">
+
+</div>
+<div class="g-col-10">
+<p><span class="math display">\[
+\underline{P}(X)=\{u:[u]_p \subseteq X\}. (lower \quad approximation)
+\]</span></p>
+</div>
+<div class="g-col-1">
+<p><br>
+( 8 )</p>
+</div>
+</div>
+<div class="grid">
+<div class="g-col-1">
+<p>where</p>
+</div>
+<div class="g-col-10">
+<p><span class="math inline">\(\underline{P}(X)\)</span> denotes the P-lower approximations of <em>X</em>, or positively and certainly assigned to set <em>X</em></p>
+</div>
+<div class="g-col-1">
+
+</div>
+</div>
+<div class="grid">
+<div class="g-col-1">
+
+</div>
+<div class="g-col-10">
+<p><span class="math display">\[
+\overline{P}(X)=\{u:[u]_p \cap X\neq 0 \}. (upper \quad approximation)
+\]</span></p>
+</div>
+<div class="g-col-1">
+<p><br>
+( 9 )</p>
+</div>
+</div>
+<div class="grid">
+<div class="g-col-1">
+<p>where</p>
+</div>
+<div class="g-col-10">
+<p><span class="math inline">\(\overline{P}(X)\)</span> denotes the P-upper approximations of <em>X</em>, or positively and possibly assigned to set <em>X</em></p>
+</div>
+<div class="g-col-1">
+
+</div>
+</div>
+<p><br>
+The difference between the two approximations is called the <em>boundary region</em> and is made up of the set of instances that are not positively, but possibly classified in a certain way. <em>X</em> is said to be a <em>crisp set</em> if the boundary region is an empty set where <span class="math inline">\(\underline{P} (X)= \overline{P}(X)\)</span>. Failure to meet this condition would yield <em>X</em> as a <em>rough set</em>.<br>
+<br>
+A dependency measure is defined to compare subsets of attributes. For example, the dependency measure of an attribute subset Q on another attribute subset P is given as:<br>
+</p>
+<div class="grid">
+<div class="g-col-1">
+
+</div>
+<div class="g-col-10">
+<p><span class="math display">\[
+_{\gamma P}(Q)=\frac{|POS_P(Q)|}{|U|}
+\]</span></p>
+</div>
+<div class="g-col-1">
+<p><br>
+( 10 )</p>
+</div>
+</div>
+<div class="grid">
+<div class="g-col-1">
+<p>where</p>
+</div>
+<div class="g-col-10">
+<p><span class="math inline">\(0≤ _{\gamma P} (Q)≤1\)</span>, <span class="math inline">\(\cup\)</span> denotes the union operation, <span class="math inline">\(||\)</span> denotes the set cardinality, and <span class="math inline">\(POS_P (Q)\)</span> is defined as:</p>
+</div>
+<div class="g-col-1">
+
+</div>
+</div>
+<div class="grid">
+<div class="g-col-1">
+
+</div>
+<div class="g-col-10">
+<p><span class="math display">\[
+POS_P(Q) = \bigcup_{X\in[u]_Q}\underline P(X)
+\]</span></p>
+</div>
+<div class="g-col-1">
+<p><br>
+( 11 )</p>
+</div>
+</div>
+<p><span class="math inline">\(POS_P(Q)\)</span> is the positive region of subset <em>Q</em> in relation to subset <em>P</em>, and is the set of all objects of <em>U</em> that can be uniquely classified to blocks of the partition <span class="math inline">\([u]_Q\)</span>, by means of <em>P</em>. As <span class="math inline">\(_{\gamma P}(Q)\)</span> nears to 1, the greater <em>Q</em> depends on <em>P</em>.<br>
+<br>
+The additional benefit of Rough Set theory is the <em>reduct</em> concept. It is the ability to reduce the number of attributes that objects possess in such a way that it remains distinguishable as before. A subset <span class="math inline">\(R\subseteq C\)</span> is considered a <em>reduct</em> of <em>C</em> where:</p>
+<div class="grid">
+<div class="g-col-1">
+
+</div>
+<div class="g-col-10">
+<p><span class="math display">\[
+_{\gamma R}(D)=_{\gamma C}(D)
+\]</span></p>
+</div>
+<div class="g-col-1">
+<p><br>
+( 12 )</p>
+</div>
+</div>
+<p>and there is no <span class="math inline">\(R'\subseteq R\)</span> such that <span class="math inline">\(_{\gamma R}(D)=_{\gamma C}(D)\)</span>.<br>
+<br>
+These <em>reduct</em> concept, distilling only ‘significant’ attributes, remain a vital part of the cluster generation. Recent research applications of Rough Set theory mainly focus on attribute reduction, rule acquisition and intelligent algorithm <span class="citation" data-cites="ZhangUnknownTitle2016">(<a href="#ref-ZhangUnknownTitle2016" role="doc-biblioref">Zhang, Xie, and Wang 2016</a>)</span>. Conversely, clustering-specific Rough Set-based research has been few. It was this capstone’s initial direction to venture into this somewhat uncharted field. <span class="citation" data-cites="upadhyaya2008deriving">Upadhyaya, Arora, and Jain (<a href="#ref-upadhyaya2008deriving" role="doc-biblioref">2008</a>)</span> and <span class="citation" data-cites="singh2017cluster">Singh and Mandal (<a href="#ref-singh2017cluster" role="doc-biblioref">2017</a>)</span> applied <em>rough set</em>’s <em>reduct</em> algorithm on the attributes within each cluster, <em>post</em> clustering, to reduce each cluster’s insignificant attributes and retain its significant attributes. With this method, each cluster would retain attributes pertinent to its unique cluster characteristics. While this capstone acknowledges this <em>reduct</em> approach as a possible direction to take, nonetheless this capstone’s eventual direction slightly differs. Rather than incorporate the <em>reduct</em> algorithm <em>post</em> clustering, this capstone aims to examine the effects of incorporating a <em>reduct</em> algorithm <em>pre</em>-clustering. By comparing a ‘normal’ dataset with another dataset post <em>reduct</em>, this capstone aims to examine and compare its effects on cluster accuracy.</p>
+</section>
+</section>
+<section id="research-design-and-methods" class="level2">
+<h2 class="anchored" data-anchor-id="research-design-and-methods">4. Research Design and Methods</h2>
+<p>This study’s approach are broadly classified into the following six sequential steps, of which steps 3 to 6 are encapsulated in <a href="#fig-workflow1">Figure&nbsp;1</a> below.</p>
+<ol type="1">
+<li>Overall Intent of Study</li>
+<li>Original Data Overview and Table Selection</li>
+<li>Data Manipulation</li>
+<li>Pre-Clustering</li>
+<li>Employing Relevant Clustering Methods</li>
+<li>Clustering Result Comparison<br>
+</li>
+</ol>
+<p><a href="#fig-workflow1">Figure&nbsp;1</a> below shows the workflow steps beginning from data manipulation to pre-clustering techniques to actual clustering applications, before finally comparing the cluster output against its original household data.<br>
+<br>
+</p>
+<div id="fig-workflow1" class="quarto-figure quarto-figure-center anchored">
+<figure class="figure">
+<p><img src="data/capstone_workflow.png" class="img-fluid figure-img"></p>
+<figcaption class="figure-caption">Figure&nbsp;1: Capstone Workflow</figcaption>
+</figure>
+</div>
+<p>To add, the completion of steps 1 to 3 i.e., overall intent of study, original data overview and table selection as well as data manipulation were covered in the earlier progress report. At the same time, the traditional variable manipulation part of step 4 was similarly completed. Excluding the household ID variable, this traditional variable manipulation part identified 16 non-collinear variables from the overall 28 variables as per <a href="#fig-menu1">Figure&nbsp;2</a>. These non-collinear variables are crucial assumptions within the <em>k</em>-means algorithm.<br>
+<br>
+</p>
+<div id="fig-menu1" class="quarto-figure quarto-figure-center anchored">
+<figure class="figure">
+<p><img src="data/fig2.png" class="img-fluid figure-img"></p>
+<figcaption class="figure-caption">Figure&nbsp;2: 16 Non-Collinear Variables Kept as Inputs For k-Means; Rest Are Rejected</figcaption>
+</figure>
+</div>
+<p>Thus, this final report would continue from the Rough Set variable reduction part of step 4.<br>
+<br>
+</p>
+<div id="fig-workflow2" class="quarto-figure quarto-figure-center anchored">
+<figure class="figure">
+<p><img src="data/Capstone_workflow2.png" class="img-fluid figure-img"></p>
+<figcaption class="figure-caption">Figure&nbsp;3: Capstone Workflow with emphasis on current step</figcaption>
+</figure>
+</div>
+<section id="pre-clustering-rough-set-variable-reduction" class="level3">
+<h3 class="anchored" data-anchor-id="pre-clustering-rough-set-variable-reduction">4.1 <em>Pre</em>-Clustering (Rough Set Variable Reduction)</h3>
+<p>This sub-section implements Rough Set’s <em>reduct</em> feature selection algorithm onto the base dataset. Though Rough Set algorithm exists within a multitude of programming language packages (R, C++, and Java) <span class="citation" data-cites="RizaUnknownTitle2014">(<a href="#ref-RizaUnknownTitle2014" role="doc-biblioref">Riza et al. 2014</a>)</span>, Enterprise Miner does not include Rough Set <em>reduct</em> within its standard software. As a workaround, Enterprise Miner has an Open-Source Integration (OSI) Node that allows for both R and Python scripts to run within the EM environment. Since Rough Set already exists as an R package, using this node allows for Rough Set to be run within EM. Similarly, R packages of <em>k</em>-means, fuzzy <em>k</em>-means and Gaussian Mixture Models algorithms would also be executed with the Open-Source Integration node in similar fashion.<br>
+<br>
+To ensure successful R integration with EM, compatibility of both versions need to be carefully considered. This capstone uses EM version 14.1. As such, SAS recommend 64-Bit R versions between 2.13.0 and 3.2.5. At the time of this capstone, the latest stable R version is 4.2.2. Since EM version 14.1 only recognizes R version 3.2.5 and nothing later, it must be said that certain R packages, considered useful to this capstone, may have limited usage on this earlier R version, or may even find itself completely unusable. Nonetheless, it is this capstone’s intention to find workable alternatives to ultimately deliver meaningful analysis and insights. Lastly, for housekeeping purposes and to ensure a streamlined and coherent report, all R codes within this capstone will be included in the appendix.<br>
+<br>
+As seen in <a href="#fig-menu2">Figure&nbsp;4</a> below, the Open-Source Integration Node is attached to the Data_All Node containing the base dataset of 28 input variables and 1 ID variable. The Rough Set reduct R code, using the RoughSets R package, is then entered within the Code Editor of the OSI Node. The Rough Set reduct R code used within this node closely follows <span class="citation" data-cites="RizaUnknownTitle2014">Riza et al. (<a href="#ref-RizaUnknownTitle2014" role="doc-biblioref">2014</a>)</span>.<br>
+<br>
+</p>
+<div id="fig-menu2" class="quarto-figure quarto-figure-center anchored">
+<figure class="figure">
+<p><img src="data/fig4.png" class="img-fluid figure-img"></p>
+<figcaption class="figure-caption">Figure&nbsp;4: 16 Attaching Open-Source Integration Node to Data_All Node</figcaption>
+</figure>
+</div>
+<p>The base dataset is first converted as a decision table. Unlike R’s usual dataframe or tibble type, a decision table has attribute descriptions, types of attributes and an index of the decision attribute. The household_ID is classified as an index of the decision attribute, with a nominal property. As a <em>pre</em>-processing step, this decision table is then discretized or converted from real-valued attributes into nominal attributes. This step maintains the discernibility between objects in information systems. Of the many different discretization approaches, there is one option for either global (discretizing values over the whole continuous attribute) or local (discretizing values over localized regions). @<span class="citation" data-cites="RizaUnknownTitle2014">Riza et al. (<a href="#ref-RizaUnknownTitle2014" role="doc-biblioref">2014</a>)</span> used global discretization, and thus this capstone followed suit. The eventual discretized values are then applied back to the decision table to generate a new decision table. Though there are other methods (quickreduct.rst, quickreduct.frst), feature selection is performed using the greedy.heuristic.superreduct method. The R code detailing this whole Rough Set reduct process is included in Appendix 5, and 6.<br>
+<br>
+<a href="#fig-menu3">Figure&nbsp;5</a> shows the Rough Set reduct output. Out of 28 possible input variables to choose from, the R code within the OSI Node chose only one input variable: M_DISCOUNT_USED_PER_ACTIVE_WEEKEND. This meant that the amount of discounts on an active weekend was THE attribute that is akin to the entire set of shopping consumer behaviour attributes.<br>
+<br>
+</p>
+<div id="fig-menu3" class="quarto-figure quarto-figure-center anchored">
+<figure class="figure">
+<p><img src="data/fig5.png" class="img-fluid figure-img"></p>
+<figcaption class="figure-caption">Figure&nbsp;5: Rough Set Reduct Output from Data_All</figcaption>
+</figure>
+</div>
+<p>Unfortunately, given that clustering algorithms require a minimum of two variables, at least one other input is required. To meet this requirement, this capstone then removed the ‘M_DISCOUNT_USED_PER_ACTIVE_WEEKEND’ input variable from the Data_All Node. Since the OSI Node takes in the whole data node regardless of rejected variables, filtering out the ‘M_DISCOUNT_USED_PER_ACTIVE_WEEKEND’ input variable would need to be done within the OSI Node.<br>
+<br>
+</p>
+<div id="fig-menu4" class="quarto-figure quarto-figure-center anchored">
+<figure class="figure">
+<p><img src="data/fig6.png" class="img-fluid figure-img"></p>
+<figcaption class="figure-caption">Figure&nbsp;6: 16 Attaching Open-Source Integration Node (Removed One Input and Redid Reduct) to Data_All Node</figcaption>
+</figure>
+</div>
+<p><a href="#fig-menu4">Figure&nbsp;6</a> shows the second run of Rough Set reduct output. Out of 27 possible input variables to choose from, the R code within the OSI Node chose only one input variable as before. This time, the input variable ‘M_DISCOUNT_USED_PER_ACTIVE_WEEKDAY’ was chosen. Thus, the reduct dataset (originally from the base dataset) would now comprise of one ID variable (household_ID), and two input variables (M_DISCOUNT_USED_PER_ACTIVE_WEEKDAY and M_DISCOUNT_USED_PER_ACTIVE_WEEKEND).<br>
+<br>
+</p>
+<div id="fig-menu5" class="quarto-figure quarto-figure-center anchored">
+<figure class="figure">
+<p><img src="data/fig7.png" class="img-fluid figure-img"></p>
+<figcaption class="figure-caption">Figure&nbsp;7: Rough Set Reduct Output from Data_All(Excluding M_DISCOUNT_USED_PER_ACTIVE_WEEKEND)</figcaption>
+</figure>
+</div>
+</section>
+<section id="employing-relevant-clustering-methods-k-means-clustering" class="level3">
+<h3 class="anchored" data-anchor-id="employing-relevant-clustering-methods-k-means-clustering">4.2 Employing Relevant Clustering Methods – <em>k</em>-Means Clustering</h3>
+<p>As mentioned in the progress report, four out of the eight clustering outputs are generated from <em>k</em>-means clustering. The outputs differ due to:</p>
+<ul>
+<li>Type of Dataset Used:
+<ul>
+<li>16 non-collinear input variables and 1 ID variable</li>
+<li>2 Rough Set reduct variables and 1 ID variable</li>
+</ul></li>
+<li>Whether dataset was normalized (using the Transform Variables Node) before k-means clustering was performed<br>
+<br>
+</li>
+</ul>
+<div id="fig-workflow3" class="quarto-figure quarto-figure-center anchored">
+<figure class="figure">
+<p><img src="data/Capstone_workflow3.png" class="img-fluid figure-img"></p>
+<figcaption class="figure-caption">Figure&nbsp;8: Capstone Workflow with emphasis on current step</figcaption>
+</figure>
+</div>
+<p>It’s worth noting that since k-means is a distance-based algorithm, its input variables need to be scaled in a similar fashion. This scaling will be done in the R code. This scale function, already within base R, centres and scales the values, using either standard deviation or root mean square.<br>
+<br>
+Separately, the clustering algorithm in the Cluster Node within SAS EM is closer to hierarchical clustering, than k-means clustering. The following details were lifted from SAS EM 14.1’s Reference Help, with emphasis on the hierarchical clustering.<br>
+<br>
+</p>
+<p>::: {.grid .style=“background-color: #F2F2F2”} <em>“The Automatic setting (default) configures SAS Enterprise Miner to automatically determine the optimum number of clusters to create.<br>
+<br>
+When the Automatic setting is selected, the value in the Maximum Number of Clusters property in the Number of Clusters section is not used to set the maximum number of clusters. Instead, SAS Enterprise Miner first makes a preliminary clustering pass, beginning with the number of clusters that is specified as the Preliminary Maximum value in the Selection Criterion properties.<br>
+<br>
+After the preliminary pass completes, the multivariate means of the clusters are used as inputs for a second pass that uses agglomerative, hierarchical algorithms to combine and reduce the number of clusters. Then, the smallest number of clusters that meets all four of the following criteria is selected.”</em> :::</p>
+<p>Since <em>k</em>-means clustering is not found within SAS EM, similar to Rough Set, this section will focus on using R code within OSI to perform <em>k</em>-means clustering. R already has k-means clustering built into its base stats package. To determine the optimal number of <em>k</em> clusters, this capstone would use the silhouette coefficient, with values between -1 and +1. It is a measure of how similar a data-point is within-cluster (cohesion), compared to other clusters (separation). <span class="citation" data-cites="RousseeuwUnknownTitle1987">Rousseeuw (<a href="#ref-RousseeuwUnknownTitle1987" role="doc-biblioref">1987</a>)</span> first defines a value of <em>s(i)</em> in the case of dissimilarities for object <em>i</em>. Object <em>i</em> is then assigned to cluster <em>A</em>. When cluster <em>A</em> has other objects apart from <em>i</em>, the following can be computed:<br>
+<br>
+</p>
+<div class="grid">
+<div class="g-col-1">
+
+</div>
+<div class="g-col-10">
+<p><em>a(i)</em> = average dissimilarity distance of <em>i</em> to all other objects within cluster <em>A</em></p>
+</div>
+<div class="g-col-1">
+<p>( 13 )</p>
+</div>
+</div>
+<p><br>
+Considering another cluster C, which is different from cluster A, the following can be computed:<br>
+<br>
+</p>
+<div class="grid">
+<div class="g-col-1">
+
+</div>
+<div class="g-col-10">
+<p><em>d(i, C)</em> = average dissimilarity distance of <em>i</em> to all objects of cluster <em>C</em></p>
+</div>
+<div class="g-col-1">
+<p>( 14 )</p>
+</div>
+</div>
+<p><br>
+After computing <em>d(i, C)</em> for all clusters <span class="math inline">\(C ≠ A\)</span>, the smallest of these numbers are then selected, and denoted by:<br>
+<br>
+</p>
+<div class="grid">
+<div class="g-col-1">
+
+</div>
+<div class="g-col-10">
+<p><em>b(i)</em> = minimum <em>d(i, C)</em>, <em>where</em> <span class="math inline">\(C ≠ A\)</span></p>
+</div>
+<div class="g-col-1">
+<p>( 15 )</p>
+</div>
+</div>
+<p><br>
+Thus, the number <em>s(i)</em> is obtained by combining <em>a(i)</em> and <em>b(i)</em> as follows:<br>
+<br>
+</p>
+<div class="grid">
+<div class="g-col-1">
+
+</div>
+<div class="g-col-10">
+<p><span class="math display">\[
+s(i) =
+  \begin{cases}
+   1 - b(i)/a(i) &amp; \quad \text{if a(i) &lt; b(i)}\\
+   0             &amp; \quad \text{if a(i) = b(i)  ,  or}\\
+   b(i)/a(i)-1   &amp; \quad \text{if a(i) &gt; b(i)}
+  \end{cases}
+\]</span></p>
+</div>
+<div class="g-col-1">
+<p><br>
+<br>
+( 16 )</p>
+</div>
+</div>
+<div class="grid">
+<div class="g-col-1">
+
+</div>
+<div class="g-col-10">
+<p><span class="math display">\[
+s(i) = \frac{b(i) - a(i)}{max\{a(i), b(i)\}}
+\]</span></p>
+</div>
+<div class="g-col-1">
+<p><br>
+( 17 )</p>
+</div>
+</div>
+<p>A silhouette coefficient close to +1 shows that the object <em>i</em> has been assigned to an appropriate cluster, while a silhouette coefficient close to -1 shows that the same object has been misclassified to its current cluster. A silhouette coefficient close to zero would mean that object <em>i</em> lies equally far from two clusters.<br>
+<br>
+This section covers both the TKM-N-T and TKM-A-T outputs, using the dataset with 16 non-collinear input variables and one ID variable, as shown in the EM diagram below.<br>
+<br>
+</p>
+<div id="fig-menu6" class="quarto-figure quarto-figure-center anchored">
+<figure class="figure">
+<p><img src="data/fig9.png" class="img-fluid figure-img"></p>
+<figcaption class="figure-caption">Figure&nbsp;9: EM Diagram for TKM-N-T and TKM-A-T outputs (Using 16 non-collinear inputs and 1 ID variable)</figcaption>
+</figure>
+</div>
+<p><span style="text-decoration: underline;">TKM-N-T (Traditional k-means clustering on normalized form of 16 non-collinear inputs)</span> First, the optimal number of clusters needs to be computed. Information on the transformation of these 16 non-collinear inputs, within the Transform Variables Node, is included in Appendix 3. These are then ingested into the OSI Node called ‘OSI11-TKM-N-T-Explore.’ The number 12 here refers to the node number within the EM Workspace and allows for ease of retrieval of .csv and plot files. Setting the seed value to 1234, and then calling the ‘<em>cluster</em>’ and ‘<em>purrr</em>’ packages, a function to record the silhouette index of a particular cluster k is created, and then looped through cluster counts 2 to 50. This silhouette index is then plotted within EM, as seen below.<br>
+<br>
+</p>
+<div class="grid">
+<div class="g-col-5">
+<div id="fig-menu7" class="quarto-figure quarto-figure-center anchored">
+<figure class="figure">
+<p><img src="data/fig10.png" class="img-fluid figure-img"></p>
+<figcaption class="figure-caption">Figure&nbsp;10: Silhouette Index for TKM-N-T output</figcaption>
+</figure>
+</div>
+</div>
+<div class="g-col-7">
+<p>The silhouette index starts out strongest at <em>k</em> = 2, and then goes downwards sharply by <em>k</em> = 6, before gradually decreasing by <em>k</em> = 50. It’s worth noting that the silhouette index within the graph is closer to zero than to 1. This might mean that the objects within the dataset are more evenly spread out, with little cluster concentrations. For now, we will continue to regard <em>k</em> = 2 as its most optimized cluster count.<br>
+<br>
+Another OSI node, called ‘OSI12-TKM-N-T-2-Clusters,’ is now attached to the same Transform Variable Node. This time, instead of exploring, we will generate the <em>k</em> = 2 cluster output. Apart from the same R code above, a plot is created to compare the histograms of each cluster against overall for all variables. Analysis of these results will be covered in a later section.<br>
+</p>
+</div>
+</div>
+<!-- ## Figure -->
+<!-- Figure 5: Predicted ODA (foreign aid) across a range of differences from average number of anti-NGO laws in an average country; dark line shows average of 500 draws from posterior distribution. -->
+<!-- ![Figure 5: Predicted ODA (foreign aid) across a range of differences from average number of anti-NGO laws in an average country; dark line shows average of 500 draws from posterior distribution.](ngos-aid_fig5.png) -->
+<!-- ## BibTeX citation -->
+<!-- ```bibtex -->
+<!-- @unpublished{ChaudhryHeiss:2023, -->
+<!--     Author = {Suparna Chaudhry and Andrew Heiss}, -->
+<!--     Note = {Working paper}, -->
+<!--     Title = {Are Donors Really Responding? Analyzing the Impact of Global Restrictions on {NGO}s}, -->
+<!--     Year = {2023}} -->
+<!-- ``` -->
+
+
+
+</section>
+</section>
+
+<div id="quarto-appendix" class="default"><section class="quarto-appendix-contents" role="doc-bibliography"><h2 class="anchored quarto-appendix-heading">References</h2><div id="refs" class="references csl-bib-body hanging-indent" role="list">
+<div id="ref-BezdekUnknownTitle1981" class="csl-entry" role="listitem">
+Bezdek, James C. 1981. <span>“Pattern Recognition with Fuzzy Objective Function Algorithms.”</span> <em>Not Available</em>. <a href="https://doi.org/10.1007/978-1-4757-0450-1">https://doi.org/10.1007/978-1-4757-0450-1</a>.
+</div>
+<div id="ref-ChaudhuriUnknownTitle1998" class="csl-entry" role="listitem">
+Chaudhuri, B. B, and P. R Bhowmik. 1998. <span>“An Approach of Clustering Data with Noisy or Imprecise Feature Measurement.”</span> <em>Pattern Recognition Letters</em>. <a href="https://doi.org/10.1016/s0167-8655(98)00112-3">https://doi.org/10.1016/s0167-8655(98)00112-3</a>.
+</div>
+<div id="ref-CormackUnknownTitle1971" class="csl-entry" role="listitem">
+Cormack, R. M. 1971. <span>“A Review of Classification.”</span> <em>Journal of the Royal Statistical Society. Series A (General)</em>. <a href="https://doi.org/10.2307/2344237">https://doi.org/10.2307/2344237</a>.
+</div>
+<div id="ref-ChellyDagdiaUnknownTitle2020" class="csl-entry" role="listitem">
+Dagdia, Zaineb Chelly, Christine Zarges, Gaël Beck, and Mustapha Lebbah. 2020. <span>“A Scalable and Effective Rough Set Theory-Based Approach for Big Data Pre-Processing.”</span> <em>Knowledge and Information Systems</em>. <a href="https://doi.org/10.1007/s10115-020-01467-y">https://doi.org/10.1007/s10115-020-01467-y</a>.
+</div>
+<div id="ref-garla2012comparison" class="csl-entry" role="listitem">
+Garla, Satish, Goutam Chakraborty, G Gaeth, and US Iowa. 2012. <span>“Comparison of k-Means, Normal Mixtures and Probabilistic-d Clustering for B2b Segmentation Using Customers’ Perceptions.”</span> In <em>SAS Global Forum 2012-Data Mining and Text Analytics</em>.
+</div>
+<div id="ref-MelchiorUnknownTitle2018" class="csl-entry" role="listitem">
+Melchior, P., and A. D. Goulding. 2018. <span>“Filling the Gaps: Gaussian Mixture Models from Noisy, Truncated or Incomplete Samples.”</span> <em>Astronomy and Computing</em>. <a href="https://doi.org/10.1016/j.ascom.2018.09.013">https://doi.org/10.1016/j.ascom.2018.09.013</a>.
+</div>
+<div id="ref-NayakUnknownTitle2012" class="csl-entry" role="listitem">
+Nayak, Rudra Kalyan, Debahuti Mishra, Kailash Shaw, and Sashikala Mishra. 2012. <span>“Rough Set Based Attribute Clustering for Sample Classification of Gene Expression Data.”</span> <em>Procedia Engineering</em>. <a href="https://doi.org/10.1016/j.proeng.2012.06.219">https://doi.org/10.1016/j.proeng.2012.06.219</a>.
+</div>
+<div id="ref-PatelUnknownTitle2020" class="csl-entry" role="listitem">
+Patel, Eva, and Dharmender Singh Kushwaha. 2020. <span>“Clustering Cloud Workloads: K-Means Vs Gaussian Mixture Model.”</span> <em>Procedia Computer Science</em>. <a href="https://doi.org/10.1016/j.procs.2020.04.017">https://doi.org/10.1016/j.procs.2020.04.017</a>.
+</div>
+<div id="ref-PawlakUnknownTitle1982" class="csl-entry" role="listitem">
+Pawlak, Zdzis?aw. 1982. <span>“Rough Sets.”</span> <em>International Journal of Computer &amp;Amp; Information Sciences</em>. <a href="https://doi.org/10.1007/bf01001956">https://doi.org/10.1007/bf01001956</a>.
+</div>
+<div id="ref-PiętaSzmuc+2021+659+683" class="csl-entry" role="listitem">
+Pięta, Piotr, and Tomasz Szmuc. 2021. <span>“Applications of Rough Sets in Big Data Analysis: An Overview.”</span> <em>International Journal of Applied Mathematics and Computer Science</em> 31 (4): 659–83. <a href="https://doi.org/doi:10.34768/amcs-2021-0046">https://doi.org/doi:10.34768/amcs-2021-0046</a>.
+</div>
+<div id="ref-RaykovUnknownTitle2016" class="csl-entry" role="listitem">
+Raykov, Yordan P., Alexis Boukouvalas, Fahd Baig, and Max A. Little. 2016. <span>“What to Do When k-Means Clustering Fails: A Simple yet Principled Alternative Algorithm.”</span> <em>PLOS ONE</em>. <a href="https://doi.org/10.1371/journal.pone.0162259">https://doi.org/10.1371/journal.pone.0162259</a>.
+</div>
+<div id="ref-RizaUnknownTitle2014" class="csl-entry" role="listitem">
+Riza, Lala Septem, Andrzej Janusz, Christoph Bergmeir, Chris Cornelis, Francisco Herrera, Dominik Śle¸zak, and José Manuel Benítez. 2014. <span>“Implementing Algorithms of Rough Set Theory and Fuzzy Rough Set Theory in the r Package <span>‘RoughSets’</span>.”</span> <em>Information Sciences</em>. <a href="https://doi.org/10.1016/j.ins.2014.07.029">https://doi.org/10.1016/j.ins.2014.07.029</a>.
+</div>
+<div id="ref-RousseeuwUnknownTitle1987" class="csl-entry" role="listitem">
+Rousseeuw, Peter J. 1987. <span>“Silhouettes: A Graphical Aid to the Interpretation and Validation of Cluster Analysis.”</span> <em>Journal of Computational and Applied Mathematics</em>. <a href="https://doi.org/10.1016/0377-0427(87)90125-7">https://doi.org/10.1016/0377-0427(87)90125-7</a>.
+</div>
+<div id="ref-singh2017cluster" class="csl-entry" role="listitem">
+Singh, Girish Kumar, and Shrabanti Mandal. 2017. <span>“Cluster Analysis Using Rough Set Theory.”</span> <em>Journal of Informatics &amp; Mathematical Sciences</em> 9 (3).
+</div>
+<div id="ref-SteinleyUnknownTitle2006" class="csl-entry" role="listitem">
+Steinley, Douglas. 2006. <span>“K‐means Clustering: A Half‐century Synthesis.”</span> <em>British Journal of Mathematical and Statistical Psychology</em>. <a href="https://doi.org/10.1348/000711005x48266">https://doi.org/10.1348/000711005x48266</a>.
+</div>
+<div id="ref-upadhyaya2008deriving" class="csl-entry" role="listitem">
+Upadhyaya, Shuchita, Alka Arora, and Rajni Jain. 2008. <span>“DERIVING CLUSTER KNOWLEDGE USING ROUGH SET THEORY.”</span> <em>Journal of Theoretical &amp; Applied Information Technology</em> 4 (8).
+</div>
+<div id="ref-ZADEH1965338" class="csl-entry" role="listitem">
+Zadeh, L. A. 1965. <span>“Fuzzy Sets.”</span> <em>Information and Control</em> 8 (3): 338–53. https://doi.org/<a href="https://doi.org/10.1016/S0019-9958(65)90241-X">https://doi.org/10.1016/S0019-9958(65)90241-X</a>.
+</div>
+<div id="ref-ZhangUnknownTitle2016" class="csl-entry" role="listitem">
+Zhang, Qinghua, Qin Xie, and Guoyin Wang. 2016. <span>“A Survey on Rough Set Theory and Its Applications.”</span> <em>CAAI Transactions on Intelligence Technology</em>. <a href="https://doi.org/10.1016/j.trit.2016.11.001">https://doi.org/10.1016/j.trit.2016.11.001</a>.
+</div>
+</div></section></div></main> <!-- /main -->
+<script id="quarto-html-after-body" type="application/javascript">
+window.document.addEventListener("DOMContentLoaded", function (event) {
+  const toggleBodyColorMode = (bsSheetEl) => {
+    const mode = bsSheetEl.getAttribute("data-mode");
+    const bodyEl = window.document.querySelector("body");
+    if (mode === "dark") {
+      bodyEl.classList.add("quarto-dark");
+      bodyEl.classList.remove("quarto-light");
+    } else {
+      bodyEl.classList.add("quarto-light");
+      bodyEl.classList.remove("quarto-dark");
+    }
+  }
+  const toggleBodyColorPrimary = () => {
+    const bsSheetEl = window.document.querySelector("link#quarto-bootstrap");
+    if (bsSheetEl) {
+      toggleBodyColorMode(bsSheetEl);
+    }
+  }
+  toggleBodyColorPrimary();  
+  const icon = "";
+  const anchorJS = new window.AnchorJS();
+  anchorJS.options = {
+    placement: 'right',
+    icon: icon
+  };
+  anchorJS.add('.anchored');
+  const isCodeAnnotation = (el) => {
+    for (const clz of el.classList) {
+      if (clz.startsWith('code-annotation-')) {                     
+        return true;
+      }
+    }
+    return false;
+  }
+  const clipboard = new window.ClipboardJS('.code-copy-button', {
+    text: function(trigger) {
+      const codeEl = trigger.previousElementSibling.cloneNode(true);
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
+        }
+      }
+      return codeEl.innerText;
+    }
+  });
+  clipboard.on('success', function(e) {
+    // button target
+    const button = e.trigger;
+    // don't keep focus
+    button.blur();
+    // flash "checked"
+    button.classList.add('code-copy-button-checked');
+    var currentTitle = button.getAttribute("title");
+    button.setAttribute("title", "Copied!");
+    let tooltip;
+    if (window.bootstrap) {
+      button.setAttribute("data-bs-toggle", "tooltip");
+      button.setAttribute("data-bs-placement", "left");
+      button.setAttribute("data-bs-title", "Copied!");
+      tooltip = new bootstrap.Tooltip(button, 
+        { trigger: "manual", 
+          customClass: "code-copy-button-tooltip",
+          offset: [0, -8]});
+      tooltip.show();    
+    }
+    setTimeout(function() {
+      if (tooltip) {
+        tooltip.hide();
+        button.removeAttribute("data-bs-title");
+        button.removeAttribute("data-bs-toggle");
+        button.removeAttribute("data-bs-placement");
+      }
+      button.setAttribute("title", currentTitle);
+      button.classList.remove('code-copy-button-checked');
+    }, 1000);
+    // clear code selection
+    e.clearSelection();
+  });
+  function tippyHover(el, contentFn) {
+    const config = {
+      allowHTML: true,
+      content: contentFn,
+      maxWidth: 500,
+      delay: 100,
+      arrow: false,
+      appendTo: function(el) {
+          return el.parentElement;
+      },
+      interactive: true,
+      interactiveBorder: 10,
+      theme: 'quarto',
+      placement: 'bottom-start'
+    };
+    window.tippy(el, config); 
+  }
+  const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+  for (var i=0; i<noterefs.length; i++) {
+    const ref = noterefs[i];
+    tippyHover(ref, function() {
+      // use id or data attribute instead here
+      let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+      try { href = new URL(href).hash; } catch {}
+      const id = href.replace(/^#\/?/, "");
+      const note = window.document.getElementById(id);
+      return note.innerHTML;
+    });
+  }
+      let selectedAnnoteEl;
+      const selectorForAnnotation = ( cell, annotation) => {
+        let cellAttr = 'data-code-cell="' + cell + '"';
+        let lineAttr = 'data-code-annotation="' +  annotation + '"';
+        const selector = 'span[' + cellAttr + '][' + lineAttr + ']';
+        return selector;
+      }
+      const selectCodeLines = (annoteEl) => {
+        const doc = window.document;
+        const targetCell = annoteEl.getAttribute("data-target-cell");
+        const targetAnnotation = annoteEl.getAttribute("data-target-annotation");
+        const annoteSpan = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
+        const lines = annoteSpan.getAttribute("data-code-lines").split(",");
+        const lineIds = lines.map((line) => {
+          return targetCell + "-" + line;
+        })
+        let top = null;
+        let height = null;
+        let parent = null;
+        if (lineIds.length > 0) {
+            //compute the position of the single el (top and bottom and make a div)
+            const el = window.document.getElementById(lineIds[0]);
+            top = el.offsetTop;
+            height = el.offsetHeight;
+            parent = el.parentElement.parentElement;
+          if (lineIds.length > 1) {
+            const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
+            const bottom = lastEl.offsetTop + lastEl.offsetHeight;
+            height = bottom - top;
+          }
+          if (top !== null && height !== null && parent !== null) {
+            // cook up a div (if necessary) and position it 
+            let div = window.document.getElementById("code-annotation-line-highlight");
+            if (div === null) {
+              div = window.document.createElement("div");
+              div.setAttribute("id", "code-annotation-line-highlight");
+              div.style.position = 'absolute';
+              parent.appendChild(div);
+            }
+            div.style.top = top - 2 + "px";
+            div.style.height = height + 4 + "px";
+            let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
+            if (gutterDiv === null) {
+              gutterDiv = window.document.createElement("div");
+              gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
+              gutterDiv.style.position = 'absolute';
+              const codeCell = window.document.getElementById(targetCell);
+              const gutter = codeCell.querySelector('.code-annotation-gutter');
+              gutter.appendChild(gutterDiv);
+            }
+            gutterDiv.style.top = top - 2 + "px";
+            gutterDiv.style.height = height + 4 + "px";
+          }
+          selectedAnnoteEl = annoteEl;
+        }
+      };
+      const unselectCodeLines = () => {
+        const elementsIds = ["code-annotation-line-highlight", "code-annotation-line-highlight-gutter"];
+        elementsIds.forEach((elId) => {
+          const div = window.document.getElementById(elId);
+          if (div) {
+            div.remove();
+          }
+        });
+        selectedAnnoteEl = undefined;
+      };
+      // Attach click handler to the DT
+      const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
+      for (const annoteDlNode of annoteDls) {
+        annoteDlNode.addEventListener('click', (event) => {
+          const clickedEl = event.target;
+          if (clickedEl !== selectedAnnoteEl) {
+            unselectCodeLines();
+            const activeEl = window.document.querySelector('dt[data-target-cell].code-annotation-active');
+            if (activeEl) {
+              activeEl.classList.remove('code-annotation-active');
+            }
+            selectCodeLines(clickedEl);
+            clickedEl.classList.add('code-annotation-active');
+          } else {
+            // Unselect the line
+            unselectCodeLines();
+            clickedEl.classList.remove('code-annotation-active');
+          }
+        });
+      }
+  const findCites = (el) => {
+    const parentEl = el.parentElement;
+    if (parentEl) {
+      const cites = parentEl.dataset.cites;
+      if (cites) {
+        return {
+          el,
+          cites: cites.split(' ')
+        };
+      } else {
+        return findCites(el.parentElement)
+      }
+    } else {
+      return undefined;
+    }
+  };
+  var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+  for (var i=0; i<bibliorefs.length; i++) {
+    const ref = bibliorefs[i];
+    const citeInfo = findCites(ref);
+    if (citeInfo) {
+      tippyHover(citeInfo.el, function() {
+        var popup = window.document.createElement('div');
+        citeInfo.cites.forEach(function(cite) {
+          var citeDiv = window.document.createElement('div');
+          citeDiv.classList.add('hanging-indent');
+          citeDiv.classList.add('csl-entry');
+          var biblioDiv = window.document.getElementById('ref-' + cite);
+          if (biblioDiv) {
+            citeDiv.innerHTML = biblioDiv.innerHTML;
+          }
+          popup.appendChild(citeDiv);
+        });
+        return popup.innerHTML;
+      });
+    }
+  }
+});
+</script>
+</div> <!-- /content -->
+
+
+
+</body></html>
