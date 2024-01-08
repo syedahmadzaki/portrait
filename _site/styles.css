@@ -1,1 +1,4 @@
 /* css styles */
+.alpha {
+  background-color: $gray-300;
+}

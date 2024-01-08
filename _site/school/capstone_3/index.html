@@ -209,6 +209,13 @@ div.csl-indent {
   <ul class="collapse">
   <li><a href="#pre-clustering-rough-set-variable-reduction" id="toc-pre-clustering-rough-set-variable-reduction" class="nav-link" data-scroll-target="#pre-clustering-rough-set-variable-reduction">4.1 <em>Pre</em>-Clustering (Rough Set Variable Reduction)</a></li>
   <li><a href="#employing-relevant-clustering-methods-k-means-clustering" id="toc-employing-relevant-clustering-methods-k-means-clustering" class="nav-link" data-scroll-target="#employing-relevant-clustering-methods-k-means-clustering">4.2 Employing Relevant Clustering Methods – <em>k</em>-Means Clustering</a></li>
+  <li><a href="#employing-relevant-clustering-methods-fuzzy-k-means-clustering" id="toc-employing-relevant-clustering-methods-fuzzy-k-means-clustering" class="nav-link" data-scroll-target="#employing-relevant-clustering-methods-fuzzy-k-means-clustering">4.3 Employing Relevant Clustering Methods – Fuzzy <em>k</em>-Means Clustering</a></li>
+  <li><a href="#employing-relevant-clustering-methods-gaussian-mixture-model" id="toc-employing-relevant-clustering-methods-gaussian-mixture-model" class="nav-link" data-scroll-target="#employing-relevant-clustering-methods-gaussian-mixture-model">4.4 Employing Relevant Clustering Methods – Gaussian Mixture Model</a></li>
+  </ul></li>
+  <li><a href="#analysis-and-results" id="toc-analysis-and-results" class="nav-link" data-scroll-target="#analysis-and-results">5.0 Analysis and Results</a>
+  <ul class="collapse">
+  <li><a href="#overview-of-clustering-output-results" id="toc-overview-of-clustering-output-results" class="nav-link" data-scroll-target="#overview-of-clustering-output-results">5.1 Overview of Clustering Output Results</a></li>
+  <li><a href="#tkm-clustering-output-results" id="toc-tkm-clustering-output-results" class="nav-link" data-scroll-target="#tkm-clustering-output-results">5.2 TKM Clustering Output Results</a></li>
   </ul></li>
   </ul>
 </nav>
@@ -224,6 +231,7 @@ div.csl-indent {
     <div class="quarto-category">k-Means Clustering</div>
     <div class="quarto-category">Fuzzy k-Means Clustering</div>
     <div class="quarto-category">Gaussian Mixture Model</div>
+    <div class="quarto-category">ggplot2</div>
     <div class="quarto-category">Rough Set</div>
     <div class="quarto-category">SAS Enterprise Miner</div>
     <div class="quarto-category">R</div>
@@ -324,18 +332,21 @@ The table below shows the clustering methods used on the differing dataset.<br>
 <span id="cb1-13"><a href="#cb1-13" aria-hidden="true" tabindex="-1"></a>table1 <span class="ot">&lt;-</span> <span class="fu">tibble</span>(<span class="st">`</span><span class="at">DATA MANIPULATION &amp; VARIABLE SELECTION METHODS</span><span class="st">`</span>,</span>
 <span id="cb1-14"><a href="#cb1-14" aria-hidden="true" tabindex="-1"></a>                     <span class="st">`</span><span class="at">Traditional Variable Manipulation (TVM)</span><span class="st">`</span>,</span>
 <span id="cb1-15"><a href="#cb1-15" aria-hidden="true" tabindex="-1"></a>                     <span class="st">`</span><span class="at">Rough Set Based Variable Reduction (RSVR)</span><span class="st">`</span>)</span>
-<span id="cb1-16"><a href="#cb1-16" aria-hidden="true" tabindex="-1"></a>knitr<span class="sc">::</span><span class="fu">kable</span>(table1, </span>
-<span id="cb1-17"><a href="#cb1-17" aria-hidden="true" tabindex="-1"></a>             <span class="at">booktabs =</span> <span class="cn">TRUE</span>,</span>
-<span id="cb1-18"><a href="#cb1-18" aria-hidden="true" tabindex="-1"></a>             <span class="at">caption =</span> <span class="st">'Clustering Methods'</span>,</span>
-<span id="cb1-19"><a href="#cb1-19" aria-hidden="true" tabindex="-1"></a>             <span class="at">align =</span> <span class="st">"lcc"</span>) <span class="sc">%&gt;%</span></span>
-<span id="cb1-20"><a href="#cb1-20" aria-hidden="true" tabindex="-1"></a>  <span class="fu">row_spec</span>(<span class="dv">1</span>,</span>
-<span id="cb1-21"><a href="#cb1-21" aria-hidden="true" tabindex="-1"></a>           <span class="at">bold =</span> T,</span>
-<span id="cb1-22"><a href="#cb1-22" aria-hidden="true" tabindex="-1"></a>           <span class="at">color =</span> <span class="st">"white"</span>,</span>
-<span id="cb1-23"><a href="#cb1-23" aria-hidden="true" tabindex="-1"></a>           <span class="at">background =</span> <span class="st">"#404040"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb1-16"><a href="#cb1-16" aria-hidden="true" tabindex="-1"></a>knitr<span class="sc">::</span><span class="fu">kable</span>(table1,</span>
+<span id="cb1-17"><a href="#cb1-17" aria-hidden="true" tabindex="-1"></a>             <span class="st">"html"</span>,</span>
+<span id="cb1-18"><a href="#cb1-18" aria-hidden="true" tabindex="-1"></a>             <span class="at">booktabs =</span> <span class="cn">TRUE</span>,</span>
+<span id="cb1-19"><a href="#cb1-19" aria-hidden="true" tabindex="-1"></a>             <span class="at">caption =</span> <span class="st">'Clustering Methods'</span>,</span>
+<span id="cb1-20"><a href="#cb1-20" aria-hidden="true" tabindex="-1"></a>             <span class="at">align =</span> <span class="st">"lcc"</span>,</span>
+<span id="cb1-21"><a href="#cb1-21" aria-hidden="true" tabindex="-1"></a>             <span class="at">escape =</span> <span class="cn">FALSE</span>) <span class="sc">%&gt;%</span></span>
+<span id="cb1-22"><a href="#cb1-22" aria-hidden="true" tabindex="-1"></a>  <span class="fu">kable_styling</span>(<span class="at">bootstrap_options =</span> <span class="st">"striped"</span>)  <span class="sc">%&gt;%</span>  </span>
+<span id="cb1-23"><a href="#cb1-23" aria-hidden="true" tabindex="-1"></a>  <span class="fu">row_spec</span>(<span class="dv">1</span>,</span>
+<span id="cb1-24"><a href="#cb1-24" aria-hidden="true" tabindex="-1"></a>           <span class="at">bold =</span> T,</span>
+<span id="cb1-25"><a href="#cb1-25" aria-hidden="true" tabindex="-1"></a>           <span class="at">color =</span> <span class="st">"white"</span>,</span>
+<span id="cb1-26"><a href="#cb1-26" aria-hidden="true" tabindex="-1"></a>           <span class="at">background =</span> <span class="st">"#404040"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
 <div class="cell-output-display">
 
-<table>
+<table class="table table-striped" style="margin-left: auto; margin-right: auto;">
 <caption>
 Clustering Methods
 </caption>
@@ -814,7 +825,6 @@ As seen in <a href="#fig-menu2">Figure&nbsp;4</a> below, the Open-Source Integra
 <li>2 Rough Set reduct variables and 1 ID variable</li>
 </ul></li>
 <li>Whether dataset was normalized (using the Transform Variables Node) before k-means clustering was performed<br>
-<br>
 </li>
 </ul>
 <div id="fig-workflow3" class="quarto-figure quarto-figure-center anchored">
@@ -828,12 +838,27 @@ As seen in <a href="#fig-menu2">Figure&nbsp;4</a> below, the Open-Source Integra
 Separately, the clustering algorithm in the Cluster Node within SAS EM is closer to hierarchical clustering, than k-means clustering. The following details were lifted from SAS EM 14.1’s Reference Help, with emphasis on the hierarchical clustering.<br>
 <br>
 </p>
-<p>::: {.grid .style=“background-color: #F2F2F2”} <em>“The Automatic setting (default) configures SAS Enterprise Miner to automatically determine the optimum number of clusters to create.<br>
+<div class="grid">
+<div class="g-col-12 alpha">
+<p><em>The Automatic setting (default) configures SAS Enterprise Miner to automatically determine the optimum number of clusters to create.<br>
 <br>
 When the Automatic setting is selected, the value in the Maximum Number of Clusters property in the Number of Clusters section is not used to set the maximum number of clusters. Instead, SAS Enterprise Miner first makes a preliminary clustering pass, beginning with the number of clusters that is specified as the Preliminary Maximum value in the Selection Criterion properties.<br>
 <br>
-After the preliminary pass completes, the multivariate means of the clusters are used as inputs for a second pass that uses agglomerative, hierarchical algorithms to combine and reduce the number of clusters. Then, the smallest number of clusters that meets all four of the following criteria is selected.”</em> :::</p>
-<p>Since <em>k</em>-means clustering is not found within SAS EM, similar to Rough Set, this section will focus on using R code within OSI to perform <em>k</em>-means clustering. R already has k-means clustering built into its base stats package. To determine the optimal number of <em>k</em> clusters, this capstone would use the silhouette coefficient, with values between -1 and +1. It is a measure of how similar a data-point is within-cluster (cohesion), compared to other clusters (separation). <span class="citation" data-cites="RousseeuwUnknownTitle1987">Rousseeuw (<a href="#ref-RousseeuwUnknownTitle1987" role="doc-biblioref">1987</a>)</span> first defines a value of <em>s(i)</em> in the case of dissimilarities for object <em>i</em>. Object <em>i</em> is then assigned to cluster <em>A</em>. When cluster <em>A</em> has other objects apart from <em>i</em>, the following can be computed:<br>
+After the preliminary pass completes, the multivariate means of the clusters are used as inputs for a second pass that uses agglomerative, hierarchical algorithms to combine and reduce the number of clusters. Then, the smallest number of clusters that meets all four of the following criteria is selected.</em></p>
+</div>
+</div>
+<p><br>
+</p>
+<div class="columns">
+<p>::: {.column width=“100%} :::: {style =”background-color: #F2F2F2”}</p><p><em>The Automatic setting (default) configures SAS Enterprise Miner to automatically determine the optimum number of clusters to create.<br>
+<br>
+When the Automatic setting is selected, the value in the Maximum Number of Clusters property in the Number of Clusters section is not used to set the maximum number of clusters. Instead, SAS Enterprise Miner first makes a preliminary clustering pass, beginning with the number of clusters that is specified as the Preliminary Maximum value in the Selection Criterion properties.<br>
+<br>
+After the preliminary pass completes, the multivariate means of the clusters are used as inputs for a second pass that uses agglomerative, hierarchical algorithms to combine and reduce the number of clusters. Then, the smallest number of clusters that meets all four of the following criteria is selected.</em></p>
+</div>
+<p>:::::</p>
+<p><br>
+Since <em>k</em>-means clustering is not found within SAS EM, similar to Rough Set, this section will focus on using R code within OSI to perform <em>k</em>-means clustering. R already has k-means clustering built into its base stats package. To determine the optimal number of <em>k</em> clusters, this capstone would use the silhouette coefficient, with values between -1 and +1. It is a measure of how similar a data-point is within-cluster (cohesion), compared to other clusters (separation). <span class="citation" data-cites="RousseeuwUnknownTitle1987">Rousseeuw (<a href="#ref-RousseeuwUnknownTitle1987" role="doc-biblioref">1987</a>)</span> first defines a value of <em>s(i)</em> in the case of dissimilarities for object <em>i</em>. Object <em>i</em> is then assigned to cluster <em>A</em>. When cluster <em>A</em> has other objects apart from <em>i</em>, the following can be computed:<br>
 <br>
 </p>
 <div class="grid">
@@ -897,7 +922,6 @@ s(i) =
 </div>
 <div class="g-col-1">
 <p><br>
-<br>
 ( 16 )</p>
 </div>
 </div>
@@ -926,11 +950,12 @@ This section covers both the TKM-N-T and TKM-A-T outputs, using the dataset with
 <figcaption class="figure-caption">Figure&nbsp;9: EM Diagram for TKM-N-T and TKM-A-T outputs (Using 16 non-collinear inputs and 1 ID variable)</figcaption>
 </figure>
 </div>
-<p><span style="text-decoration: underline;">TKM-N-T (Traditional k-means clustering on normalized form of 16 non-collinear inputs)</span> First, the optimal number of clusters needs to be computed. Information on the transformation of these 16 non-collinear inputs, within the Transform Variables Node, is included in Appendix 3. These are then ingested into the OSI Node called ‘OSI11-TKM-N-T-Explore.’ The number 12 here refers to the node number within the EM Workspace and allows for ease of retrieval of .csv and plot files. Setting the seed value to 1234, and then calling the ‘<em>cluster</em>’ and ‘<em>purrr</em>’ packages, a function to record the silhouette index of a particular cluster k is created, and then looped through cluster counts 2 to 50. This silhouette index is then plotted within EM, as seen below.<br>
+<p><span style="text-decoration: underline;">TKM-N-T (Traditional k-means clustering on normalized form of 16 non-collinear inputs)</span><br>
+First, the optimal number of clusters needs to be computed. Information on the transformation of these 16 non-collinear inputs, within the Transform Variables Node, is included in Appendix 3. These are then ingested into the OSI Node called ‘OSI11-TKM-N-T-Explore.’ The number 12 here refers to the node number within the EM Workspace and allows for ease of retrieval of .csv and plot files. Setting the seed value to 1234, and then calling the ‘<em>cluster</em>’ and ‘<em>purrr</em>’ packages, a function to record the silhouette index of a particular cluster k is created, and then looped through cluster counts 2 to 50. This silhouette index is then plotted within EM, as seen below.<br>
 <br>
 </p>
 <div class="grid">
-<div class="g-col-5">
+<div class="g-col-4">
 <div id="fig-menu7" class="quarto-figure quarto-figure-center anchored">
 <figure class="figure">
 <p><img src="data/fig10.png" class="img-fluid figure-img"></p>
@@ -938,13 +963,2187 @@ This section covers both the TKM-N-T and TKM-A-T outputs, using the dataset with
 </figure>
 </div>
 </div>
-<div class="g-col-7">
+<div class="g-col-8">
 <p>The silhouette index starts out strongest at <em>k</em> = 2, and then goes downwards sharply by <em>k</em> = 6, before gradually decreasing by <em>k</em> = 50. It’s worth noting that the silhouette index within the graph is closer to zero than to 1. This might mean that the objects within the dataset are more evenly spread out, with little cluster concentrations. For now, we will continue to regard <em>k</em> = 2 as its most optimized cluster count.<br>
 <br>
 Another OSI node, called ‘OSI12-TKM-N-T-2-Clusters,’ is now attached to the same Transform Variable Node. This time, instead of exploring, we will generate the <em>k</em> = 2 cluster output. Apart from the same R code above, a plot is created to compare the histograms of each cluster against overall for all variables. Analysis of these results will be covered in a later section.<br>
+<br>
 </p>
 </div>
 </div>
+<p><span style="text-decoration: underline;">TKM-A-T (Traditional k-means clustering on as-is form of 16 non-collinear inputs)</span><br>
+Similarly, the optimal number of clusters needs to be computed here. These are then directly ingested into the OSI Node called ‘OSI9-TKM-A-T-Explore.’ Setting the seed value to 1234, and then calling the ‘<em>cluster</em>’ and ‘<em>purrr</em>’ packages, a function to record the silhouette index of a particular cluster <em>k</em> is created, and then looped through cluster counts 2 to 50. This silhouette index is then plotted within EM, as seen below.<br>
+<br>
+</p>
+<div class="grid">
+<div class="g-col-4">
+<div id="fig-menu8" class="quarto-figure quarto-figure-center anchored">
+<figure class="figure">
+<p><img src="data/fig11.png" class="img-fluid figure-img"></p>
+<figcaption class="figure-caption">Figure&nbsp;11: Silhouette Index for TKM-A-T output</figcaption>
+</figure>
+</div>
+</div>
+<div class="g-col-8">
+<p>The silhouette index starts out strongest at <em>k</em> = 2, and then goes downwards sharply by <em>k</em> = 6, before gradually decreasing by <em>k</em> = 50. It’s worth noting that the silhouette index within the graph is closer to zero than to 1. This might mean that the objects within the dataset are more evenly spread out, with little cluster concentrations. For now, we will continue to regard <em>k</em> = 2 as its most optimized cluster count.<br>
+<br>
+Another OSI node, called ‘OSI12-TKM-N-T-2-Clusters,’ is now attached to the same Transform Variable Node. This time, instead of exploring, we will generate the <em>k</em> = 2 cluster output. Apart from the same R code above, a plot is created to compare the histograms of each cluster against overall for all variables. Analysis of these results will be covered in a later section.<br>
+<br>
+</p>
+</div>
+</div>
+<p>This section covers both the TKM-N-R and TKM-A-R outputs, using the dataset with 16 non-collinear input variables and one ID variable, as shown in the EM diagram below.<br>
+<br>
+</p>
+<div id="fig-menu9" class="quarto-figure quarto-figure-center anchored">
+<figure class="figure">
+<p><img src="data/fig12.png" class="img-fluid figure-img"></p>
+<figcaption class="figure-caption">Figure&nbsp;12: EM Diagram for TKM-N-R and TKM-A-R outputs (Using 2 reduct inputs and 1 ID variable)</figcaption>
+</figure>
+</div>
+<p><span style="text-decoration: underline;">TKM-N-R (Traditional k-means clustering on normalized form of 2 reduct inputs)</span><br>
+Both discount input variables are first transformed within the Transform Variables Node. Information on both these transformations is included in Appendix 3. These are then ingested into the OSI Node called ‘OSI13-TKM-N-R-Explore.’ Setting the seed value to 1234, and then calling the ‘<em>cluster</em>’ and ‘<em>purrr</em>’ packages, a function to record the silhouette index of a particular cluster <em>k</em> is created, and then looped through cluster counts 2 to 50. This silhouette index is then plotted within EM, as seen below.<br>
+<br>
+</p>
+<div class="grid">
+<div class="g-col-4">
+<div id="fig-menu10" class="quarto-figure quarto-figure-center anchored">
+<figure class="figure">
+<p><img src="data/fig13.png" class="img-fluid figure-img"></p>
+<figcaption class="figure-caption">Figure&nbsp;13: Silhouette Index for TKM-N-R output</figcaption>
+</figure>
+</div>
+</div>
+<div class="g-col-8">
+<p>The silhouette index starts out strongest at <em>k</em> = 2, and then goes downwards sharply by <em>k</em> = 12, before plateauing til <em>k</em> = 50. This time, the silhouette index is much closer than before to 1. We can infer that the <em>reduct</em> algorithm had a strong impact in the clustering accuracy. As such, we will regard <em>k</em> = 2 as its most optimized cluster count.<br>
+<br>
+Another OSI Node, called ‘OSI14-TKM-N-R-2-Clusters,’ is now attached to the same Transform Variable Node. This time, instead of exploring, we will generate the <em>k</em> = 2 cluster output. Apart from the same R code above, a plot is created to compare the histograms of each cluster against overall for all variables. Analysis of these results will be covered in a later section.<br>
+<br>
+</p>
+</div>
+</div>
+<p><span style="text-decoration: underline;">TKM-A-R (Traditional k-means clustering on as-is form of 2 reduct inputs)</span><br>
+Similarly, the optimal number of clusters needs to be computed here. These are then directly ingested into the OSI Node called ‘OSI16-TKM-A-R-Explore.’ Setting the seed value to 1234, and then calling the ‘cluster’ and ‘purrr’ packages, a function to record the silhouette index of a particular cluster <em>k</em> is created, and then looped through cluster counts 2 to 50. This silhouette index is then plotted within EM, as seen below.<br>
+<br>
+</p>
+<div class="grid">
+<div class="g-col-4">
+<div id="fig-menu10" class="quarto-figure quarto-figure-center anchored">
+<figure class="figure">
+<p><img src="data/fig14.png" class="img-fluid figure-img"></p>
+<figcaption class="figure-caption">Figure&nbsp;14: Silhouette Index for TKM-A-R output</figcaption>
+</figure>
+</div>
+</div>
+<div class="g-col-8">
+<p>The silhouette index is strongest at <em>k</em> = 2, before gradually decreasing to <em>k</em> = 50. Similar to TKM-N-R, the silhouette index within the graph is very much close to 1. At the same time, TKM-A-R’s silhouette index is slightly higher than TKM-N-R. This suggests that the clustering was slightly impacted from the earlier normalisation. Thus, we will regard <em>k</em> = 2 as its most optimized cluster count.<br>
+<br>
+Another OSI Node, called ‘OSI15-TKM-A-R-2-Clusters,’ is now attached to the 2 <em>reduct</em> data node. The <em>k</em> = 2 cluster output will be generated together with its histogram plots. Analysis of these results will also be covered in a later section.<br>
+<br>
+</p>
+</div>
+</div>
+</section>
+<section id="employing-relevant-clustering-methods-fuzzy-k-means-clustering" class="level3">
+<h3 class="anchored" data-anchor-id="employing-relevant-clustering-methods-fuzzy-k-means-clustering">4.3 Employing Relevant Clustering Methods – Fuzzy <em>k</em>-Means Clustering</h3>
+<p>Similarly, as mentioned in the progress report, there will be two outputs generated from fuzzy <em>k</em>-means clustering. The difference is in the dataset used ie. either the full dataset with 28 input variables and 1 ID variable, or the <em>reduct</em> dataset with 2 input variables and 1 ID variable. This dataset will then be scaled within the OSI Node using the scale R package, before being fed into the fuzzy <em>k</em>-means R package, <em>fclust</em>.<br>
+<br>
+</p>
+<div id="fig-workflow4" class="quarto-figure quarto-figure-center anchored">
+<figure class="figure">
+<p><img src="data/Capstone_workflow4.png" class="img-fluid figure-img"></p>
+<figcaption class="figure-caption">Figure&nbsp;15: Capstone Workflow with emphasis on current step</figcaption>
+</figure>
+</div>
+<p>Since fuzzy <em>k</em>-means is built on the traditional <em>k</em>-means clustering method with an additional fuzzy logic aspect, it is only natural that the same silhouette coefficient index is used to determine its optimal cluster count. The only difference is that the traditional silhouette coefficient calculates the fit of object <em>i</em> between its assigned cluster and otherwise. This is very much hard clustering and suited to the traditional <em>k</em>-means clustering. However, fuzzy <em>k</em>-means allows the same object <em>i</em> memberships to multiple clusters at the same time ie. soft clustering. As such, the silhouette index needs to be tweaked to incorporate the fuzzy logic element. <span class="citation" data-cites="CampelloUnknownTitle2006">Campello and Hruschka (<a href="#ref-CampelloUnknownTitle2006" role="doc-biblioref">2006</a>)</span> demonstrated exactly this in its aptly named form, Fuzzy Silhouette (FS):</p>
+<div class="grid">
+<div class="g-col-1">
+
+</div>
+<div class="g-col-10">
+<p><span class="math display">\[
+FS = \frac{\sum^N_{j=1}(\mu_{pj}-\mu_{qj})^\alpha s_j}{\sum^N_{j=1}(\mu_{pj}-\mu_{qj})^\alpha}
+\]</span></p>
+</div>
+<div class="g-col-1">
+<p><br>
+( 18 )</p>
+</div>
+</div>
+<div class="grid">
+<div class="g-col-1">
+<p>where</p>
+</div>
+<div class="g-col-10">
+<ol type="1">
+<li><span class="math inline">\(s_j\)</span> is the silhouette value of object <em>j</em> as per Equation 17</li>
+<li><span class="math inline">\(μ_{pj}\)</span> and <span class="math inline">\(μ_{qj}\)</span> are the first and second largest elements of the <em>j</em>th column of the fuzzy partition matrix</li>
+<li><span class="math inline">\(\alpha\)</span> ≥ 0 is a weight coefficient</li>
+</ol>
+</div>
+<div class="g-col-1">
+
+</div>
+</div>
+<p>Equation 18 highlights the weighted average nature of the individual silhouettes, as per Equation 17. The weight of each term is determined by the difference in membership degrees of the corresponding object to its first and second best matching fuzzy clusters, respectively. Having said that, the FS range of values are very much the same as the Silhouette Index and are to be read as such.<br>
+<br>
+As shown in the EM diagram below, the FKM-T (fuzzy <em>k</em>-means) and GMM-T (Gaussian) pull from the Data_All Node, while the FKM-R and GMM-R pulls from the Reduct Data Node. Both fuzzy <em>k</em>-means outputs would be covered first in the immediate section below, followed by both Gaussian outputs.<br>
+<br>
+</p>
+<div id="fig-menu11" class="quarto-figure quarto-figure-center anchored">
+<figure class="figure">
+<p><img src="data/fig16.png" class="img-fluid figure-img"></p>
+<figcaption class="figure-caption">Figure&nbsp;16: EM Diagram for FKM-T, GMM-T, FKM-R and GMM-R outputs</figcaption>
+</figure>
+</div>
+<p><span style="text-decoration: underline;">FKM-T (Fuzzy k-means clustering on the as-is form of traditional variable manipulation)</span><br>
+Similarly, the optimal number of clusters needs to be computed here. These are then directly ingested into the OSI Node called ‘OSI2-FKM-T-Explore.’ Setting the seed value to 1234, and then calling the ‘<em>cluster</em>’ and ‘<em>purrr</em>’ packages, a function to record the silhouette index of a particular cluster <em>k</em> is created, and then looped through cluster counts 2 to 20. This is a much lower initial cluster exploration range, compared to the <em>k</em>-means count range of 2 to 50. This is due to the extremely long processing time, as the cluster count increases. This fuzzy silhouette index is then plotted within EM, as seen below.<br>
+<br>
+</p>
+<div class="grid">
+<div class="g-col-4">
+<div id="fig-menu12" class="quarto-figure quarto-figure-center anchored">
+<figure class="figure">
+<p><img src="data/fig17.png" class="img-fluid figure-img"></p>
+<figcaption class="figure-caption">Figure&nbsp;17: Silhouette Index for FKM-T output</figcaption>
+</figure>
+</div>
+</div>
+<div class="g-col-8">
+<p>The silhouette index is strongest at <em>k</em> = 2. It then bounced up from <em>k</em> = 4, and then dropped down from <em>k</em> = 5, before stopping at <em>k</em> = 6. It continued this up-and-down motion for an extended bit. Thus, the highest fuzzy silhouette index is at <em>k</em> = 2. Similar to the outputs generated above, the fuzzy silhouette index within the graph is near the 0.5 mark. This is in between the scores generated for the TKM <em>reduct</em> series and the TKM as-is series. Thus, we will regard <em>k</em> = 2 as its most optimized cluster count.<br>
+<br>
+Another OSI Node, called ‘OSI17-FKM-T-2-Clusters,’ is now attached to the Data_All Node. The <em>k</em> = 2 cluster output will be generated together with its histogram plots. Analysis of these results will also be covered in a later section.<br>
+<br>
+</p>
+</div>
+</div>
+<p><span style="text-decoration: underline;">FKM-R (Fuzzy k-means clustering on the as-is form of 2 reduct inputs)</span><br>
+Similarly, the optimal number of clusters needs to be computed here. These are then directly ingested into the OSI Node called ‘OSI17-FKM-R-Explore.’ Calling the ‘<em>cluster</em>’ and ‘<em>purrr</em>’ packages, a function to record the silhouette index of a particular cluster k is created, and then looped through cluster counts 2 to 20. This is a much lower initial cluster exploration range, compared to the <em>k</em>-means count range of 2 to 50. This is due to the extremely long processing time, as the cluster count increases. This fuzzy silhouette index is then plotted within EM, as seen below.<br>
+<br>
+</p>
+<div class="grid">
+<div class="g-col-4">
+<div id="fig-menu13" class="quarto-figure quarto-figure-center anchored">
+<figure class="figure">
+<p><img src="data/fig18.png" class="img-fluid figure-img"></p>
+<figcaption class="figure-caption">Figure&nbsp;18: Silhouette Index for FKM-R output</figcaption>
+</figure>
+</div>
+</div>
+<div class="g-col-8">
+<p>The silhouette index is strongest at <em>k</em> = 2. It then gradually reduces, before stopping at <em>k</em> = 6. There were no further <em>k</em> cluster counts after 20. Thus, the highest fuzzy silhouette index is at <em>k</em> = 2. This fuzzy silhouette index is almost double the one generated for FKM-T, mainly due to the <em>reduct</em> variables. Thus, we will regard <em>k</em> = 2 as its most optimized cluster count.<br>
+<br>
+Another OSI Node, called ‘OSI18-FKM-R-2-Clusters,’ is now attached to the Data_All Node. The <em>k</em> = 2 cluster output will be generated together with its histogram plots. Analysis of these results will also be covered in a later section.<br>
+<br>
+</p>
+</div>
+</div>
+</section>
+<section id="employing-relevant-clustering-methods-gaussian-mixture-model" class="level3">
+<h3 class="anchored" data-anchor-id="employing-relevant-clustering-methods-gaussian-mixture-model">4.4 Employing Relevant Clustering Methods – Gaussian Mixture Model</h3>
+<p>Similarly, as mentioned in the progress report, there will be two outputs generated from GMM clustering. It uses the same dataset as the fuzzy <em>k</em>-means clustering ie. either the full dataset with 28 input variables and 1 ID variable, or the reduct dataset with 2 input variables and 1 ID variable. This dataset will then be scaled within the OSI Node using the scale R package, before being fed into the GMM R package, <em>mclust</em>.<br>
+<br>
+</p>
+<div id="fig-workflow5" class="quarto-figure quarto-figure-center anchored">
+<figure class="figure">
+<p><img src="data/Capstone_workflow5.png" class="img-fluid figure-img"></p>
+<figcaption class="figure-caption">Figure&nbsp;19: Capstone Workflow with emphasis on current step</figcaption>
+</figure>
+</div>
+<p>For GMM, a common method for determining the optimal number of clusters is using Bayesian Information Criterion (BIC). <span class="citation" data-cites="FraleyUnknownTitle2002">Fraley and Raftery (<a href="#ref-FraleyUnknownTitle2002" role="doc-biblioref">2002</a>)</span> explains the integrated likelihood for regular models can be approximated by the following BIC formula. A maximum BIC value (the approximate Bayes factors with the BIC approximation) would determine the optimal cluster <em>k</em> for the dataset.<br>
+</p>
+<div class="grid">
+<div class="g-col-1">
+
+</div>
+<div class="g-col-10">
+<p><span class="math display">\[
+BIC_k = 2log p (D | M_k) \approx 2logp (D | \hat{\theta}_k,M_k) - v_klog(n)
+\]</span></p>
+</div>
+<div class="g-col-1">
+<p><br>
+( 19 )</p>
+</div>
+</div>
+<div class="grid">
+<div class="g-col-1">
+<p>where</p>
+</div>
+<div class="g-col-10">
+<ol type="1">
+<li><span class="math inline">\(ν_k\)</span> are the number of independent parameters to be estimated in model <span class="math inline">\(M_k\)</span> <span class="citation" data-cites="SchwarzUnknownTitle1978">(<a href="#ref-SchwarzUnknownTitle1978" role="doc-biblioref">Schwarz 1978</a>)</span></li>
+<li><span class="math inline">\(p(D|M_k)\)</span> is the probability of data <em>D</em>, given model <span class="math inline">\(M_k\)</span></li>
+<li><span class="math inline">\(\hat{\theta}_k\)</span> are the parameters of the <em>k</em>th component in the mixture</li>
+</ol>
+</div>
+<div class="g-col-1">
+
+</div>
+</div>
+<p>Within the <em>mclust</em> R package, the BIC values are calculated for different univariate and multivariate mixtures. <span class="citation" data-cites="ScruccaUnknownTitle2016">Scrucca et al. (<a href="#ref-ScruccaUnknownTitle2016" role="doc-biblioref">2016</a>)</span> nicely summarizes the models’ names and their respective traits.<br>
+<br>
+</p>
+<div class="cell" data-fig-cap-location="bottom">
+<details>
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb2"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a>table2 <span class="ot">&lt;-</span> <span class="fu">tibble</span>(<span class="st">`</span><span class="at">Mixture Type</span><span class="st">`</span> <span class="ot">=</span> <span class="fu">c</span>(<span class="st">"Univariate"</span>,</span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a>                                    <span class="st">"Univariate"</span>,</span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a>                                    <span class="st">"Multivariate"</span>,</span>
+<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a>                                    <span class="st">"Multivariate"</span>,</span>
+<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a>                                    <span class="st">"Multivariate"</span>,</span>
+<span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a>                                    <span class="st">"Multivariate"</span>,</span>
+<span id="cb2-7"><a href="#cb2-7" aria-hidden="true" tabindex="-1"></a>                                    <span class="st">"Multivariate"</span>,</span>
+<span id="cb2-8"><a href="#cb2-8" aria-hidden="true" tabindex="-1"></a>                                    <span class="st">"Multivariate"</span>,</span>
+<span id="cb2-9"><a href="#cb2-9" aria-hidden="true" tabindex="-1"></a>                                    <span class="st">"Multivariate"</span>,</span>
+<span id="cb2-10"><a href="#cb2-10" aria-hidden="true" tabindex="-1"></a>                                    <span class="st">"Multivariate"</span>,</span>
+<span id="cb2-11"><a href="#cb2-11" aria-hidden="true" tabindex="-1"></a>                                    <span class="st">"Multivariate"</span>,</span>
+<span id="cb2-12"><a href="#cb2-12" aria-hidden="true" tabindex="-1"></a>                                    <span class="st">"Multivariate"</span>,</span>
+<span id="cb2-13"><a href="#cb2-13" aria-hidden="true" tabindex="-1"></a>                                    <span class="st">"Multivariate"</span>,</span>
+<span id="cb2-14"><a href="#cb2-14" aria-hidden="true" tabindex="-1"></a>                                    <span class="st">"Multivariate"</span>,</span>
+<span id="cb2-15"><a href="#cb2-15" aria-hidden="true" tabindex="-1"></a>                                    <span class="st">"Multivariate"</span>,</span>
+<span id="cb2-16"><a href="#cb2-16" aria-hidden="true" tabindex="-1"></a>                                    <span class="st">"Multivariate"</span>),</span>
+<span id="cb2-17"><a href="#cb2-17" aria-hidden="true" tabindex="-1"></a>                 <span class="st">`</span><span class="at">*mclust*&lt;br&gt;Model Name</span><span class="st">`</span> <span class="ot">=</span>  <span class="fu">c</span>(<span class="st">"E"</span>,</span>
+<span id="cb2-18"><a href="#cb2-18" aria-hidden="true" tabindex="-1"></a>                                            <span class="st">"V"</span>,</span>
+<span id="cb2-19"><a href="#cb2-19" aria-hidden="true" tabindex="-1"></a>                                            <span class="st">"EII"</span>,</span>
+<span id="cb2-20"><a href="#cb2-20" aria-hidden="true" tabindex="-1"></a>                                            <span class="st">"VII"</span>,</span>
+<span id="cb2-21"><a href="#cb2-21" aria-hidden="true" tabindex="-1"></a>                                            <span class="st">"EEI"</span>,</span>
+<span id="cb2-22"><a href="#cb2-22" aria-hidden="true" tabindex="-1"></a>                                            <span class="st">"VEI"</span>,</span>
+<span id="cb2-23"><a href="#cb2-23" aria-hidden="true" tabindex="-1"></a>                                            <span class="st">"EVI"</span>,</span>
+<span id="cb2-24"><a href="#cb2-24" aria-hidden="true" tabindex="-1"></a>                                            <span class="st">"VVI"</span>,</span>
+<span id="cb2-25"><a href="#cb2-25" aria-hidden="true" tabindex="-1"></a>                                            <span class="st">"EEE"</span>,</span>
+<span id="cb2-26"><a href="#cb2-26" aria-hidden="true" tabindex="-1"></a>                                            <span class="st">"VEE"</span>,</span>
+<span id="cb2-27"><a href="#cb2-27" aria-hidden="true" tabindex="-1"></a>                                            <span class="st">"EVE"</span>,</span>
+<span id="cb2-28"><a href="#cb2-28" aria-hidden="true" tabindex="-1"></a>                                            <span class="st">"VVE"</span>,</span>
+<span id="cb2-29"><a href="#cb2-29" aria-hidden="true" tabindex="-1"></a>                                            <span class="st">"EEV"</span>,</span>
+<span id="cb2-30"><a href="#cb2-30" aria-hidden="true" tabindex="-1"></a>                                            <span class="st">"VEV"</span>,</span>
+<span id="cb2-31"><a href="#cb2-31" aria-hidden="true" tabindex="-1"></a>                                            <span class="st">"EVV"</span>,</span>
+<span id="cb2-32"><a href="#cb2-32" aria-hidden="true" tabindex="-1"></a>                                            <span class="st">"VVV"</span>),</span>
+<span id="cb2-33"><a href="#cb2-33" aria-hidden="true" tabindex="-1"></a>                 <span class="at">Distribution =</span> <span class="fu">c</span>(<span class="st">"Equal variance"</span>,</span>
+<span id="cb2-34"><a href="#cb2-34" aria-hidden="true" tabindex="-1"></a>                                  <span class="st">"Variable /&lt;br&gt;Unequal Variance"</span>,</span>
+<span id="cb2-35"><a href="#cb2-35" aria-hidden="true" tabindex="-1"></a>                                  <span class="st">"Spherical"</span>,</span>
+<span id="cb2-36"><a href="#cb2-36" aria-hidden="true" tabindex="-1"></a>                                  <span class="st">"Spherical"</span>,</span>
+<span id="cb2-37"><a href="#cb2-37" aria-hidden="true" tabindex="-1"></a>                                  <span class="st">"Diagonal"</span>,</span>
+<span id="cb2-38"><a href="#cb2-38" aria-hidden="true" tabindex="-1"></a>                                  <span class="st">"Diagonal"</span>,</span>
+<span id="cb2-39"><a href="#cb2-39" aria-hidden="true" tabindex="-1"></a>                                  <span class="st">"Diagonal"</span>,</span>
+<span id="cb2-40"><a href="#cb2-40" aria-hidden="true" tabindex="-1"></a>                                  <span class="st">"Diagonal"</span>,</span>
+<span id="cb2-41"><a href="#cb2-41" aria-hidden="true" tabindex="-1"></a>                                  <span class="st">"Ellipsoidal"</span>,</span>
+<span id="cb2-42"><a href="#cb2-42" aria-hidden="true" tabindex="-1"></a>                                  <span class="st">"Ellipsoidal"</span>,</span>
+<span id="cb2-43"><a href="#cb2-43" aria-hidden="true" tabindex="-1"></a>                                  <span class="st">"Ellipsoidal"</span>,</span>
+<span id="cb2-44"><a href="#cb2-44" aria-hidden="true" tabindex="-1"></a>                                  <span class="st">"Ellipsoidal"</span>,</span>
+<span id="cb2-45"><a href="#cb2-45" aria-hidden="true" tabindex="-1"></a>                                  <span class="st">"Ellipsoidal"</span>,</span>
+<span id="cb2-46"><a href="#cb2-46" aria-hidden="true" tabindex="-1"></a>                                  <span class="st">"Ellipsoidal"</span>,</span>
+<span id="cb2-47"><a href="#cb2-47" aria-hidden="true" tabindex="-1"></a>                                  <span class="st">"Ellipsoidal"</span>,</span>
+<span id="cb2-48"><a href="#cb2-48" aria-hidden="true" tabindex="-1"></a>                                  <span class="st">"Ellipsoidal"</span>),</span>
+<span id="cb2-49"><a href="#cb2-49" aria-hidden="true" tabindex="-1"></a>                 <span class="at">Volume =</span> <span class="fu">c</span>(<span class="st">"--"</span>,</span>
+<span id="cb2-50"><a href="#cb2-50" aria-hidden="true" tabindex="-1"></a>                            <span class="st">"--"</span>,</span>
+<span id="cb2-51"><a href="#cb2-51" aria-hidden="true" tabindex="-1"></a>                            <span class="st">"Equal"</span>,</span>
+<span id="cb2-52"><a href="#cb2-52" aria-hidden="true" tabindex="-1"></a>                            <span class="st">"Variable"</span>,</span>
+<span id="cb2-53"><a href="#cb2-53" aria-hidden="true" tabindex="-1"></a>                            <span class="st">"Equal"</span>,</span>
+<span id="cb2-54"><a href="#cb2-54" aria-hidden="true" tabindex="-1"></a>                            <span class="st">"Variable"</span>,</span>
+<span id="cb2-55"><a href="#cb2-55" aria-hidden="true" tabindex="-1"></a>                            <span class="st">"Equal"</span>,</span>
+<span id="cb2-56"><a href="#cb2-56" aria-hidden="true" tabindex="-1"></a>                            <span class="st">"Variable"</span>,</span>
+<span id="cb2-57"><a href="#cb2-57" aria-hidden="true" tabindex="-1"></a>                            <span class="st">"Equal"</span>,</span>
+<span id="cb2-58"><a href="#cb2-58" aria-hidden="true" tabindex="-1"></a>                            <span class="st">"Variable"</span>,</span>
+<span id="cb2-59"><a href="#cb2-59" aria-hidden="true" tabindex="-1"></a>                            <span class="st">"Equal"</span>,</span>
+<span id="cb2-60"><a href="#cb2-60" aria-hidden="true" tabindex="-1"></a>                            <span class="st">"Variable"</span>,</span>
+<span id="cb2-61"><a href="#cb2-61" aria-hidden="true" tabindex="-1"></a>                            <span class="st">"Equal"</span>,</span>
+<span id="cb2-62"><a href="#cb2-62" aria-hidden="true" tabindex="-1"></a>                            <span class="st">"Variable"</span>,</span>
+<span id="cb2-63"><a href="#cb2-63" aria-hidden="true" tabindex="-1"></a>                            <span class="st">"Equal"</span>,</span>
+<span id="cb2-64"><a href="#cb2-64" aria-hidden="true" tabindex="-1"></a>                            <span class="st">"Variable"</span>),</span>
+<span id="cb2-65"><a href="#cb2-65" aria-hidden="true" tabindex="-1"></a>                 <span class="at">Shape =</span>  <span class="fu">c</span>(<span class="st">"--"</span>,</span>
+<span id="cb2-66"><a href="#cb2-66" aria-hidden="true" tabindex="-1"></a>                            <span class="st">"--"</span>,</span>
+<span id="cb2-67"><a href="#cb2-67" aria-hidden="true" tabindex="-1"></a>                            <span class="st">"Equal"</span>,</span>
+<span id="cb2-68"><a href="#cb2-68" aria-hidden="true" tabindex="-1"></a>                            <span class="st">"Equal"</span>,</span>
+<span id="cb2-69"><a href="#cb2-69" aria-hidden="true" tabindex="-1"></a>                            <span class="st">"Equal"</span>,</span>
+<span id="cb2-70"><a href="#cb2-70" aria-hidden="true" tabindex="-1"></a>                            <span class="st">"Equal"</span>,</span>
+<span id="cb2-71"><a href="#cb2-71" aria-hidden="true" tabindex="-1"></a>                            <span class="st">"Variable"</span>,</span>
+<span id="cb2-72"><a href="#cb2-72" aria-hidden="true" tabindex="-1"></a>                            <span class="st">"Variable"</span>,</span>
+<span id="cb2-73"><a href="#cb2-73" aria-hidden="true" tabindex="-1"></a>                            <span class="st">"Equal"</span>,</span>
+<span id="cb2-74"><a href="#cb2-74" aria-hidden="true" tabindex="-1"></a>                            <span class="st">"Equal"</span>,</span>
+<span id="cb2-75"><a href="#cb2-75" aria-hidden="true" tabindex="-1"></a>                            <span class="st">"Variable"</span>,</span>
+<span id="cb2-76"><a href="#cb2-76" aria-hidden="true" tabindex="-1"></a>                            <span class="st">"Variable"</span>,</span>
+<span id="cb2-77"><a href="#cb2-77" aria-hidden="true" tabindex="-1"></a>                            <span class="st">"Equal"</span>,</span>
+<span id="cb2-78"><a href="#cb2-78" aria-hidden="true" tabindex="-1"></a>                            <span class="st">"Equal"</span>,</span>
+<span id="cb2-79"><a href="#cb2-79" aria-hidden="true" tabindex="-1"></a>                            <span class="st">"Variable"</span>,</span>
+<span id="cb2-80"><a href="#cb2-80" aria-hidden="true" tabindex="-1"></a>                            <span class="st">"Variable"</span>),</span>
+<span id="cb2-81"><a href="#cb2-81" aria-hidden="true" tabindex="-1"></a>                 <span class="at">Orientation =</span>  <span class="fu">c</span>(<span class="st">"--"</span>,</span>
+<span id="cb2-82"><a href="#cb2-82" aria-hidden="true" tabindex="-1"></a>                                  <span class="st">"--"</span>,</span>
+<span id="cb2-83"><a href="#cb2-83" aria-hidden="true" tabindex="-1"></a>                                  <span class="st">"--"</span>,</span>
+<span id="cb2-84"><a href="#cb2-84" aria-hidden="true" tabindex="-1"></a>                                  <span class="st">"--"</span>,</span>
+<span id="cb2-85"><a href="#cb2-85" aria-hidden="true" tabindex="-1"></a>                                  <span class="st">"Coordinate&lt;br&gt;Axes"</span>,</span>
+<span id="cb2-86"><a href="#cb2-86" aria-hidden="true" tabindex="-1"></a>                                  <span class="st">"Coordinate&lt;br&gt;Axes"</span>,</span>
+<span id="cb2-87"><a href="#cb2-87" aria-hidden="true" tabindex="-1"></a>                                  <span class="st">"Coordinate&lt;br&gt;Axes"</span>,</span>
+<span id="cb2-88"><a href="#cb2-88" aria-hidden="true" tabindex="-1"></a>                                  <span class="st">"Coordinate&lt;br&gt;Axes"</span>,</span>
+<span id="cb2-89"><a href="#cb2-89" aria-hidden="true" tabindex="-1"></a>                                  <span class="st">"Equal"</span>,</span>
+<span id="cb2-90"><a href="#cb2-90" aria-hidden="true" tabindex="-1"></a>                                  <span class="st">"Equal"</span>,</span>
+<span id="cb2-91"><a href="#cb2-91" aria-hidden="true" tabindex="-1"></a>                                  <span class="st">"Equal"</span>,</span>
+<span id="cb2-92"><a href="#cb2-92" aria-hidden="true" tabindex="-1"></a>                                  <span class="st">"Equal"</span>,</span>
+<span id="cb2-93"><a href="#cb2-93" aria-hidden="true" tabindex="-1"></a>                                  <span class="st">"Variable"</span>,</span>
+<span id="cb2-94"><a href="#cb2-94" aria-hidden="true" tabindex="-1"></a>                                  <span class="st">"Variable"</span>,</span>
+<span id="cb2-95"><a href="#cb2-95" aria-hidden="true" tabindex="-1"></a>                                  <span class="st">"Variable"</span>,</span>
+<span id="cb2-96"><a href="#cb2-96" aria-hidden="true" tabindex="-1"></a>                                  <span class="st">"Variable"</span>)) <span class="co">#%&gt;%</span></span>
+<span id="cb2-97"><a href="#cb2-97" aria-hidden="true" tabindex="-1"></a>  <span class="co">#mutate_all(linebreak)</span></span>
+<span id="cb2-98"><a href="#cb2-98" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-99"><a href="#cb2-99" aria-hidden="true" tabindex="-1"></a>knitr<span class="sc">::</span><span class="fu">kable</span>(table2, </span>
+<span id="cb2-100"><a href="#cb2-100" aria-hidden="true" tabindex="-1"></a>             <span class="st">"html"</span>,</span>
+<span id="cb2-101"><a href="#cb2-101" aria-hidden="true" tabindex="-1"></a>             <span class="at">booktabs =</span> <span class="cn">TRUE</span>,</span>
+<span id="cb2-102"><a href="#cb2-102" aria-hidden="true" tabindex="-1"></a>             <span class="co"># caption = 'Clustering Methods',</span></span>
+<span id="cb2-103"><a href="#cb2-103" aria-hidden="true" tabindex="-1"></a>             <span class="at">align =</span> <span class="st">"cccccc"</span>,</span>
+<span id="cb2-104"><a href="#cb2-104" aria-hidden="true" tabindex="-1"></a>             <span class="at">escape =</span> <span class="cn">FALSE</span>)  <span class="sc">%&gt;%</span></span>
+<span id="cb2-105"><a href="#cb2-105" aria-hidden="true" tabindex="-1"></a>  <span class="fu">kable_styling</span>(<span class="at">bootstrap_options =</span> <span class="st">"striped"</span>) <span class="sc">%&gt;%</span></span>
+<span id="cb2-106"><a href="#cb2-106" aria-hidden="true" tabindex="-1"></a>  <span class="fu">collapse_rows</span>(<span class="at">columns =</span> <span class="dv">1</span>, </span>
+<span id="cb2-107"><a href="#cb2-107" aria-hidden="true" tabindex="-1"></a>                <span class="at">valign =</span> <span class="st">"top"</span>) <span class="sc">%&gt;%</span></span>
+<span id="cb2-108"><a href="#cb2-108" aria-hidden="true" tabindex="-1"></a>  <span class="fu">row_spec</span>(<span class="dv">0</span>,</span>
+<span id="cb2-109"><a href="#cb2-109" aria-hidden="true" tabindex="-1"></a>           <span class="at">background =</span> <span class="st">"#404040"</span>,</span>
+<span id="cb2-110"><a href="#cb2-110" aria-hidden="true" tabindex="-1"></a>           <span class="at">color =</span> <span class="st">"white"</span>) <span class="sc">%&gt;%</span></span>
+<span id="cb2-111"><a href="#cb2-111" aria-hidden="true" tabindex="-1"></a>  <span class="fu">column_spec</span>(<span class="dv">1</span><span class="sc">:</span><span class="dv">6</span>,</span>
+<span id="cb2-112"><a href="#cb2-112" aria-hidden="true" tabindex="-1"></a>              <span class="at">extra_css =</span> <span class="st">"vertical-align:middle;"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output-display">
+
+<table class="table table-striped" style="margin-left: auto; margin-right: auto;">
+<thead>
+<tr>
+<th style="text-align:center;color: white !important;background-color: #404040 !important;">
+Mixture Type
+</th>
+<th style="text-align:center;color: white !important;background-color: #404040 !important;">
+<em>mclust</em><br>Model Name
+</th>
+<th style="text-align:center;color: white !important;background-color: #404040 !important;">
+Distribution
+</th>
+<th style="text-align:center;color: white !important;background-color: #404040 !important;">
+Volume
+</th>
+<th style="text-align:center;color: white !important;background-color: #404040 !important;">
+Shape
+</th>
+<th style="text-align:center;color: white !important;background-color: #404040 !important;">
+Orientation
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:center;vertical-align:middle;">
+Univariate
+</td>
+<td style="text-align:center;vertical-align:middle;">
+E
+</td>
+<td style="text-align:center;vertical-align:middle;">
+Equal variance
+</td>
+<td style="text-align:center;vertical-align:middle;">
+–
+</td>
+<td style="text-align:center;vertical-align:middle;">
+–
+</td>
+<td style="text-align:center;vertical-align:middle;">
+–
+</td>
+</tr>
+<tr>
+<td style="text-align:center;vertical-align:middle;">
+Univariate
+</td>
+<td style="text-align:center;vertical-align:middle;">
+V
+</td>
+<td style="text-align:center;vertical-align:middle;">
+Variable /<br>Unequal Variance
+</td>
+<td style="text-align:center;vertical-align:middle;">
+–
+</td>
+<td style="text-align:center;vertical-align:middle;">
+–
+</td>
+<td style="text-align:center;vertical-align:middle;">
+–
+</td>
+</tr>
+<tr>
+<td style="text-align:center;vertical-align:middle;">
+Multivariate
+</td>
+<td style="text-align:center;vertical-align:middle;">
+EII
+</td>
+<td style="text-align:center;vertical-align:middle;">
+Spherical
+</td>
+<td style="text-align:center;vertical-align:middle;">
+Equal
+</td>
+<td style="text-align:center;vertical-align:middle;">
+Equal
+</td>
+<td style="text-align:center;vertical-align:middle;">
+–
+</td>
+</tr>
+<tr>
+<td style="text-align:center;vertical-align:middle;">
+Multivariate
+</td>
+<td style="text-align:center;vertical-align:middle;">
+VII
+</td>
+<td style="text-align:center;vertical-align:middle;">
+Spherical
+</td>
+<td style="text-align:center;vertical-align:middle;">
+Variable
+</td>
+<td style="text-align:center;vertical-align:middle;">
+Equal
+</td>
+<td style="text-align:center;vertical-align:middle;">
+–
+</td>
+</tr>
+<tr>
+<td style="text-align:center;vertical-align:middle;">
+Multivariate
+</td>
+<td style="text-align:center;vertical-align:middle;">
+EEI
+</td>
+<td style="text-align:center;vertical-align:middle;">
+Diagonal
+</td>
+<td style="text-align:center;vertical-align:middle;">
+Equal
+</td>
+<td style="text-align:center;vertical-align:middle;">
+Equal
+</td>
+<td style="text-align:center;vertical-align:middle;">
+Coordinate<br>Axes
+</td>
+</tr>
+<tr>
+<td style="text-align:center;vertical-align:middle;">
+Multivariate
+</td>
+<td style="text-align:center;vertical-align:middle;">
+VEI
+</td>
+<td style="text-align:center;vertical-align:middle;">
+Diagonal
+</td>
+<td style="text-align:center;vertical-align:middle;">
+Variable
+</td>
+<td style="text-align:center;vertical-align:middle;">
+Equal
+</td>
+<td style="text-align:center;vertical-align:middle;">
+Coordinate<br>Axes
+</td>
+</tr>
+<tr>
+<td style="text-align:center;vertical-align:middle;">
+Multivariate
+</td>
+<td style="text-align:center;vertical-align:middle;">
+EVI
+</td>
+<td style="text-align:center;vertical-align:middle;">
+Diagonal
+</td>
+<td style="text-align:center;vertical-align:middle;">
+Equal
+</td>
+<td style="text-align:center;vertical-align:middle;">
+Variable
+</td>
+<td style="text-align:center;vertical-align:middle;">
+Coordinate<br>Axes
+</td>
+</tr>
+<tr>
+<td style="text-align:center;vertical-align:middle;">
+Multivariate
+</td>
+<td style="text-align:center;vertical-align:middle;">
+VVI
+</td>
+<td style="text-align:center;vertical-align:middle;">
+Diagonal
+</td>
+<td style="text-align:center;vertical-align:middle;">
+Variable
+</td>
+<td style="text-align:center;vertical-align:middle;">
+Variable
+</td>
+<td style="text-align:center;vertical-align:middle;">
+Coordinate<br>Axes
+</td>
+</tr>
+<tr>
+<td style="text-align:center;vertical-align:middle;">
+Multivariate
+</td>
+<td style="text-align:center;vertical-align:middle;">
+EEE
+</td>
+<td style="text-align:center;vertical-align:middle;">
+Ellipsoidal
+</td>
+<td style="text-align:center;vertical-align:middle;">
+Equal
+</td>
+<td style="text-align:center;vertical-align:middle;">
+Equal
+</td>
+<td style="text-align:center;vertical-align:middle;">
+Equal
+</td>
+</tr>
+<tr>
+<td style="text-align:center;vertical-align:middle;">
+Multivariate
+</td>
+<td style="text-align:center;vertical-align:middle;">
+VEE
+</td>
+<td style="text-align:center;vertical-align:middle;">
+Ellipsoidal
+</td>
+<td style="text-align:center;vertical-align:middle;">
+Variable
+</td>
+<td style="text-align:center;vertical-align:middle;">
+Equal
+</td>
+<td style="text-align:center;vertical-align:middle;">
+Equal
+</td>
+</tr>
+<tr>
+<td style="text-align:center;vertical-align:middle;">
+Multivariate
+</td>
+<td style="text-align:center;vertical-align:middle;">
+EVE
+</td>
+<td style="text-align:center;vertical-align:middle;">
+Ellipsoidal
+</td>
+<td style="text-align:center;vertical-align:middle;">
+Equal
+</td>
+<td style="text-align:center;vertical-align:middle;">
+Variable
+</td>
+<td style="text-align:center;vertical-align:middle;">
+Equal
+</td>
+</tr>
+<tr>
+<td style="text-align:center;vertical-align:middle;">
+Multivariate
+</td>
+<td style="text-align:center;vertical-align:middle;">
+VVE
+</td>
+<td style="text-align:center;vertical-align:middle;">
+Ellipsoidal
+</td>
+<td style="text-align:center;vertical-align:middle;">
+Variable
+</td>
+<td style="text-align:center;vertical-align:middle;">
+Variable
+</td>
+<td style="text-align:center;vertical-align:middle;">
+Equal
+</td>
+</tr>
+<tr>
+<td style="text-align:center;vertical-align:middle;">
+Multivariate
+</td>
+<td style="text-align:center;vertical-align:middle;">
+EEV
+</td>
+<td style="text-align:center;vertical-align:middle;">
+Ellipsoidal
+</td>
+<td style="text-align:center;vertical-align:middle;">
+Equal
+</td>
+<td style="text-align:center;vertical-align:middle;">
+Equal
+</td>
+<td style="text-align:center;vertical-align:middle;">
+Variable
+</td>
+</tr>
+<tr>
+<td style="text-align:center;vertical-align:middle;">
+Multivariate
+</td>
+<td style="text-align:center;vertical-align:middle;">
+VEV
+</td>
+<td style="text-align:center;vertical-align:middle;">
+Ellipsoidal
+</td>
+<td style="text-align:center;vertical-align:middle;">
+Variable
+</td>
+<td style="text-align:center;vertical-align:middle;">
+Equal
+</td>
+<td style="text-align:center;vertical-align:middle;">
+Variable
+</td>
+</tr>
+<tr>
+<td style="text-align:center;vertical-align:middle;">
+Multivariate
+</td>
+<td style="text-align:center;vertical-align:middle;">
+EVV
+</td>
+<td style="text-align:center;vertical-align:middle;">
+Ellipsoidal
+</td>
+<td style="text-align:center;vertical-align:middle;">
+Equal
+</td>
+<td style="text-align:center;vertical-align:middle;">
+Variable
+</td>
+<td style="text-align:center;vertical-align:middle;">
+Variable
+</td>
+</tr>
+<tr>
+<td style="text-align:center;vertical-align:middle;">
+Multivariate
+</td>
+<td style="text-align:center;vertical-align:middle;">
+VVV
+</td>
+<td style="text-align:center;vertical-align:middle;">
+Ellipsoidal
+</td>
+<td style="text-align:center;vertical-align:middle;">
+Variable
+</td>
+<td style="text-align:center;vertical-align:middle;">
+Variable
+</td>
+<td style="text-align:center;vertical-align:middle;">
+Variable
+</td>
+</tr>
+</tbody>
+
+</table>
+<p><em>(Parameterisations of the within-group covariance matrix Σk for multidimensional data available in the mclust package, and the corresponding geometric characteristics.)</em></p>
+</div>
+<details>
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb3"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a>  <span class="co"># column_spec(2:3,</span></span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a>  <span class="co">#              width = "4cm") %&gt;%</span></span>
+<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a>  <span class="co"># column_spec(6,</span></span>
+<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a>  <span class="co">#              width = "4cm")</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+</div>
+<p><br>
+<span style="text-decoration: underline;">GMM-T (Gaussian Mixture Model on the as-is form of traditional variable manipulation)</span><br>
+Similarly, the optimal number of clusters needs to be computed here. These are then directly ingested into the OSI Node called ‘OSI5-GMM-T-Explore.’ Calling the <em>mclust</em> package, a function to record the BIC value of a particular cluster <em>k</em> is created, and then looped through cluster counts 2 to 20. Again, this is a much lower initial cluster exploration range, compared to the <em>k</em>-means count range of 2 to 50. This is due to the long processing time, as the cluster count increases. These BIC values are then plotted within EM, as seen below.<br>
+<br>
+</p>
+<div class="grid">
+<div class="g-col-4">
+<div id="fig-menu14" class="quarto-figure quarto-figure-center anchored">
+<figure class="figure">
+<p><img src="data/fig20.png" class="img-fluid figure-img"></p>
+<figcaption class="figure-caption">Figure&nbsp;20: Silhouette Index for GMM-T output</figcaption>
+</figure>
+</div>
+</div>
+<div class="g-col-8">
+<p>The BIC values generally improve as the number of clusters <em>k</em> increases. Using VEV values as recommended by the <em>mclust</em> package, cluster 8 had the highest BIC values. Thus, we will regard <em>k</em> = 8 as its most optimized cluster count.<br>
+<br>
+Another OSI Node, called ‘OSI19-GMM-T-8-Clusters,’ is now attached to the Data_All Node. The <em>k</em> = 8 cluster output will be generated together with its histogram plots. Analysis of these results will also be covered in a later section.<br>
+<br>
+<br>
+<br>
+</p>
+</div>
+</div>
+<p><span style="text-decoration: underline;">GMM-R (Gaussian Mixture Model on the as-is form of 2 reduct inputs)</span><br>
+Similarly, the optimal number of clusters needs to be computed here. These are then directly ingested into the OSI Node called ‘OSI6-GMM-R-Explore.’ Calling the <em>mclust</em> package, a function to record the BIC value of a particular cluster <em>k</em> is created, and then looped through cluster counts 2 to 20. Again, this is a much lower initial cluster exploration range, compared to the k-means count range of 2 to 50. This is due to the long processing time, as the cluster count increases. These BIC values are then plotted within EM, as seen below.<br>
+<br>
+</p>
+<div class="grid">
+<div class="g-col-4">
+<div id="fig-menu15" class="quarto-figure quarto-figure-center anchored">
+<figure class="figure">
+<p><img src="data/fig21.png" class="img-fluid figure-img"></p>
+<figcaption class="figure-caption">Figure&nbsp;21: Silhouette Index for GMM-T output</figcaption>
+</figure>
+</div>
+</div>
+<div class="g-col-8">
+<p>Similarly, the BIC values generally improve as the number of clusters <em>k</em> increases. Using EVV values as recommended by the mclust package, cluster 19 had the highest BIC values. Thus, we will regard <em>k</em> = 19 as its most optimized cluster count.<br>
+<br>
+Another OSI Node, called ‘OSI20-GMM-T-19-Clusters,’ is now attached to the Data_All Node. The <em>k</em> = 19 cluster output will be generated together with its histogram plots. Analysis of these results will also be covered in a later section.<br>
+<br>
+<br>
+<br>
+<br>
+</p>
+</div>
+</div>
+</section>
+</section>
+<section id="analysis-and-results" class="level2">
+<h2 class="anchored" data-anchor-id="analysis-and-results">5.0 Analysis and Results</h2>
+<section id="overview-of-clustering-output-results" class="level3">
+<h3 class="anchored" data-anchor-id="overview-of-clustering-output-results">5.1 Overview of Clustering Output Results</h3>
+<p>After identifying the optimal cluster counts for each output, this section covers the distribution of each cluster, as well as explore its individual characteristics. Tweaks to the outputs may be explored as well, where needed. Figure below shows the outputs for exploration.<br>
+<br>
+</p>
+<div id="fig-workflow6" class="quarto-figure quarto-figure-center anchored">
+<figure class="figure">
+<p><img src="data/Capstone_workflow6.png" class="img-fluid figure-img"></p>
+<figcaption class="figure-caption">Figure&nbsp;22: Capstone Workflow with emphasis on current step</figcaption>
+</figure>
+</div>
+<p>Most of the optimal cluster counts hovered at the 2-cluster mark. This was generally true for both the traditional and fuzzy k-means clustering outputs, except for the TKM-A-T. GMM produced a much higher cluster count at 8 and 19 respectively.<br>
+<br>
+</p>
+<div class="cell" data-fig-cap-location="bottom">
+<details>
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb4"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a>barchart1 <span class="ot">&lt;-</span> <span class="fu">tibble</span>(<span class="at">Type =</span> <span class="fu">c</span>(<span class="st">"TKM-N-T"</span>,</span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a>                             <span class="st">"TKM-N-R"</span>,</span>
+<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a>                             <span class="st">"TKM-A-T"</span>,</span>
+<span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a>                             <span class="st">"TKM-A-R"</span>,</span>
+<span id="cb4-5"><a href="#cb4-5" aria-hidden="true" tabindex="-1"></a>                             <span class="st">"FKM-T"</span>,</span>
+<span id="cb4-6"><a href="#cb4-6" aria-hidden="true" tabindex="-1"></a>                             <span class="st">"FKM-R"</span>,</span>
+<span id="cb4-7"><a href="#cb4-7" aria-hidden="true" tabindex="-1"></a>                             <span class="st">"GMM-T"</span>,</span>
+<span id="cb4-8"><a href="#cb4-8" aria-hidden="true" tabindex="-1"></a>                             <span class="st">"GMM-R"</span>),</span>
+<span id="cb4-9"><a href="#cb4-9" aria-hidden="true" tabindex="-1"></a>                   <span class="at">ClusterCount =</span> <span class="fu">c</span>(<span class="dv">2</span>,</span>
+<span id="cb4-10"><a href="#cb4-10" aria-hidden="true" tabindex="-1"></a>                                    <span class="dv">2</span>,</span>
+<span id="cb4-11"><a href="#cb4-11" aria-hidden="true" tabindex="-1"></a>                                    <span class="dv">3</span>,</span>
+<span id="cb4-12"><a href="#cb4-12" aria-hidden="true" tabindex="-1"></a>                                    <span class="dv">2</span>,</span>
+<span id="cb4-13"><a href="#cb4-13" aria-hidden="true" tabindex="-1"></a>                                    <span class="dv">2</span>,</span>
+<span id="cb4-14"><a href="#cb4-14" aria-hidden="true" tabindex="-1"></a>                                    <span class="dv">2</span>,</span>
+<span id="cb4-15"><a href="#cb4-15" aria-hidden="true" tabindex="-1"></a>                                    <span class="dv">8</span>,</span>
+<span id="cb4-16"><a href="#cb4-16" aria-hidden="true" tabindex="-1"></a>                                    <span class="dv">19</span>)) <span class="sc">%&gt;%</span></span>
+<span id="cb4-17"><a href="#cb4-17" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">Type =</span> <span class="fu">factor</span>(Type,</span>
+<span id="cb4-18"><a href="#cb4-18" aria-hidden="true" tabindex="-1"></a>                       <span class="at">levels =</span> <span class="fu">c</span>(<span class="st">"TKM-N-T"</span>,</span>
+<span id="cb4-19"><a href="#cb4-19" aria-hidden="true" tabindex="-1"></a>                            <span class="st">"TKM-N-R"</span>,</span>
+<span id="cb4-20"><a href="#cb4-20" aria-hidden="true" tabindex="-1"></a>                            <span class="st">"TKM-A-T"</span>,</span>
+<span id="cb4-21"><a href="#cb4-21" aria-hidden="true" tabindex="-1"></a>                            <span class="st">"TKM-A-R"</span>,</span>
+<span id="cb4-22"><a href="#cb4-22" aria-hidden="true" tabindex="-1"></a>                            <span class="st">"FKM-T"</span>,</span>
+<span id="cb4-23"><a href="#cb4-23" aria-hidden="true" tabindex="-1"></a>                            <span class="st">"FKM-R"</span>,</span>
+<span id="cb4-24"><a href="#cb4-24" aria-hidden="true" tabindex="-1"></a>                            <span class="st">"GMM-T"</span>,</span>
+<span id="cb4-25"><a href="#cb4-25" aria-hidden="true" tabindex="-1"></a>                            <span class="st">"GMM-R"</span>))) <span class="sc">%&gt;%</span></span>
+<span id="cb4-26"><a href="#cb4-26" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggplot</span>(<span class="fu">aes</span>(<span class="at">x =</span> Type, </span>
+<span id="cb4-27"><a href="#cb4-27" aria-hidden="true" tabindex="-1"></a>             <span class="at">y =</span> ClusterCount)) <span class="sc">+</span></span>
+<span id="cb4-28"><a href="#cb4-28" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_bar</span>(<span class="at">stat =</span> <span class="st">"identity"</span>,</span>
+<span id="cb4-29"><a href="#cb4-29" aria-hidden="true" tabindex="-1"></a>           <span class="at">fill =</span> <span class="st">"#404040"</span>) <span class="sc">+</span></span>
+<span id="cb4-30"><a href="#cb4-30" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_text</span>(<span class="fu">aes</span>(<span class="at">label =</span> ClusterCount),</span>
+<span id="cb4-31"><a href="#cb4-31" aria-hidden="true" tabindex="-1"></a>            <span class="at">vjust =</span> <span class="sc">-</span><span class="fl">0.4</span>) <span class="sc">+</span></span>
+<span id="cb4-32"><a href="#cb4-32" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme</span>(<span class="at">axis.text.y =</span> <span class="fu">element_blank</span>(),</span>
+<span id="cb4-33"><a href="#cb4-33" aria-hidden="true" tabindex="-1"></a>        <span class="at">axis.ticks =</span> <span class="fu">element_blank</span>(),</span>
+<span id="cb4-34"><a href="#cb4-34" aria-hidden="true" tabindex="-1"></a>        <span class="at">axis.title =</span> <span class="fu">element_blank</span>(),</span>
+<span id="cb4-35"><a href="#cb4-35" aria-hidden="true" tabindex="-1"></a>        <span class="at">panel.background =</span> <span class="fu">element_blank</span>(),</span>
+<span id="cb4-36"><a href="#cb4-36" aria-hidden="true" tabindex="-1"></a>        <span class="at">panel.grid.major =</span> <span class="fu">element_blank</span>())</span>
+<span id="cb4-37"><a href="#cb4-37" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-38"><a href="#cb4-38" aria-hidden="true" tabindex="-1"></a>barchart1</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output-display">
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="index_files/figure-html/barchart-1-1.png" class="img-fluid figure-img" width="672"></p>
+<figcaption class="figure-caption"><em>(Optimal Cluster Counts for Each Clustering Output)</em></figcaption>
+</figure>
+</div>
+</div>
+</div>
+<p>Table 3 shows the various output distribution within each cluster. It would appear that both the traditional and fuzzy <em>k</em>-means output, from a <em>reduct</em> dataset, had very low distribution in their first cluster, when compared to their second. Coversely, there is a more even distribution for the same clustering outputs, from a regular dataset. For the GMM outputs, the reduct dataset yielded a very uneven spread, compared to the regular dataset.<br>
+<br>
+</p>
+<div class="cell" data-fig-cap-location="bottom">
+<details>
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb5"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a>table3 <span class="ot">&lt;-</span> <span class="fu">tibble</span>(<span class="st">`</span><span class="at">Cluster No.</span><span class="st">`</span> <span class="ot">=</span> <span class="fu">c</span>(<span class="dv">1</span>, <span class="dv">2</span>, <span class="dv">3</span>, <span class="dv">4</span>, <span class="dv">5</span>, <span class="dv">6</span>, <span class="dv">7</span>, <span class="dv">8</span>, <span class="dv">9</span>, <span class="dv">10</span>, <span class="dv">11</span>, <span class="dv">12</span>, <span class="dv">13</span>, <span class="dv">14</span>, <span class="dv">15</span>, <span class="dv">16</span>, <span class="dv">17</span>, <span class="dv">18</span>, <span class="dv">19</span>),</span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a>                 <span class="st">`</span><span class="at">TKM-N-T</span><span class="st">`</span> <span class="ot">=</span> <span class="fu">c</span>(<span class="st">"1,287"</span>, <span class="st">"1,183"</span>, <span class="st">"--"</span>, <span class="st">"--"</span>, <span class="st">"--"</span>, <span class="st">"--"</span>, <span class="st">"--"</span>, <span class="st">"--"</span>, <span class="st">"--"</span>, <span class="st">"--"</span>, <span class="st">"--"</span>, <span class="st">"--"</span>, <span class="st">"--"</span>, <span class="st">"--"</span>, <span class="st">"--"</span>, <span class="st">"--"</span>, <span class="st">"--"</span>, <span class="st">"--"</span>, <span class="st">"--"</span>),</span>
+<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a>                 <span class="st">`</span><span class="at">TKM-N-R</span><span class="st">`</span> <span class="ot">=</span> <span class="fu">c</span>(<span class="st">"143"</span>, <span class="st">"2,327"</span>, <span class="st">"--"</span>, <span class="st">"--"</span>, <span class="st">"--"</span>, <span class="st">"--"</span>, <span class="st">"--"</span>, <span class="st">"--"</span>, <span class="st">"--"</span>, <span class="st">"--"</span>, <span class="st">"--"</span>, <span class="st">"--"</span>, <span class="st">"--"</span>, <span class="st">"--"</span>, <span class="st">"--"</span>, <span class="st">"--"</span>, <span class="st">"--"</span>, <span class="st">"--"</span>, <span class="st">"--"</span>),</span>
+<span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a>                 <span class="st">`</span><span class="at">TKM-A-T</span><span class="st">`</span> <span class="ot">=</span> <span class="fu">c</span>(<span class="st">"774"</span>, <span class="st">"1,452"</span>, <span class="st">"244"</span>, <span class="st">"--"</span>, <span class="st">"--"</span>, <span class="st">"--"</span>, <span class="st">"--"</span>, <span class="st">"--"</span>, <span class="st">"--"</span>, <span class="st">"--"</span>, <span class="st">"--"</span>, <span class="st">"--"</span>, <span class="st">"--"</span>, <span class="st">"--"</span>, <span class="st">"--"</span>, <span class="st">"--"</span>, <span class="st">"--"</span>, <span class="st">"--"</span>, <span class="st">"--"</span>),</span>
+<span id="cb5-5"><a href="#cb5-5" aria-hidden="true" tabindex="-1"></a>                 <span class="st">`</span><span class="at">TKM-A-R</span><span class="st">`</span> <span class="ot">=</span> <span class="fu">c</span>(<span class="st">"74"</span>, <span class="st">"2,396"</span>, <span class="st">"--"</span>, <span class="st">"--"</span>, <span class="st">"--"</span>, <span class="st">"--"</span>, <span class="st">"--"</span>, <span class="st">"--"</span>, <span class="st">"--"</span>, <span class="st">"--"</span>, <span class="st">"--"</span>, <span class="st">"--"</span>, <span class="st">"--"</span>, <span class="st">"--"</span>, <span class="st">"--"</span>, <span class="st">"--"</span>, <span class="st">"--"</span>, <span class="st">"--"</span>, <span class="st">"--"</span>),</span>
+<span id="cb5-6"><a href="#cb5-6" aria-hidden="true" tabindex="-1"></a>                 <span class="st">`</span><span class="at">FKM-T</span><span class="st">`</span> <span class="ot">=</span> <span class="fu">c</span>(<span class="st">"1,421"</span>, <span class="st">"1,049"</span>, <span class="st">"--"</span>, <span class="st">"--"</span>, <span class="st">"--"</span>, <span class="st">"--"</span>, <span class="st">"--"</span>, <span class="st">"--"</span>, <span class="st">"--"</span>, <span class="st">"--"</span>, <span class="st">"--"</span>, <span class="st">"--"</span>, <span class="st">"--"</span>, <span class="st">"--"</span>, <span class="st">"--"</span>, <span class="st">"--"</span>, <span class="st">"--"</span>, <span class="st">"--"</span>, <span class="st">"--"</span>),</span>
+<span id="cb5-7"><a href="#cb5-7" aria-hidden="true" tabindex="-1"></a>                 <span class="st">`</span><span class="at">FKM-R</span><span class="st">`</span> <span class="ot">=</span> <span class="fu">c</span>(<span class="st">"100"</span>, <span class="st">"2,370"</span>, <span class="st">"--"</span>, <span class="st">"--"</span>, <span class="st">"--"</span>, <span class="st">"--"</span>, <span class="st">"--"</span>, <span class="st">"--"</span>, <span class="st">"--"</span>, <span class="st">"--"</span>, <span class="st">"--"</span>, <span class="st">"--"</span>, <span class="st">"--"</span>, <span class="st">"--"</span>, <span class="st">"--"</span>, <span class="st">"--"</span>, <span class="st">"--"</span>, <span class="st">"--"</span>, <span class="st">"--"</span>),</span>
+<span id="cb5-8"><a href="#cb5-8" aria-hidden="true" tabindex="-1"></a>                 <span class="st">`</span><span class="at">GMM-T</span><span class="st">`</span> <span class="ot">=</span> <span class="fu">c</span>(<span class="st">"283"</span>, <span class="st">"504"</span>, <span class="st">"298"</span>, <span class="st">"146"</span>, <span class="st">"274"</span>, <span class="st">"552"</span>, <span class="st">"368"</span>, <span class="st">"45"</span>, <span class="st">"--"</span>, <span class="st">"--"</span>, <span class="st">"--"</span>, <span class="st">"--"</span>, <span class="st">"--"</span>, <span class="st">"--"</span>, <span class="st">"--"</span>, <span class="st">"--"</span>, <span class="st">"--"</span>, <span class="st">"--"</span>, <span class="st">"--"</span>),</span>
+<span id="cb5-9"><a href="#cb5-9" aria-hidden="true" tabindex="-1"></a>                 <span class="st">`</span><span class="at">GMM-R</span><span class="st">`</span> <span class="ot">=</span> <span class="fu">c</span>(<span class="st">"389"</span>, <span class="st">"11"</span>, <span class="st">"73"</span>, <span class="st">"40"</span>, <span class="st">"1,759"</span>, <span class="st">"51"</span>, <span class="st">"10"</span>, <span class="st">"10"</span>, <span class="st">"6"</span>, <span class="st">"22"</span>, <span class="st">"6"</span>, <span class="st">"9"</span>, <span class="st">"16"</span>, <span class="st">"22"</span>, <span class="st">"8"</span>, <span class="st">"15"</span>, <span class="st">"7"</span>, <span class="st">"3"</span>, <span class="st">"13"</span>))</span>
+<span id="cb5-10"><a href="#cb5-10" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-11"><a href="#cb5-11" aria-hidden="true" tabindex="-1"></a>knitr<span class="sc">::</span><span class="fu">kable</span>(table3,</span>
+<span id="cb5-12"><a href="#cb5-12" aria-hidden="true" tabindex="-1"></a>             <span class="st">"html"</span>,</span>
+<span id="cb5-13"><a href="#cb5-13" aria-hidden="true" tabindex="-1"></a>             <span class="at">booktabs =</span> <span class="cn">TRUE</span>,</span>
+<span id="cb5-14"><a href="#cb5-14" aria-hidden="true" tabindex="-1"></a>             <span class="co"># caption = 'Clustering Methods',</span></span>
+<span id="cb5-15"><a href="#cb5-15" aria-hidden="true" tabindex="-1"></a>             <span class="at">align =</span> <span class="st">"ccccccccc"</span>,</span>
+<span id="cb5-16"><a href="#cb5-16" aria-hidden="true" tabindex="-1"></a>             <span class="at">escape =</span> <span class="cn">FALSE</span>) <span class="sc">%&gt;%</span></span>
+<span id="cb5-17"><a href="#cb5-17" aria-hidden="true" tabindex="-1"></a>  <span class="fu">kable_styling</span>(<span class="at">bootstrap_options =</span> <span class="st">"striped"</span>,</span>
+<span id="cb5-18"><a href="#cb5-18" aria-hidden="true" tabindex="-1"></a>                <span class="at">full_width =</span> <span class="cn">TRUE</span>) <span class="sc">%&gt;%</span></span>
+<span id="cb5-19"><a href="#cb5-19" aria-hidden="true" tabindex="-1"></a>  <span class="fu">row_spec</span>(<span class="dv">0</span>,</span>
+<span id="cb5-20"><a href="#cb5-20" aria-hidden="true" tabindex="-1"></a>           <span class="at">background =</span> <span class="st">"#404040"</span>,</span>
+<span id="cb5-21"><a href="#cb5-21" aria-hidden="true" tabindex="-1"></a>           <span class="at">color =</span> <span class="st">"white"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output-display">
+
+<table class="table table-striped" style="margin-left: auto; margin-right: auto;">
+<thead>
+<tr>
+<th style="text-align:center;color: white !important;background-color: #404040 !important;">
+Cluster No.&nbsp;
+</th>
+<th style="text-align:center;color: white !important;background-color: #404040 !important;">
+TKM-N-T
+</th>
+<th style="text-align:center;color: white !important;background-color: #404040 !important;">
+TKM-N-R
+</th>
+<th style="text-align:center;color: white !important;background-color: #404040 !important;">
+TKM-A-T
+</th>
+<th style="text-align:center;color: white !important;background-color: #404040 !important;">
+TKM-A-R
+</th>
+<th style="text-align:center;color: white !important;background-color: #404040 !important;">
+FKM-T
+</th>
+<th style="text-align:center;color: white !important;background-color: #404040 !important;">
+FKM-R
+</th>
+<th style="text-align:center;color: white !important;background-color: #404040 !important;">
+GMM-T
+</th>
+<th style="text-align:center;color: white !important;background-color: #404040 !important;">
+GMM-R
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:center;">
+1
+</td>
+<td style="text-align:center;">
+1,287
+</td>
+<td style="text-align:center;">
+143
+</td>
+<td style="text-align:center;">
+774
+</td>
+<td style="text-align:center;">
+74
+</td>
+<td style="text-align:center;">
+1,421
+</td>
+<td style="text-align:center;">
+100
+</td>
+<td style="text-align:center;">
+283
+</td>
+<td style="text-align:center;">
+389
+</td>
+</tr>
+<tr>
+<td style="text-align:center;">
+2
+</td>
+<td style="text-align:center;">
+1,183
+</td>
+<td style="text-align:center;">
+2,327
+</td>
+<td style="text-align:center;">
+1,452
+</td>
+<td style="text-align:center;">
+2,396
+</td>
+<td style="text-align:center;">
+1,049
+</td>
+<td style="text-align:center;">
+2,370
+</td>
+<td style="text-align:center;">
+504
+</td>
+<td style="text-align:center;">
+11
+</td>
+</tr>
+<tr>
+<td style="text-align:center;">
+3
+</td>
+<td style="text-align:center;">
+–
+</td>
+<td style="text-align:center;">
+–
+</td>
+<td style="text-align:center;">
+244
+</td>
+<td style="text-align:center;">
+–
+</td>
+<td style="text-align:center;">
+–
+</td>
+<td style="text-align:center;">
+–
+</td>
+<td style="text-align:center;">
+298
+</td>
+<td style="text-align:center;">
+73
+</td>
+</tr>
+<tr>
+<td style="text-align:center;">
+4
+</td>
+<td style="text-align:center;">
+–
+</td>
+<td style="text-align:center;">
+–
+</td>
+<td style="text-align:center;">
+–
+</td>
+<td style="text-align:center;">
+–
+</td>
+<td style="text-align:center;">
+–
+</td>
+<td style="text-align:center;">
+–
+</td>
+<td style="text-align:center;">
+146
+</td>
+<td style="text-align:center;">
+40
+</td>
+</tr>
+<tr>
+<td style="text-align:center;">
+5
+</td>
+<td style="text-align:center;">
+–
+</td>
+<td style="text-align:center;">
+–
+</td>
+<td style="text-align:center;">
+–
+</td>
+<td style="text-align:center;">
+–
+</td>
+<td style="text-align:center;">
+–
+</td>
+<td style="text-align:center;">
+–
+</td>
+<td style="text-align:center;">
+274
+</td>
+<td style="text-align:center;">
+1,759
+</td>
+</tr>
+<tr>
+<td style="text-align:center;">
+6
+</td>
+<td style="text-align:center;">
+–
+</td>
+<td style="text-align:center;">
+–
+</td>
+<td style="text-align:center;">
+–
+</td>
+<td style="text-align:center;">
+–
+</td>
+<td style="text-align:center;">
+–
+</td>
+<td style="text-align:center;">
+–
+</td>
+<td style="text-align:center;">
+552
+</td>
+<td style="text-align:center;">
+51
+</td>
+</tr>
+<tr>
+<td style="text-align:center;">
+7
+</td>
+<td style="text-align:center;">
+–
+</td>
+<td style="text-align:center;">
+–
+</td>
+<td style="text-align:center;">
+–
+</td>
+<td style="text-align:center;">
+–
+</td>
+<td style="text-align:center;">
+–
+</td>
+<td style="text-align:center;">
+–
+</td>
+<td style="text-align:center;">
+368
+</td>
+<td style="text-align:center;">
+10
+</td>
+</tr>
+<tr>
+<td style="text-align:center;">
+8
+</td>
+<td style="text-align:center;">
+–
+</td>
+<td style="text-align:center;">
+–
+</td>
+<td style="text-align:center;">
+–
+</td>
+<td style="text-align:center;">
+–
+</td>
+<td style="text-align:center;">
+–
+</td>
+<td style="text-align:center;">
+–
+</td>
+<td style="text-align:center;">
+45
+</td>
+<td style="text-align:center;">
+10
+</td>
+</tr>
+<tr>
+<td style="text-align:center;">
+9
+</td>
+<td style="text-align:center;">
+–
+</td>
+<td style="text-align:center;">
+–
+</td>
+<td style="text-align:center;">
+–
+</td>
+<td style="text-align:center;">
+–
+</td>
+<td style="text-align:center;">
+–
+</td>
+<td style="text-align:center;">
+–
+</td>
+<td style="text-align:center;">
+–
+</td>
+<td style="text-align:center;">
+6
+</td>
+</tr>
+<tr>
+<td style="text-align:center;">
+10
+</td>
+<td style="text-align:center;">
+–
+</td>
+<td style="text-align:center;">
+–
+</td>
+<td style="text-align:center;">
+–
+</td>
+<td style="text-align:center;">
+–
+</td>
+<td style="text-align:center;">
+–
+</td>
+<td style="text-align:center;">
+–
+</td>
+<td style="text-align:center;">
+–
+</td>
+<td style="text-align:center;">
+22
+</td>
+</tr>
+<tr>
+<td style="text-align:center;">
+11
+</td>
+<td style="text-align:center;">
+–
+</td>
+<td style="text-align:center;">
+–
+</td>
+<td style="text-align:center;">
+–
+</td>
+<td style="text-align:center;">
+–
+</td>
+<td style="text-align:center;">
+–
+</td>
+<td style="text-align:center;">
+–
+</td>
+<td style="text-align:center;">
+–
+</td>
+<td style="text-align:center;">
+6
+</td>
+</tr>
+<tr>
+<td style="text-align:center;">
+12
+</td>
+<td style="text-align:center;">
+–
+</td>
+<td style="text-align:center;">
+–
+</td>
+<td style="text-align:center;">
+–
+</td>
+<td style="text-align:center;">
+–
+</td>
+<td style="text-align:center;">
+–
+</td>
+<td style="text-align:center;">
+–
+</td>
+<td style="text-align:center;">
+–
+</td>
+<td style="text-align:center;">
+9
+</td>
+</tr>
+<tr>
+<td style="text-align:center;">
+13
+</td>
+<td style="text-align:center;">
+–
+</td>
+<td style="text-align:center;">
+–
+</td>
+<td style="text-align:center;">
+–
+</td>
+<td style="text-align:center;">
+–
+</td>
+<td style="text-align:center;">
+–
+</td>
+<td style="text-align:center;">
+–
+</td>
+<td style="text-align:center;">
+–
+</td>
+<td style="text-align:center;">
+16
+</td>
+</tr>
+<tr>
+<td style="text-align:center;">
+14
+</td>
+<td style="text-align:center;">
+–
+</td>
+<td style="text-align:center;">
+–
+</td>
+<td style="text-align:center;">
+–
+</td>
+<td style="text-align:center;">
+–
+</td>
+<td style="text-align:center;">
+–
+</td>
+<td style="text-align:center;">
+–
+</td>
+<td style="text-align:center;">
+–
+</td>
+<td style="text-align:center;">
+22
+</td>
+</tr>
+<tr>
+<td style="text-align:center;">
+15
+</td>
+<td style="text-align:center;">
+–
+</td>
+<td style="text-align:center;">
+–
+</td>
+<td style="text-align:center;">
+–
+</td>
+<td style="text-align:center;">
+–
+</td>
+<td style="text-align:center;">
+–
+</td>
+<td style="text-align:center;">
+–
+</td>
+<td style="text-align:center;">
+–
+</td>
+<td style="text-align:center;">
+8
+</td>
+</tr>
+<tr>
+<td style="text-align:center;">
+16
+</td>
+<td style="text-align:center;">
+–
+</td>
+<td style="text-align:center;">
+–
+</td>
+<td style="text-align:center;">
+–
+</td>
+<td style="text-align:center;">
+–
+</td>
+<td style="text-align:center;">
+–
+</td>
+<td style="text-align:center;">
+–
+</td>
+<td style="text-align:center;">
+–
+</td>
+<td style="text-align:center;">
+15
+</td>
+</tr>
+<tr>
+<td style="text-align:center;">
+17
+</td>
+<td style="text-align:center;">
+–
+</td>
+<td style="text-align:center;">
+–
+</td>
+<td style="text-align:center;">
+–
+</td>
+<td style="text-align:center;">
+–
+</td>
+<td style="text-align:center;">
+–
+</td>
+<td style="text-align:center;">
+–
+</td>
+<td style="text-align:center;">
+–
+</td>
+<td style="text-align:center;">
+7
+</td>
+</tr>
+<tr>
+<td style="text-align:center;">
+18
+</td>
+<td style="text-align:center;">
+–
+</td>
+<td style="text-align:center;">
+–
+</td>
+<td style="text-align:center;">
+–
+</td>
+<td style="text-align:center;">
+–
+</td>
+<td style="text-align:center;">
+–
+</td>
+<td style="text-align:center;">
+–
+</td>
+<td style="text-align:center;">
+–
+</td>
+<td style="text-align:center;">
+3
+</td>
+</tr>
+<tr>
+<td style="text-align:center;">
+19
+</td>
+<td style="text-align:center;">
+–
+</td>
+<td style="text-align:center;">
+–
+</td>
+<td style="text-align:center;">
+–
+</td>
+<td style="text-align:center;">
+–
+</td>
+<td style="text-align:center;">
+–
+</td>
+<td style="text-align:center;">
+–
+</td>
+<td style="text-align:center;">
+–
+</td>
+<td style="text-align:center;">
+13
+</td>
+</tr>
+</tbody>
+
+</table>
+<p><em>(Distribution of 2,470 IDs across the various clustering outputs)</em></p>
+</div>
+</div>
+<p><br>
+The clustering outputs, together with their respective cluster traits, will be explored next. Given that there’s 28 variables to consider, only 9 of the more significant variables will be included here for each output.</p>
+</section>
+<section id="tkm-clustering-output-results" class="level3">
+<h3 class="anchored" data-anchor-id="tkm-clustering-output-results">5.2 TKM Clustering Output Results</h3>
+<p><span style="text-decoration: underline;">TKM-N-T (Traditional k-means clustering on normalized form of 16 non-collinear inputs)</span><br>
+Cluster 1 shoppers are a good mixture of frequent and infrequent shoppers. They are price sensitive, since they use a large number of discounts and sales per quantity are generally on the lower side. Their total spending is sizable.<br>
+<br>
+</p>
+<div class="cell" data-fig-cap-location="bottom">
+<details>
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb6"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="co"># output1 &lt;- tibble(`M_DISCOUNT_USED_PER_ACTIVE_WEEKDAY` = c("![](data/TKMNT_C1_1.png)",</span></span>
+<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a><span class="co">#                                                            "M_AVG_SALES_VALUE_PER_QTY",</span></span>
+<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a><span class="co">#                                                            "![](data/TKMNT_C1_4.png)"),</span></span>
+<span id="cb6-4"><a href="#cb6-4" aria-hidden="true" tabindex="-1"></a><span class="co">#                   `M_TOTAL_SPEND` = c("![](data/TKMNT_C1_2.png)",</span></span>
+<span id="cb6-5"><a href="#cb6-5" aria-hidden="true" tabindex="-1"></a><span class="co">#                                       "F_ACTIVE_WEEKEND_COUNT",</span></span>
+<span id="cb6-6"><a href="#cb6-6" aria-hidden="true" tabindex="-1"></a><span class="co">#                                       "![](data/TKMNT_C1_5.png)"),</span></span>
+<span id="cb6-7"><a href="#cb6-7" aria-hidden="true" tabindex="-1"></a><span class="co">#                   `F_ACTIVE_MORNING_COUNT` = c("![](data/TKMNT_C1_3.png)",</span></span>
+<span id="cb6-8"><a href="#cb6-8" aria-hidden="true" tabindex="-1"></a><span class="co">#                                                "F_ACTIVE_EVENING_COUNT",</span></span>
+<span id="cb6-9"><a href="#cb6-9" aria-hidden="true" tabindex="-1"></a><span class="co">#                                                "![](data/TKMNT_C1_6.png)"))</span></span>
+<span id="cb6-10"><a href="#cb6-10" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-11"><a href="#cb6-11" aria-hidden="true" tabindex="-1"></a>output1 <span class="ot">&lt;-</span> <span class="fu">tibble</span>(<span class="st">`</span><span class="at">M_DISCOUNT_USED&lt;br&gt;PER_ACTIVE_WEEKDAY</span><span class="st">`</span> <span class="ot">=</span> <span class="st">"![](data/TKMNT_C1_1.png)"</span>,</span>
+<span id="cb6-12"><a href="#cb6-12" aria-hidden="true" tabindex="-1"></a>                  <span class="st">`</span><span class="at">M_TOTAL_SPEND</span><span class="st">`</span> <span class="ot">=</span> <span class="st">"![](data/TKMNT_C1_2.png)"</span>,</span>
+<span id="cb6-13"><a href="#cb6-13" aria-hidden="true" tabindex="-1"></a>                  <span class="st">`</span><span class="at">F_ACTIVE&lt;br&gt;MORNING_COUNT</span><span class="st">`</span> <span class="ot">=</span> <span class="st">"![](data/TKMNT_C1_3.png)"</span>)</span>
+<span id="cb6-14"><a href="#cb6-14" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-15"><a href="#cb6-15" aria-hidden="true" tabindex="-1"></a>output2 <span class="ot">&lt;-</span> <span class="fu">tibble</span>(<span class="st">`</span><span class="at">M_AVG_SALES&lt;br&gt;VALUE_PER_QTY</span><span class="st">`</span> <span class="ot">=</span> <span class="st">"![](data/TKMNT_C1_4.png)"</span>,</span>
+<span id="cb6-16"><a href="#cb6-16" aria-hidden="true" tabindex="-1"></a>                  <span class="st">`</span><span class="at">F_ACTIVE&lt;br&gt;WEEKEND_COUNT</span><span class="st">`</span> <span class="ot">=</span> <span class="st">"![](data/TKMNT_C1_5.png)"</span>,</span>
+<span id="cb6-17"><a href="#cb6-17" aria-hidden="true" tabindex="-1"></a>                  <span class="st">`</span><span class="at">F_ACTIVE&lt;br&gt;EVENING_COUNT</span><span class="st">`</span> <span class="ot">=</span> <span class="st">"![](data/TKMNT_C1_6.png)"</span>)</span>
+<span id="cb6-18"><a href="#cb6-18" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-19"><a href="#cb6-19" aria-hidden="true" tabindex="-1"></a>output3 <span class="ot">&lt;-</span> <span class="fu">tibble</span>(<span class="st">`</span><span class="at">F_ACTIVE&lt;br&gt;AFTERNOON_COUNT</span><span class="st">`</span> <span class="ot">=</span> <span class="st">"![](data/TKMNT_C1_7.png)"</span>,</span>
+<span id="cb6-20"><a href="#cb6-20" aria-hidden="true" tabindex="-1"></a>                  <span class="st">`</span><span class="at">F_ACTIVE&lt;br&gt;WEEKDAY_COUNT</span><span class="st">`</span> <span class="ot">=</span> <span class="st">"![](data/TKMNT_C1_8.png)"</span>,</span>
+<span id="cb6-21"><a href="#cb6-21" aria-hidden="true" tabindex="-1"></a>                  <span class="st">`</span><span class="at">M_MIN_SPEND&lt;br&gt;PER_BASKET</span><span class="st">`</span> <span class="ot">=</span> <span class="st">"![](data/TKMNT_C1_9.png)"</span>)</span>
+<span id="cb6-22"><a href="#cb6-22" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-23"><a href="#cb6-23" aria-hidden="true" tabindex="-1"></a>knitr<span class="sc">::</span><span class="fu">kable</span>(output1,</span>
+<span id="cb6-24"><a href="#cb6-24" aria-hidden="true" tabindex="-1"></a>             <span class="st">"html"</span>,</span>
+<span id="cb6-25"><a href="#cb6-25" aria-hidden="true" tabindex="-1"></a>             <span class="at">booktabs =</span> <span class="cn">TRUE</span>,</span>
+<span id="cb6-26"><a href="#cb6-26" aria-hidden="true" tabindex="-1"></a>             <span class="at">align =</span> <span class="st">"ccc"</span>,</span>
+<span id="cb6-27"><a href="#cb6-27" aria-hidden="true" tabindex="-1"></a>             <span class="at">escape =</span> <span class="cn">FALSE</span>) <span class="sc">%&gt;%</span></span>
+<span id="cb6-28"><a href="#cb6-28" aria-hidden="true" tabindex="-1"></a>  <span class="fu">kable_styling</span>(<span class="at">bootstrap_options =</span> <span class="st">"striped"</span>,</span>
+<span id="cb6-29"><a href="#cb6-29" aria-hidden="true" tabindex="-1"></a>                <span class="at">full_width =</span> <span class="cn">TRUE</span>) <span class="sc">%&gt;%</span></span>
+<span id="cb6-30"><a href="#cb6-30" aria-hidden="true" tabindex="-1"></a>  <span class="fu">row_spec</span>(<span class="dv">0</span>,</span>
+<span id="cb6-31"><a href="#cb6-31" aria-hidden="true" tabindex="-1"></a>           <span class="at">background =</span> <span class="st">"#404040"</span>,</span>
+<span id="cb6-32"><a href="#cb6-32" aria-hidden="true" tabindex="-1"></a>           <span class="at">color =</span> <span class="st">"white"</span>)</span>
+<span id="cb6-33"><a href="#cb6-33" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-34"><a href="#cb6-34" aria-hidden="true" tabindex="-1"></a>knitr<span class="sc">::</span><span class="fu">kable</span>(output2,</span>
+<span id="cb6-35"><a href="#cb6-35" aria-hidden="true" tabindex="-1"></a>             <span class="st">"html"</span>,</span>
+<span id="cb6-36"><a href="#cb6-36" aria-hidden="true" tabindex="-1"></a>             <span class="at">booktabs =</span> <span class="cn">TRUE</span>,</span>
+<span id="cb6-37"><a href="#cb6-37" aria-hidden="true" tabindex="-1"></a>             <span class="at">align =</span> <span class="st">"ccc"</span>,</span>
+<span id="cb6-38"><a href="#cb6-38" aria-hidden="true" tabindex="-1"></a>             <span class="at">escape =</span> <span class="cn">FALSE</span>) <span class="sc">%&gt;%</span></span>
+<span id="cb6-39"><a href="#cb6-39" aria-hidden="true" tabindex="-1"></a>  <span class="fu">kable_styling</span>(<span class="at">bootstrap_options =</span> <span class="st">"striped"</span>,</span>
+<span id="cb6-40"><a href="#cb6-40" aria-hidden="true" tabindex="-1"></a>                <span class="at">full_width =</span> <span class="cn">TRUE</span>) <span class="sc">%&gt;%</span></span>
+<span id="cb6-41"><a href="#cb6-41" aria-hidden="true" tabindex="-1"></a>  <span class="fu">row_spec</span>(<span class="dv">0</span>,</span>
+<span id="cb6-42"><a href="#cb6-42" aria-hidden="true" tabindex="-1"></a>           <span class="at">background =</span> <span class="st">"#404040"</span>,</span>
+<span id="cb6-43"><a href="#cb6-43" aria-hidden="true" tabindex="-1"></a>           <span class="at">color =</span> <span class="st">"white"</span>)</span>
+<span id="cb6-44"><a href="#cb6-44" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-45"><a href="#cb6-45" aria-hidden="true" tabindex="-1"></a>knitr<span class="sc">::</span><span class="fu">kable</span>(output3,</span>
+<span id="cb6-46"><a href="#cb6-46" aria-hidden="true" tabindex="-1"></a>             <span class="st">"html"</span>,</span>
+<span id="cb6-47"><a href="#cb6-47" aria-hidden="true" tabindex="-1"></a>             <span class="at">booktabs =</span> <span class="cn">TRUE</span>,</span>
+<span id="cb6-48"><a href="#cb6-48" aria-hidden="true" tabindex="-1"></a>             <span class="at">align =</span> <span class="st">"ccc"</span>,</span>
+<span id="cb6-49"><a href="#cb6-49" aria-hidden="true" tabindex="-1"></a>             <span class="at">escape =</span> <span class="cn">FALSE</span>) <span class="sc">%&gt;%</span></span>
+<span id="cb6-50"><a href="#cb6-50" aria-hidden="true" tabindex="-1"></a>  <span class="fu">kable_styling</span>(<span class="at">bootstrap_options =</span> <span class="st">"striped"</span>,</span>
+<span id="cb6-51"><a href="#cb6-51" aria-hidden="true" tabindex="-1"></a>                <span class="at">full_width =</span> <span class="cn">TRUE</span>) <span class="sc">%&gt;%</span></span>
+<span id="cb6-52"><a href="#cb6-52" aria-hidden="true" tabindex="-1"></a>  <span class="fu">row_spec</span>(<span class="dv">0</span>,</span>
+<span id="cb6-53"><a href="#cb6-53" aria-hidden="true" tabindex="-1"></a>           <span class="at">background =</span> <span class="st">"#404040"</span>,</span>
+<span id="cb6-54"><a href="#cb6-54" aria-hidden="true" tabindex="-1"></a>           <span class="at">color =</span> <span class="st">"white"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output-display">
+
+<table class="table table-striped" style="margin-left: auto; margin-right: auto;">
+<thead>
+<tr>
+<th style="text-align:center;color: white !important;background-color: #404040 !important;">
+M_DISCOUNT_USED<br>PER_ACTIVE_WEEKDAY
+</th>
+<th style="text-align:center;color: white !important;background-color: #404040 !important;">
+M_TOTAL_SPEND
+</th>
+<th style="text-align:center;color: white !important;background-color: #404040 !important;">
+F_ACTIVE<br>MORNING_COUNT
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:center;">
+<img src="data/TKMNT_C1_1.png" class="img-fluid">
+</td>
+<td style="text-align:center;">
+<img src="data/TKMNT_C1_2.png" class="img-fluid">
+</td>
+<td style="text-align:center;">
+<img src="data/TKMNT_C1_3.png" class="img-fluid">
+</td>
+</tr>
+</tbody>
+
+</table>
+<table class="table table-striped" style="margin-left: auto; margin-right: auto;">
+<thead>
+<tr>
+<th style="text-align:center;color: white !important;background-color: #404040 !important;">
+M_AVG_SALES<br>VALUE_PER_QTY
+</th>
+<th style="text-align:center;color: white !important;background-color: #404040 !important;">
+F_ACTIVE<br>WEEKEND_COUNT
+</th>
+<th style="text-align:center;color: white !important;background-color: #404040 !important;">
+F_ACTIVE<br>EVENING_COUNT
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:center;">
+<img src="data/TKMNT_C1_4.png" class="img-fluid">
+</td>
+<td style="text-align:center;">
+<img src="data/TKMNT_C1_5.png" class="img-fluid">
+</td>
+<td style="text-align:center;">
+<img src="data/TKMNT_C1_6.png" class="img-fluid">
+</td>
+</tr>
+</tbody>
+
+</table>
+<table class="table table-striped" style="margin-left: auto; margin-right: auto;">
+<thead>
+<tr>
+<th style="text-align:center;color: white !important;background-color: #404040 !important;">
+F_ACTIVE<br>AFTERNOON_COUNT
+</th>
+<th style="text-align:center;color: white !important;background-color: #404040 !important;">
+F_ACTIVE<br>WEEKDAY_COUNT
+</th>
+<th style="text-align:center;color: white !important;background-color: #404040 !important;">
+M_MIN_SPEND<br>PER_BASKET
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:center;">
+<img src="data/TKMNT_C1_7.png" class="img-fluid">
+</td>
+<td style="text-align:center;">
+<img src="data/TKMNT_C1_8.png" class="img-fluid">
+</td>
+<td style="text-align:center;">
+<img src="data/TKMNT_C1_9.png" class="img-fluid">
+</td>
+</tr>
+</tbody>
+
+</table>
+<p><em>(9 Significant Attributes for Cluster 1 of TKM-N-T)</em></p>
+</div>
+</div>
+<p><br>
+Cluster 2 shoppers are somewhat infrequent shoppers. They are not as price sensitive as they tend to use less discounts on weekdays. Their total spending is much lower than Cluster 1 shoppers. Given their infrequency, they tend to spend slightly more for each basket.<br>
+<br>
+</p>
+<div class="cell" data-fig-cap-location="bottom">
+<details>
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb7"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="co"># output1 &lt;- tibble(`M_DISCOUNT_USED_PER_ACTIVE_WEEKDAY` = c("![](data/TKMNT_C1_1.png)",</span></span>
+<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a><span class="co">#                                                            "M_AVG_SALES_VALUE_PER_QTY",</span></span>
+<span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a><span class="co">#                                                            "![](data/TKMNT_C1_4.png)"),</span></span>
+<span id="cb7-4"><a href="#cb7-4" aria-hidden="true" tabindex="-1"></a><span class="co">#                   `M_TOTAL_SPEND` = c("![](data/TKMNT_C1_2.png)",</span></span>
+<span id="cb7-5"><a href="#cb7-5" aria-hidden="true" tabindex="-1"></a><span class="co">#                                       "F_ACTIVE_WEEKEND_COUNT",</span></span>
+<span id="cb7-6"><a href="#cb7-6" aria-hidden="true" tabindex="-1"></a><span class="co">#                                       "![](data/TKMNT_C1_5.png)"),</span></span>
+<span id="cb7-7"><a href="#cb7-7" aria-hidden="true" tabindex="-1"></a><span class="co">#                   `F_ACTIVE_MORNING_COUNT` = c("![](data/TKMNT_C1_3.png)",</span></span>
+<span id="cb7-8"><a href="#cb7-8" aria-hidden="true" tabindex="-1"></a><span class="co">#                                                "F_ACTIVE_EVENING_COUNT",</span></span>
+<span id="cb7-9"><a href="#cb7-9" aria-hidden="true" tabindex="-1"></a><span class="co">#                                                "![](data/TKMNT_C1_6.png)"))</span></span>
+<span id="cb7-10"><a href="#cb7-10" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-11"><a href="#cb7-11" aria-hidden="true" tabindex="-1"></a>output1 <span class="ot">&lt;-</span> <span class="fu">tibble</span>(<span class="st">`</span><span class="at">M_DISCOUNT_USED&lt;br&gt;PER_ACTIVE_WEEKDAY</span><span class="st">`</span> <span class="ot">=</span> <span class="st">"![](data/TKMNT_C2_1.png)"</span>,</span>
+<span id="cb7-12"><a href="#cb7-12" aria-hidden="true" tabindex="-1"></a>                  <span class="st">`</span><span class="at">M_TOTAL_SPEND</span><span class="st">`</span> <span class="ot">=</span> <span class="st">"![](data/TKMNT_C2_2.png)"</span>,</span>
+<span id="cb7-13"><a href="#cb7-13" aria-hidden="true" tabindex="-1"></a>                  <span class="st">`</span><span class="at">F_ACTIVE&lt;br&gt;MORNING_COUNT</span><span class="st">`</span> <span class="ot">=</span> <span class="st">"![](data/TKMNT_C2_3.png)"</span>)</span>
+<span id="cb7-14"><a href="#cb7-14" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-15"><a href="#cb7-15" aria-hidden="true" tabindex="-1"></a>output2 <span class="ot">&lt;-</span> <span class="fu">tibble</span>(<span class="st">`</span><span class="at">M_AVG_SALES&lt;br&gt;VALUE_PER_QTY</span><span class="st">`</span> <span class="ot">=</span> <span class="st">"![](data/TKMNT_C2_4.png)"</span>,</span>
+<span id="cb7-16"><a href="#cb7-16" aria-hidden="true" tabindex="-1"></a>                  <span class="st">`</span><span class="at">F_ACTIVE&lt;br&gt;WEEKEND_COUNT</span><span class="st">`</span> <span class="ot">=</span> <span class="st">"![](data/TKMNT_C2_5.png)"</span>,</span>
+<span id="cb7-17"><a href="#cb7-17" aria-hidden="true" tabindex="-1"></a>                  <span class="st">`</span><span class="at">F_ACTIVE&lt;br&gt;EVENING_COUNT</span><span class="st">`</span> <span class="ot">=</span> <span class="st">"![](data/TKMNT_C2_6.png)"</span>)</span>
+<span id="cb7-18"><a href="#cb7-18" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-19"><a href="#cb7-19" aria-hidden="true" tabindex="-1"></a>output3 <span class="ot">&lt;-</span> <span class="fu">tibble</span>(<span class="st">`</span><span class="at">F_ACTIVE&lt;br&gt;AFTERNOON_COUNT</span><span class="st">`</span> <span class="ot">=</span> <span class="st">"![](data/TKMNT_C2_7.png)"</span>,</span>
+<span id="cb7-20"><a href="#cb7-20" aria-hidden="true" tabindex="-1"></a>                  <span class="st">`</span><span class="at">F_ACTIVE&lt;br&gt;WEEKDAY_COUNT</span><span class="st">`</span> <span class="ot">=</span> <span class="st">"![](data/TKMNT_C2_8.png)"</span>,</span>
+<span id="cb7-21"><a href="#cb7-21" aria-hidden="true" tabindex="-1"></a>                  <span class="st">`</span><span class="at">M_MIN_SPEND&lt;br&gt;PER_BASKET</span><span class="st">`</span> <span class="ot">=</span> <span class="st">"![](data/TKMNT_C2_9.png)"</span>)</span>
+<span id="cb7-22"><a href="#cb7-22" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-23"><a href="#cb7-23" aria-hidden="true" tabindex="-1"></a>knitr<span class="sc">::</span><span class="fu">kable</span>(output1,</span>
+<span id="cb7-24"><a href="#cb7-24" aria-hidden="true" tabindex="-1"></a>             <span class="st">"html"</span>,</span>
+<span id="cb7-25"><a href="#cb7-25" aria-hidden="true" tabindex="-1"></a>             <span class="at">booktabs =</span> <span class="cn">TRUE</span>,</span>
+<span id="cb7-26"><a href="#cb7-26" aria-hidden="true" tabindex="-1"></a>             <span class="at">align =</span> <span class="st">"ccc"</span>,</span>
+<span id="cb7-27"><a href="#cb7-27" aria-hidden="true" tabindex="-1"></a>             <span class="at">escape =</span> <span class="cn">FALSE</span>) <span class="sc">%&gt;%</span></span>
+<span id="cb7-28"><a href="#cb7-28" aria-hidden="true" tabindex="-1"></a>  <span class="fu">kable_styling</span>(<span class="at">bootstrap_options =</span> <span class="st">"striped"</span>,</span>
+<span id="cb7-29"><a href="#cb7-29" aria-hidden="true" tabindex="-1"></a>                <span class="at">full_width =</span> <span class="cn">TRUE</span>) <span class="sc">%&gt;%</span></span>
+<span id="cb7-30"><a href="#cb7-30" aria-hidden="true" tabindex="-1"></a>  <span class="fu">row_spec</span>(<span class="dv">0</span>,</span>
+<span id="cb7-31"><a href="#cb7-31" aria-hidden="true" tabindex="-1"></a>           <span class="at">background =</span> <span class="st">"#404040"</span>,</span>
+<span id="cb7-32"><a href="#cb7-32" aria-hidden="true" tabindex="-1"></a>           <span class="at">color =</span> <span class="st">"white"</span>)</span>
+<span id="cb7-33"><a href="#cb7-33" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-34"><a href="#cb7-34" aria-hidden="true" tabindex="-1"></a>knitr<span class="sc">::</span><span class="fu">kable</span>(output2,</span>
+<span id="cb7-35"><a href="#cb7-35" aria-hidden="true" tabindex="-1"></a>             <span class="st">"html"</span>,</span>
+<span id="cb7-36"><a href="#cb7-36" aria-hidden="true" tabindex="-1"></a>             <span class="at">booktabs =</span> <span class="cn">TRUE</span>,</span>
+<span id="cb7-37"><a href="#cb7-37" aria-hidden="true" tabindex="-1"></a>             <span class="at">align =</span> <span class="st">"ccc"</span>,</span>
+<span id="cb7-38"><a href="#cb7-38" aria-hidden="true" tabindex="-1"></a>             <span class="at">escape =</span> <span class="cn">FALSE</span>) <span class="sc">%&gt;%</span></span>
+<span id="cb7-39"><a href="#cb7-39" aria-hidden="true" tabindex="-1"></a>  <span class="fu">kable_styling</span>(<span class="at">bootstrap_options =</span> <span class="st">"striped"</span>,</span>
+<span id="cb7-40"><a href="#cb7-40" aria-hidden="true" tabindex="-1"></a>                <span class="at">full_width =</span> <span class="cn">TRUE</span>) <span class="sc">%&gt;%</span></span>
+<span id="cb7-41"><a href="#cb7-41" aria-hidden="true" tabindex="-1"></a>  <span class="fu">row_spec</span>(<span class="dv">0</span>,</span>
+<span id="cb7-42"><a href="#cb7-42" aria-hidden="true" tabindex="-1"></a>           <span class="at">background =</span> <span class="st">"#404040"</span>,</span>
+<span id="cb7-43"><a href="#cb7-43" aria-hidden="true" tabindex="-1"></a>           <span class="at">color =</span> <span class="st">"white"</span>)</span>
+<span id="cb7-44"><a href="#cb7-44" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-45"><a href="#cb7-45" aria-hidden="true" tabindex="-1"></a>knitr<span class="sc">::</span><span class="fu">kable</span>(output3,</span>
+<span id="cb7-46"><a href="#cb7-46" aria-hidden="true" tabindex="-1"></a>             <span class="st">"html"</span>,</span>
+<span id="cb7-47"><a href="#cb7-47" aria-hidden="true" tabindex="-1"></a>             <span class="at">booktabs =</span> <span class="cn">TRUE</span>,</span>
+<span id="cb7-48"><a href="#cb7-48" aria-hidden="true" tabindex="-1"></a>             <span class="at">align =</span> <span class="st">"ccc"</span>,</span>
+<span id="cb7-49"><a href="#cb7-49" aria-hidden="true" tabindex="-1"></a>             <span class="at">escape =</span> <span class="cn">FALSE</span>) <span class="sc">%&gt;%</span></span>
+<span id="cb7-50"><a href="#cb7-50" aria-hidden="true" tabindex="-1"></a>  <span class="fu">kable_styling</span>(<span class="at">bootstrap_options =</span> <span class="st">"striped"</span>,</span>
+<span id="cb7-51"><a href="#cb7-51" aria-hidden="true" tabindex="-1"></a>                <span class="at">full_width =</span> <span class="cn">TRUE</span>) <span class="sc">%&gt;%</span></span>
+<span id="cb7-52"><a href="#cb7-52" aria-hidden="true" tabindex="-1"></a>  <span class="fu">row_spec</span>(<span class="dv">0</span>,</span>
+<span id="cb7-53"><a href="#cb7-53" aria-hidden="true" tabindex="-1"></a>           <span class="at">background =</span> <span class="st">"#404040"</span>,</span>
+<span id="cb7-54"><a href="#cb7-54" aria-hidden="true" tabindex="-1"></a>           <span class="at">color =</span> <span class="st">"white"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output-display">
+
+<table class="table table-striped" style="margin-left: auto; margin-right: auto;">
+<thead>
+<tr>
+<th style="text-align:center;color: white !important;background-color: #404040 !important;">
+M_DISCOUNT_USED<br>PER_ACTIVE_WEEKDAY
+</th>
+<th style="text-align:center;color: white !important;background-color: #404040 !important;">
+M_TOTAL_SPEND
+</th>
+<th style="text-align:center;color: white !important;background-color: #404040 !important;">
+F_ACTIVE<br>MORNING_COUNT
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:center;">
+<img src="data/TKMNT_C2_1.png" class="img-fluid">
+</td>
+<td style="text-align:center;">
+<img src="data/TKMNT_C2_2.png" class="img-fluid">
+</td>
+<td style="text-align:center;">
+<img src="data/TKMNT_C2_3.png" class="img-fluid">
+</td>
+</tr>
+</tbody>
+
+</table>
+<table class="table table-striped" style="margin-left: auto; margin-right: auto;">
+<thead>
+<tr>
+<th style="text-align:center;color: white !important;background-color: #404040 !important;">
+M_AVG_SALES<br>VALUE_PER_QTY
+</th>
+<th style="text-align:center;color: white !important;background-color: #404040 !important;">
+F_ACTIVE<br>WEEKEND_COUNT
+</th>
+<th style="text-align:center;color: white !important;background-color: #404040 !important;">
+F_ACTIVE<br>EVENING_COUNT
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:center;">
+<img src="data/TKMNT_C2_4.png" class="img-fluid">
+</td>
+<td style="text-align:center;">
+<img src="data/TKMNT_C2_5.png" class="img-fluid">
+</td>
+<td style="text-align:center;">
+<img src="data/TKMNT_C2_6.png" class="img-fluid">
+</td>
+</tr>
+</tbody>
+
+</table>
+<table class="table table-striped" style="margin-left: auto; margin-right: auto;">
+<thead>
+<tr>
+<th style="text-align:center;color: white !important;background-color: #404040 !important;">
+F_ACTIVE<br>AFTERNOON_COUNT
+</th>
+<th style="text-align:center;color: white !important;background-color: #404040 !important;">
+F_ACTIVE<br>WEEKDAY_COUNT
+</th>
+<th style="text-align:center;color: white !important;background-color: #404040 !important;">
+M_MIN_SPEND<br>PER_BASKET
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:center;">
+<img src="data/TKMNT_C2_7.png" class="img-fluid">
+</td>
+<td style="text-align:center;">
+<img src="data/TKMNT_C2_8.png" class="img-fluid">
+</td>
+<td style="text-align:center;">
+<img src="data/TKMNT_C2_9.png" class="img-fluid">
+</td>
+</tr>
+</tbody>
+
+</table>
+<p><em>(9 Significant Attributes for Cluster 2 of TKM-N-T)</em></p>
+</div>
+</div>
+<p><br>
+<span style="text-decoration: underline;">TKM-A-T (Traditional k-means clustering on as-is form of 16 non-collinear inputs)</span><br>
+Cluster 1 shoppers tend to be a more frequent shopper with a preference for weekday shopping. They spend more overall, and yet are price conscious due to their use of discounts. Given their frequency, they spend less for each basket.<br>
+<br>
+</p>
+<div class="cell" data-fig-cap-location="bottom">
+<details>
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb8"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a>output1 <span class="ot">&lt;-</span> <span class="fu">tibble</span>(<span class="st">`</span><span class="at">M_DISCOUNT_USED&lt;br&gt;PER_ACTIVE_WEEKDAY</span><span class="st">`</span> <span class="ot">=</span> <span class="st">"![](data/TKMAT_C1_1.png)"</span>,</span>
+<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a>                  <span class="st">`</span><span class="at">M_MIN_SPEND&lt;br&gt;PER_BASKET</span><span class="st">`</span> <span class="ot">=</span> <span class="st">"![](data/TKMAT_C1_2.png)"</span>,</span>
+<span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a>                  <span class="st">`</span><span class="at">F_ACTIVE&lt;br&gt;MORNING_COUNT</span><span class="st">`</span> <span class="ot">=</span> <span class="st">"![](data/TKMAT_C1_3.png)"</span>)</span>
+<span id="cb8-4"><a href="#cb8-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-5"><a href="#cb8-5" aria-hidden="true" tabindex="-1"></a>output2 <span class="ot">&lt;-</span> <span class="fu">tibble</span>(<span class="st">`</span><span class="at">M_TOTAL_SPEND</span><span class="st">`</span> <span class="ot">=</span> <span class="st">"![](data/TKMAT_C1_4.png)"</span>,</span>
+<span id="cb8-6"><a href="#cb8-6" aria-hidden="true" tabindex="-1"></a>                  <span class="st">`</span><span class="at">F_ACTIVE&lt;br&gt;EVENING_COUNT</span><span class="st">`</span> <span class="ot">=</span> <span class="st">"![](data/TKMAT_C1_5.png)"</span>,</span>
+<span id="cb8-7"><a href="#cb8-7" aria-hidden="true" tabindex="-1"></a>                  <span class="st">`</span><span class="at">F_ACTIVE&lt;br&gt;WEEKEND_COUNT</span><span class="st">`</span> <span class="ot">=</span> <span class="st">"![](data/TKMAT_C1_6.png)"</span>)</span>
+<span id="cb8-8"><a href="#cb8-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-9"><a href="#cb8-9" aria-hidden="true" tabindex="-1"></a>output3 <span class="ot">&lt;-</span> <span class="fu">tibble</span>(<span class="st">`</span><span class="at">F_ACTIVE&lt;br&gt;AFTERNOON_COUNT</span><span class="st">`</span> <span class="ot">=</span> <span class="st">"![](data/TKMAT_C1_7.png)"</span>,</span>
+<span id="cb8-10"><a href="#cb8-10" aria-hidden="true" tabindex="-1"></a>                  <span class="st">`</span><span class="at">F_ACTIVE&lt;br&gt;WEEKDAY_COUNT</span><span class="st">`</span> <span class="ot">=</span> <span class="st">"![](data/TKMAT_C1_8.png)"</span>,</span>
+<span id="cb8-11"><a href="#cb8-11" aria-hidden="true" tabindex="-1"></a>                  <span class="st">`</span><span class="at">M_AVG_SPEND&lt;br&gt;PER_ACTIVE_MORNING</span><span class="st">`</span> <span class="ot">=</span> <span class="st">"![](data/TKMAT_C1_9.png)"</span>)</span>
+<span id="cb8-12"><a href="#cb8-12" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-13"><a href="#cb8-13" aria-hidden="true" tabindex="-1"></a>knitr<span class="sc">::</span><span class="fu">kable</span>(output1,</span>
+<span id="cb8-14"><a href="#cb8-14" aria-hidden="true" tabindex="-1"></a>             <span class="st">"html"</span>,</span>
+<span id="cb8-15"><a href="#cb8-15" aria-hidden="true" tabindex="-1"></a>             <span class="at">booktabs =</span> <span class="cn">TRUE</span>,</span>
+<span id="cb8-16"><a href="#cb8-16" aria-hidden="true" tabindex="-1"></a>             <span class="at">align =</span> <span class="st">"ccc"</span>,</span>
+<span id="cb8-17"><a href="#cb8-17" aria-hidden="true" tabindex="-1"></a>             <span class="at">escape =</span> <span class="cn">FALSE</span>) <span class="sc">%&gt;%</span></span>
+<span id="cb8-18"><a href="#cb8-18" aria-hidden="true" tabindex="-1"></a>  <span class="fu">kable_styling</span>(<span class="at">bootstrap_options =</span> <span class="st">"striped"</span>,</span>
+<span id="cb8-19"><a href="#cb8-19" aria-hidden="true" tabindex="-1"></a>                <span class="at">full_width =</span> <span class="cn">TRUE</span>) <span class="sc">%&gt;%</span></span>
+<span id="cb8-20"><a href="#cb8-20" aria-hidden="true" tabindex="-1"></a>  <span class="fu">row_spec</span>(<span class="dv">0</span>,</span>
+<span id="cb8-21"><a href="#cb8-21" aria-hidden="true" tabindex="-1"></a>           <span class="at">background =</span> <span class="st">"#404040"</span>,</span>
+<span id="cb8-22"><a href="#cb8-22" aria-hidden="true" tabindex="-1"></a>           <span class="at">color =</span> <span class="st">"white"</span>)</span>
+<span id="cb8-23"><a href="#cb8-23" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-24"><a href="#cb8-24" aria-hidden="true" tabindex="-1"></a>knitr<span class="sc">::</span><span class="fu">kable</span>(output2,</span>
+<span id="cb8-25"><a href="#cb8-25" aria-hidden="true" tabindex="-1"></a>             <span class="st">"html"</span>,</span>
+<span id="cb8-26"><a href="#cb8-26" aria-hidden="true" tabindex="-1"></a>             <span class="at">booktabs =</span> <span class="cn">TRUE</span>,</span>
+<span id="cb8-27"><a href="#cb8-27" aria-hidden="true" tabindex="-1"></a>             <span class="at">align =</span> <span class="st">"ccc"</span>,</span>
+<span id="cb8-28"><a href="#cb8-28" aria-hidden="true" tabindex="-1"></a>             <span class="at">escape =</span> <span class="cn">FALSE</span>) <span class="sc">%&gt;%</span></span>
+<span id="cb8-29"><a href="#cb8-29" aria-hidden="true" tabindex="-1"></a>  <span class="fu">kable_styling</span>(<span class="at">bootstrap_options =</span> <span class="st">"striped"</span>,</span>
+<span id="cb8-30"><a href="#cb8-30" aria-hidden="true" tabindex="-1"></a>                <span class="at">full_width =</span> <span class="cn">TRUE</span>) <span class="sc">%&gt;%</span></span>
+<span id="cb8-31"><a href="#cb8-31" aria-hidden="true" tabindex="-1"></a>  <span class="fu">row_spec</span>(<span class="dv">0</span>,</span>
+<span id="cb8-32"><a href="#cb8-32" aria-hidden="true" tabindex="-1"></a>           <span class="at">background =</span> <span class="st">"#404040"</span>,</span>
+<span id="cb8-33"><a href="#cb8-33" aria-hidden="true" tabindex="-1"></a>           <span class="at">color =</span> <span class="st">"white"</span>)</span>
+<span id="cb8-34"><a href="#cb8-34" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-35"><a href="#cb8-35" aria-hidden="true" tabindex="-1"></a>knitr<span class="sc">::</span><span class="fu">kable</span>(output3,</span>
+<span id="cb8-36"><a href="#cb8-36" aria-hidden="true" tabindex="-1"></a>             <span class="st">"html"</span>,</span>
+<span id="cb8-37"><a href="#cb8-37" aria-hidden="true" tabindex="-1"></a>             <span class="at">booktabs =</span> <span class="cn">TRUE</span>,</span>
+<span id="cb8-38"><a href="#cb8-38" aria-hidden="true" tabindex="-1"></a>             <span class="at">align =</span> <span class="st">"ccc"</span>,</span>
+<span id="cb8-39"><a href="#cb8-39" aria-hidden="true" tabindex="-1"></a>             <span class="at">escape =</span> <span class="cn">FALSE</span>) <span class="sc">%&gt;%</span></span>
+<span id="cb8-40"><a href="#cb8-40" aria-hidden="true" tabindex="-1"></a>  <span class="fu">kable_styling</span>(<span class="at">bootstrap_options =</span> <span class="st">"striped"</span>,</span>
+<span id="cb8-41"><a href="#cb8-41" aria-hidden="true" tabindex="-1"></a>                <span class="at">full_width =</span> <span class="cn">TRUE</span>) <span class="sc">%&gt;%</span></span>
+<span id="cb8-42"><a href="#cb8-42" aria-hidden="true" tabindex="-1"></a>  <span class="fu">row_spec</span>(<span class="dv">0</span>,</span>
+<span id="cb8-43"><a href="#cb8-43" aria-hidden="true" tabindex="-1"></a>           <span class="at">background =</span> <span class="st">"#404040"</span>,</span>
+<span id="cb8-44"><a href="#cb8-44" aria-hidden="true" tabindex="-1"></a>           <span class="at">color =</span> <span class="st">"white"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output-display">
+
+<table class="table table-striped" style="margin-left: auto; margin-right: auto;">
+<thead>
+<tr>
+<th style="text-align:center;color: white !important;background-color: #404040 !important;">
+M_DISCOUNT_USED<br>PER_ACTIVE_WEEKDAY
+</th>
+<th style="text-align:center;color: white !important;background-color: #404040 !important;">
+M_MIN_SPEND<br>PER_BASKET
+</th>
+<th style="text-align:center;color: white !important;background-color: #404040 !important;">
+F_ACTIVE<br>MORNING_COUNT
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:center;">
+<img src="data/TKMAT_C1_1.png" class="img-fluid">
+</td>
+<td style="text-align:center;">
+<img src="data/TKMAT_C1_2.png" class="img-fluid">
+</td>
+<td style="text-align:center;">
+<img src="data/TKMAT_C1_3.png" class="img-fluid">
+</td>
+</tr>
+</tbody>
+
+</table>
+<table class="table table-striped" style="margin-left: auto; margin-right: auto;">
+<thead>
+<tr>
+<th style="text-align:center;color: white !important;background-color: #404040 !important;">
+M_TOTAL_SPEND
+</th>
+<th style="text-align:center;color: white !important;background-color: #404040 !important;">
+F_ACTIVE<br>EVENING_COUNT
+</th>
+<th style="text-align:center;color: white !important;background-color: #404040 !important;">
+F_ACTIVE<br>WEEKEND_COUNT
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:center;">
+<img src="data/TKMAT_C1_4.png" class="img-fluid">
+</td>
+<td style="text-align:center;">
+<img src="data/TKMAT_C1_5.png" class="img-fluid">
+</td>
+<td style="text-align:center;">
+<img src="data/TKMAT_C1_6.png" class="img-fluid">
+</td>
+</tr>
+</tbody>
+
+</table>
+<table class="table table-striped" style="margin-left: auto; margin-right: auto;">
+<thead>
+<tr>
+<th style="text-align:center;color: white !important;background-color: #404040 !important;">
+F_ACTIVE<br>AFTERNOON_COUNT
+</th>
+<th style="text-align:center;color: white !important;background-color: #404040 !important;">
+F_ACTIVE<br>WEEKDAY_COUNT
+</th>
+<th style="text-align:center;color: white !important;background-color: #404040 !important;">
+M_AVG_SPEND<br>PER_ACTIVE_MORNING
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:center;">
+<img src="data/TKMAT_C1_7.png" class="img-fluid">
+</td>
+<td style="text-align:center;">
+<img src="data/TKMAT_C1_8.png" class="img-fluid">
+</td>
+<td style="text-align:center;">
+<img src="data/TKMAT_C1_9.png" class="img-fluid">
+</td>
+</tr>
+</tbody>
+
+</table>
+<p><em>(9 Significant Attributes for Cluster 1 of TKM-A-T)</em></p>
+</div>
+</div>
+<p><br>
+Cluster 2 shoppers are somewhat infrequent shoppers. They spend less each time, and hardly make use of discounts on weekdays. Overall spending is also on the lower side.<br>
+<br>
+</p>
+<div class="cell" data-fig-cap-location="bottom">
+<details>
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb9"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a>output1 <span class="ot">&lt;-</span> <span class="fu">tibble</span>(<span class="st">`</span><span class="at">M_DISCOUNT_USED&lt;br&gt;PER_ACTIVE_WEEKDAY</span><span class="st">`</span> <span class="ot">=</span> <span class="st">"![](data/TKMAT_C2_1.png)"</span>,</span>
+<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a>                  <span class="st">`</span><span class="at">M_MIN_SPEND&lt;br&gt;PER_BASKET</span><span class="st">`</span> <span class="ot">=</span> <span class="st">"![](data/TKMAT_C2_2.png)"</span>,</span>
+<span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a>                  <span class="st">`</span><span class="at">F_ACTIVE&lt;br&gt;MORNING_COUNT</span><span class="st">`</span> <span class="ot">=</span> <span class="st">"![](data/TKMAT_C2_3.png)"</span>)</span>
+<span id="cb9-4"><a href="#cb9-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-5"><a href="#cb9-5" aria-hidden="true" tabindex="-1"></a>output2 <span class="ot">&lt;-</span> <span class="fu">tibble</span>(<span class="st">`</span><span class="at">M_TOTAL_SPEND</span><span class="st">`</span> <span class="ot">=</span> <span class="st">"![](data/TKMAT_C2_4.png)"</span>,</span>
+<span id="cb9-6"><a href="#cb9-6" aria-hidden="true" tabindex="-1"></a>                  <span class="st">`</span><span class="at">F_ACTIVE&lt;br&gt;EVENING_COUNT</span><span class="st">`</span> <span class="ot">=</span> <span class="st">"![](data/TKMAT_C2_5.png)"</span>,</span>
+<span id="cb9-7"><a href="#cb9-7" aria-hidden="true" tabindex="-1"></a>                  <span class="st">`</span><span class="at">F_ACTIVE&lt;br&gt;WEEKEND_COUNT</span><span class="st">`</span> <span class="ot">=</span> <span class="st">"![](data/TKMAT_C2_6.png)"</span>)</span>
+<span id="cb9-8"><a href="#cb9-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-9"><a href="#cb9-9" aria-hidden="true" tabindex="-1"></a>output3 <span class="ot">&lt;-</span> <span class="fu">tibble</span>(<span class="st">`</span><span class="at">F_ACTIVE&lt;br&gt;AFTERNOON_COUNT</span><span class="st">`</span> <span class="ot">=</span> <span class="st">"![](data/TKMAT_C2_7.png)"</span>,</span>
+<span id="cb9-10"><a href="#cb9-10" aria-hidden="true" tabindex="-1"></a>                  <span class="st">`</span><span class="at">F_ACTIVE&lt;br&gt;WEEKDAY_COUNT</span><span class="st">`</span> <span class="ot">=</span> <span class="st">"![](data/TKMAT_C2_8.png)"</span>,</span>
+<span id="cb9-11"><a href="#cb9-11" aria-hidden="true" tabindex="-1"></a>                  <span class="st">`</span><span class="at">M_AVG_SPEND&lt;br&gt;PER_ACTIVE_MORNING</span><span class="st">`</span> <span class="ot">=</span> <span class="st">"![](data/TKMAT_C2_9.png)"</span>)</span>
+<span id="cb9-12"><a href="#cb9-12" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-13"><a href="#cb9-13" aria-hidden="true" tabindex="-1"></a>knitr<span class="sc">::</span><span class="fu">kable</span>(output1,</span>
+<span id="cb9-14"><a href="#cb9-14" aria-hidden="true" tabindex="-1"></a>             <span class="st">"html"</span>,</span>
+<span id="cb9-15"><a href="#cb9-15" aria-hidden="true" tabindex="-1"></a>             <span class="at">booktabs =</span> <span class="cn">TRUE</span>,</span>
+<span id="cb9-16"><a href="#cb9-16" aria-hidden="true" tabindex="-1"></a>             <span class="at">align =</span> <span class="st">"ccc"</span>,</span>
+<span id="cb9-17"><a href="#cb9-17" aria-hidden="true" tabindex="-1"></a>             <span class="at">escape =</span> <span class="cn">FALSE</span>) <span class="sc">%&gt;%</span></span>
+<span id="cb9-18"><a href="#cb9-18" aria-hidden="true" tabindex="-1"></a>  <span class="fu">kable_styling</span>(<span class="at">bootstrap_options =</span> <span class="st">"striped"</span>,</span>
+<span id="cb9-19"><a href="#cb9-19" aria-hidden="true" tabindex="-1"></a>                <span class="at">full_width =</span> <span class="cn">TRUE</span>) <span class="sc">%&gt;%</span></span>
+<span id="cb9-20"><a href="#cb9-20" aria-hidden="true" tabindex="-1"></a>  <span class="fu">row_spec</span>(<span class="dv">0</span>,</span>
+<span id="cb9-21"><a href="#cb9-21" aria-hidden="true" tabindex="-1"></a>           <span class="at">background =</span> <span class="st">"#404040"</span>,</span>
+<span id="cb9-22"><a href="#cb9-22" aria-hidden="true" tabindex="-1"></a>           <span class="at">color =</span> <span class="st">"white"</span>)</span>
+<span id="cb9-23"><a href="#cb9-23" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-24"><a href="#cb9-24" aria-hidden="true" tabindex="-1"></a>knitr<span class="sc">::</span><span class="fu">kable</span>(output2,</span>
+<span id="cb9-25"><a href="#cb9-25" aria-hidden="true" tabindex="-1"></a>             <span class="st">"html"</span>,</span>
+<span id="cb9-26"><a href="#cb9-26" aria-hidden="true" tabindex="-1"></a>             <span class="at">booktabs =</span> <span class="cn">TRUE</span>,</span>
+<span id="cb9-27"><a href="#cb9-27" aria-hidden="true" tabindex="-1"></a>             <span class="at">align =</span> <span class="st">"ccc"</span>,</span>
+<span id="cb9-28"><a href="#cb9-28" aria-hidden="true" tabindex="-1"></a>             <span class="at">escape =</span> <span class="cn">FALSE</span>) <span class="sc">%&gt;%</span></span>
+<span id="cb9-29"><a href="#cb9-29" aria-hidden="true" tabindex="-1"></a>  <span class="fu">kable_styling</span>(<span class="at">bootstrap_options =</span> <span class="st">"striped"</span>,</span>
+<span id="cb9-30"><a href="#cb9-30" aria-hidden="true" tabindex="-1"></a>                <span class="at">full_width =</span> <span class="cn">TRUE</span>) <span class="sc">%&gt;%</span></span>
+<span id="cb9-31"><a href="#cb9-31" aria-hidden="true" tabindex="-1"></a>  <span class="fu">row_spec</span>(<span class="dv">0</span>,</span>
+<span id="cb9-32"><a href="#cb9-32" aria-hidden="true" tabindex="-1"></a>           <span class="at">background =</span> <span class="st">"#404040"</span>,</span>
+<span id="cb9-33"><a href="#cb9-33" aria-hidden="true" tabindex="-1"></a>           <span class="at">color =</span> <span class="st">"white"</span>)</span>
+<span id="cb9-34"><a href="#cb9-34" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-35"><a href="#cb9-35" aria-hidden="true" tabindex="-1"></a>knitr<span class="sc">::</span><span class="fu">kable</span>(output3,</span>
+<span id="cb9-36"><a href="#cb9-36" aria-hidden="true" tabindex="-1"></a>             <span class="st">"html"</span>,</span>
+<span id="cb9-37"><a href="#cb9-37" aria-hidden="true" tabindex="-1"></a>             <span class="at">booktabs =</span> <span class="cn">TRUE</span>,</span>
+<span id="cb9-38"><a href="#cb9-38" aria-hidden="true" tabindex="-1"></a>             <span class="at">align =</span> <span class="st">"ccc"</span>,</span>
+<span id="cb9-39"><a href="#cb9-39" aria-hidden="true" tabindex="-1"></a>             <span class="at">escape =</span> <span class="cn">FALSE</span>) <span class="sc">%&gt;%</span></span>
+<span id="cb9-40"><a href="#cb9-40" aria-hidden="true" tabindex="-1"></a>  <span class="fu">kable_styling</span>(<span class="at">bootstrap_options =</span> <span class="st">"striped"</span>,</span>
+<span id="cb9-41"><a href="#cb9-41" aria-hidden="true" tabindex="-1"></a>                <span class="at">full_width =</span> <span class="cn">TRUE</span>) <span class="sc">%&gt;%</span></span>
+<span id="cb9-42"><a href="#cb9-42" aria-hidden="true" tabindex="-1"></a>  <span class="fu">row_spec</span>(<span class="dv">0</span>,</span>
+<span id="cb9-43"><a href="#cb9-43" aria-hidden="true" tabindex="-1"></a>           <span class="at">background =</span> <span class="st">"#404040"</span>,</span>
+<span id="cb9-44"><a href="#cb9-44" aria-hidden="true" tabindex="-1"></a>           <span class="at">color =</span> <span class="st">"white"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output-display">
+
+<table class="table table-striped" style="margin-left: auto; margin-right: auto;">
+<thead>
+<tr>
+<th style="text-align:center;color: white !important;background-color: #404040 !important;">
+M_DISCOUNT_USED<br>PER_ACTIVE_WEEKDAY
+</th>
+<th style="text-align:center;color: white !important;background-color: #404040 !important;">
+M_MIN_SPEND<br>PER_BASKET
+</th>
+<th style="text-align:center;color: white !important;background-color: #404040 !important;">
+F_ACTIVE<br>MORNING_COUNT
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:center;">
+<img src="data/TKMAT_C2_1.png" class="img-fluid">
+</td>
+<td style="text-align:center;">
+<img src="data/TKMAT_C2_2.png" class="img-fluid">
+</td>
+<td style="text-align:center;">
+<img src="data/TKMAT_C2_3.png" class="img-fluid">
+</td>
+</tr>
+</tbody>
+
+</table>
+<table class="table table-striped" style="margin-left: auto; margin-right: auto;">
+<thead>
+<tr>
+<th style="text-align:center;color: white !important;background-color: #404040 !important;">
+M_TOTAL_SPEND
+</th>
+<th style="text-align:center;color: white !important;background-color: #404040 !important;">
+F_ACTIVE<br>EVENING_COUNT
+</th>
+<th style="text-align:center;color: white !important;background-color: #404040 !important;">
+F_ACTIVE<br>WEEKEND_COUNT
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:center;">
+<img src="data/TKMAT_C2_4.png" class="img-fluid">
+</td>
+<td style="text-align:center;">
+<img src="data/TKMAT_C2_5.png" class="img-fluid">
+</td>
+<td style="text-align:center;">
+<img src="data/TKMAT_C2_6.png" class="img-fluid">
+</td>
+</tr>
+</tbody>
+
+</table>
+<table class="table table-striped" style="margin-left: auto; margin-right: auto;">
+<thead>
+<tr>
+<th style="text-align:center;color: white !important;background-color: #404040 !important;">
+F_ACTIVE<br>AFTERNOON_COUNT
+</th>
+<th style="text-align:center;color: white !important;background-color: #404040 !important;">
+F_ACTIVE<br>WEEKDAY_COUNT
+</th>
+<th style="text-align:center;color: white !important;background-color: #404040 !important;">
+M_AVG_SPEND<br>PER_ACTIVE_MORNING
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:center;">
+<img src="data/TKMAT_C2_7.png" class="img-fluid">
+</td>
+<td style="text-align:center;">
+<img src="data/TKMAT_C2_8.png" class="img-fluid">
+</td>
+<td style="text-align:center;">
+<img src="data/TKMAT_C2_9.png" class="img-fluid">
+</td>
+</tr>
+</tbody>
+
+</table>
+<p><em>(9 Significant Attributes for Cluster 2 of TKM-A-T)</em></p>
+</div>
+</div>
+<p><br>
+Cluster 3 shoppers are highly infrequent shoppers. They tend to use little to no discounts on weekdays and spend less overall than Cluster 2 shoppers. They are much less active through the week. Given their frequency, they tend to spend much more for each basket.<br>
+<br>
+</p>
+<div class="cell" data-fig-cap-location="bottom">
+<details>
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb10"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a>output1 <span class="ot">&lt;-</span> <span class="fu">tibble</span>(<span class="st">`</span><span class="at">M_DISCOUNT_USED&lt;br&gt;PER_ACTIVE_WEEKDAY</span><span class="st">`</span> <span class="ot">=</span> <span class="st">"![](data/TKMAT_C3_1.png)"</span>,</span>
+<span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a>                  <span class="st">`</span><span class="at">M_MIN_SPEND&lt;br&gt;PER_BASKET</span><span class="st">`</span> <span class="ot">=</span> <span class="st">"![](data/TKMAT_C3_2.png)"</span>,</span>
+<span id="cb10-3"><a href="#cb10-3" aria-hidden="true" tabindex="-1"></a>                  <span class="st">`</span><span class="at">F_ACTIVE&lt;br&gt;MORNING_COUNT</span><span class="st">`</span> <span class="ot">=</span> <span class="st">"![](data/TKMAT_C3_3.png)"</span>)</span>
+<span id="cb10-4"><a href="#cb10-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-5"><a href="#cb10-5" aria-hidden="true" tabindex="-1"></a>output2 <span class="ot">&lt;-</span> <span class="fu">tibble</span>(<span class="st">`</span><span class="at">M_TOTAL_SPEND</span><span class="st">`</span> <span class="ot">=</span> <span class="st">"![](data/TKMAT_C3_4.png)"</span>,</span>
+<span id="cb10-6"><a href="#cb10-6" aria-hidden="true" tabindex="-1"></a>                  <span class="st">`</span><span class="at">F_ACTIVE&lt;br&gt;EVENING_COUNT</span><span class="st">`</span> <span class="ot">=</span> <span class="st">"![](data/TKMAT_C3_5.png)"</span>,</span>
+<span id="cb10-7"><a href="#cb10-7" aria-hidden="true" tabindex="-1"></a>                  <span class="st">`</span><span class="at">F_ACTIVE&lt;br&gt;WEEKEND_COUNT</span><span class="st">`</span> <span class="ot">=</span> <span class="st">"![](data/TKMAT_C3_6.png)"</span>)</span>
+<span id="cb10-8"><a href="#cb10-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-9"><a href="#cb10-9" aria-hidden="true" tabindex="-1"></a>output3 <span class="ot">&lt;-</span> <span class="fu">tibble</span>(<span class="st">`</span><span class="at">F_ACTIVE&lt;br&gt;AFTERNOON_COUNT</span><span class="st">`</span> <span class="ot">=</span> <span class="st">"![](data/TKMAT_C3_7.png)"</span>,</span>
+<span id="cb10-10"><a href="#cb10-10" aria-hidden="true" tabindex="-1"></a>                  <span class="st">`</span><span class="at">F_ACTIVE&lt;br&gt;WEEKDAY_COUNT</span><span class="st">`</span> <span class="ot">=</span> <span class="st">"![](data/TKMAT_C3_8.png)"</span>,</span>
+<span id="cb10-11"><a href="#cb10-11" aria-hidden="true" tabindex="-1"></a>                  <span class="st">`</span><span class="at">M_AVG_SPEND&lt;br&gt;PER_ACTIVE_MORNING</span><span class="st">`</span> <span class="ot">=</span> <span class="st">"![](data/TKMAT_C3_9.png)"</span>)</span>
+<span id="cb10-12"><a href="#cb10-12" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-13"><a href="#cb10-13" aria-hidden="true" tabindex="-1"></a>knitr<span class="sc">::</span><span class="fu">kable</span>(output1,</span>
+<span id="cb10-14"><a href="#cb10-14" aria-hidden="true" tabindex="-1"></a>             <span class="st">"html"</span>,</span>
+<span id="cb10-15"><a href="#cb10-15" aria-hidden="true" tabindex="-1"></a>             <span class="at">booktabs =</span> <span class="cn">TRUE</span>,</span>
+<span id="cb10-16"><a href="#cb10-16" aria-hidden="true" tabindex="-1"></a>             <span class="at">align =</span> <span class="st">"ccc"</span>,</span>
+<span id="cb10-17"><a href="#cb10-17" aria-hidden="true" tabindex="-1"></a>             <span class="at">escape =</span> <span class="cn">FALSE</span>) <span class="sc">%&gt;%</span></span>
+<span id="cb10-18"><a href="#cb10-18" aria-hidden="true" tabindex="-1"></a>  <span class="fu">kable_styling</span>(<span class="at">bootstrap_options =</span> <span class="st">"striped"</span>,</span>
+<span id="cb10-19"><a href="#cb10-19" aria-hidden="true" tabindex="-1"></a>                <span class="at">full_width =</span> <span class="cn">TRUE</span>) <span class="sc">%&gt;%</span></span>
+<span id="cb10-20"><a href="#cb10-20" aria-hidden="true" tabindex="-1"></a>  <span class="fu">row_spec</span>(<span class="dv">0</span>,</span>
+<span id="cb10-21"><a href="#cb10-21" aria-hidden="true" tabindex="-1"></a>           <span class="at">background =</span> <span class="st">"#404040"</span>,</span>
+<span id="cb10-22"><a href="#cb10-22" aria-hidden="true" tabindex="-1"></a>           <span class="at">color =</span> <span class="st">"white"</span>)</span>
+<span id="cb10-23"><a href="#cb10-23" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-24"><a href="#cb10-24" aria-hidden="true" tabindex="-1"></a>knitr<span class="sc">::</span><span class="fu">kable</span>(output2,</span>
+<span id="cb10-25"><a href="#cb10-25" aria-hidden="true" tabindex="-1"></a>             <span class="st">"html"</span>,</span>
+<span id="cb10-26"><a href="#cb10-26" aria-hidden="true" tabindex="-1"></a>             <span class="at">booktabs =</span> <span class="cn">TRUE</span>,</span>
+<span id="cb10-27"><a href="#cb10-27" aria-hidden="true" tabindex="-1"></a>             <span class="at">align =</span> <span class="st">"ccc"</span>,</span>
+<span id="cb10-28"><a href="#cb10-28" aria-hidden="true" tabindex="-1"></a>             <span class="at">escape =</span> <span class="cn">FALSE</span>) <span class="sc">%&gt;%</span></span>
+<span id="cb10-29"><a href="#cb10-29" aria-hidden="true" tabindex="-1"></a>  <span class="fu">kable_styling</span>(<span class="at">bootstrap_options =</span> <span class="st">"striped"</span>,</span>
+<span id="cb10-30"><a href="#cb10-30" aria-hidden="true" tabindex="-1"></a>                <span class="at">full_width =</span> <span class="cn">TRUE</span>) <span class="sc">%&gt;%</span></span>
+<span id="cb10-31"><a href="#cb10-31" aria-hidden="true" tabindex="-1"></a>  <span class="fu">row_spec</span>(<span class="dv">0</span>,</span>
+<span id="cb10-32"><a href="#cb10-32" aria-hidden="true" tabindex="-1"></a>           <span class="at">background =</span> <span class="st">"#404040"</span>,</span>
+<span id="cb10-33"><a href="#cb10-33" aria-hidden="true" tabindex="-1"></a>           <span class="at">color =</span> <span class="st">"white"</span>)</span>
+<span id="cb10-34"><a href="#cb10-34" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-35"><a href="#cb10-35" aria-hidden="true" tabindex="-1"></a>knitr<span class="sc">::</span><span class="fu">kable</span>(output3,</span>
+<span id="cb10-36"><a href="#cb10-36" aria-hidden="true" tabindex="-1"></a>             <span class="st">"html"</span>,</span>
+<span id="cb10-37"><a href="#cb10-37" aria-hidden="true" tabindex="-1"></a>             <span class="at">booktabs =</span> <span class="cn">TRUE</span>,</span>
+<span id="cb10-38"><a href="#cb10-38" aria-hidden="true" tabindex="-1"></a>             <span class="at">align =</span> <span class="st">"ccc"</span>,</span>
+<span id="cb10-39"><a href="#cb10-39" aria-hidden="true" tabindex="-1"></a>             <span class="at">escape =</span> <span class="cn">FALSE</span>) <span class="sc">%&gt;%</span></span>
+<span id="cb10-40"><a href="#cb10-40" aria-hidden="true" tabindex="-1"></a>  <span class="fu">kable_styling</span>(<span class="at">bootstrap_options =</span> <span class="st">"striped"</span>,</span>
+<span id="cb10-41"><a href="#cb10-41" aria-hidden="true" tabindex="-1"></a>                <span class="at">full_width =</span> <span class="cn">TRUE</span>) <span class="sc">%&gt;%</span></span>
+<span id="cb10-42"><a href="#cb10-42" aria-hidden="true" tabindex="-1"></a>  <span class="fu">row_spec</span>(<span class="dv">0</span>,</span>
+<span id="cb10-43"><a href="#cb10-43" aria-hidden="true" tabindex="-1"></a>           <span class="at">background =</span> <span class="st">"#404040"</span>,</span>
+<span id="cb10-44"><a href="#cb10-44" aria-hidden="true" tabindex="-1"></a>           <span class="at">color =</span> <span class="st">"white"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output-display">
+
+<table class="table table-striped" style="margin-left: auto; margin-right: auto;">
+<thead>
+<tr>
+<th style="text-align:center;color: white !important;background-color: #404040 !important;">
+M_DISCOUNT_USED<br>PER_ACTIVE_WEEKDAY
+</th>
+<th style="text-align:center;color: white !important;background-color: #404040 !important;">
+M_MIN_SPEND<br>PER_BASKET
+</th>
+<th style="text-align:center;color: white !important;background-color: #404040 !important;">
+F_ACTIVE<br>MORNING_COUNT
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:center;">
+<img src="data/TKMAT_C3_1.png" class="img-fluid">
+</td>
+<td style="text-align:center;">
+<img src="data/TKMAT_C3_2.png" class="img-fluid">
+</td>
+<td style="text-align:center;">
+<img src="data/TKMAT_C3_3.png" class="img-fluid">
+</td>
+</tr>
+</tbody>
+
+</table>
+<table class="table table-striped" style="margin-left: auto; margin-right: auto;">
+<thead>
+<tr>
+<th style="text-align:center;color: white !important;background-color: #404040 !important;">
+M_TOTAL_SPEND
+</th>
+<th style="text-align:center;color: white !important;background-color: #404040 !important;">
+F_ACTIVE<br>EVENING_COUNT
+</th>
+<th style="text-align:center;color: white !important;background-color: #404040 !important;">
+F_ACTIVE<br>WEEKEND_COUNT
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:center;">
+<img src="data/TKMAT_C3_4.png" class="img-fluid">
+</td>
+<td style="text-align:center;">
+<img src="data/TKMAT_C3_5.png" class="img-fluid">
+</td>
+<td style="text-align:center;">
+<img src="data/TKMAT_C3_6.png" class="img-fluid">
+</td>
+</tr>
+</tbody>
+
+</table>
+<table class="table table-striped" style="margin-left: auto; margin-right: auto;">
+<thead>
+<tr>
+<th style="text-align:center;color: white !important;background-color: #404040 !important;">
+F_ACTIVE<br>AFTERNOON_COUNT
+</th>
+<th style="text-align:center;color: white !important;background-color: #404040 !important;">
+F_ACTIVE<br>WEEKDAY_COUNT
+</th>
+<th style="text-align:center;color: white !important;background-color: #404040 !important;">
+M_AVG_SPEND<br>PER_ACTIVE_MORNING
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:center;">
+<img src="data/TKMAT_C3_7.png" class="img-fluid">
+</td>
+<td style="text-align:center;">
+<img src="data/TKMAT_C3_8.png" class="img-fluid">
+</td>
+<td style="text-align:center;">
+<img src="data/TKMAT_C3_9.png" class="img-fluid">
+</td>
+</tr>
+</tbody>
+
+</table>
+<p><em>(9 Significant Attributes for Cluster 3 of TKM-A-T)</em></p>
+</div>
+</div>
+<p><br>
+</p>
 <!-- ## Figure -->
 <!-- Figure 5: Predicted ODA (foreign aid) across a range of differences from average number of anti-NGO laws in an average country; dark line shows average of 500 draws from posterior distribution. -->
 <!-- ![Figure 5: Predicted ODA (foreign aid) across a range of differences from average number of anti-NGO laws in an average country; dark line shows average of 500 draws from posterior distribution.](ngos-aid_fig5.png) -->
@@ -966,6 +3165,9 @@ Another OSI node, called ‘OSI12-TKM-N-T-2-Clusters,’ is now attached to the 
 <div id="ref-BezdekUnknownTitle1981" class="csl-entry" role="listitem">
 Bezdek, James C. 1981. <span>“Pattern Recognition with Fuzzy Objective Function Algorithms.”</span> <em>Not Available</em>. <a href="https://doi.org/10.1007/978-1-4757-0450-1">https://doi.org/10.1007/978-1-4757-0450-1</a>.
 </div>
+<div id="ref-CampelloUnknownTitle2006" class="csl-entry" role="listitem">
+Campello, R. J. G. B., and E. R. Hruschka. 2006. <span>“A Fuzzy Extension of the Silhouette Width Criterion for Cluster Analysis.”</span> <em>Fuzzy Sets and Systems</em>. <a href="https://doi.org/10.1016/j.fss.2006.07.006">https://doi.org/10.1016/j.fss.2006.07.006</a>.
+</div>
 <div id="ref-ChaudhuriUnknownTitle1998" class="csl-entry" role="listitem">
 Chaudhuri, B. B, and P. R Bhowmik. 1998. <span>“An Approach of Clustering Data with Noisy or Imprecise Feature Measurement.”</span> <em>Pattern Recognition Letters</em>. <a href="https://doi.org/10.1016/s0167-8655(98)00112-3">https://doi.org/10.1016/s0167-8655(98)00112-3</a>.
 </div>
@@ -974,6 +3176,9 @@ Cormack, R. M. 1971. <span>“A Review of Classification.”</span> <em>Journal 
 </div>
 <div id="ref-ChellyDagdiaUnknownTitle2020" class="csl-entry" role="listitem">
 Dagdia, Zaineb Chelly, Christine Zarges, Gaël Beck, and Mustapha Lebbah. 2020. <span>“A Scalable and Effective Rough Set Theory-Based Approach for Big Data Pre-Processing.”</span> <em>Knowledge and Information Systems</em>. <a href="https://doi.org/10.1007/s10115-020-01467-y">https://doi.org/10.1007/s10115-020-01467-y</a>.
+</div>
+<div id="ref-FraleyUnknownTitle2002" class="csl-entry" role="listitem">
+Fraley, Chris, and Adrian E. Raftery. 2002. <span>“MCLUST: Software for Model-Based Clustering, Density Estimation and Discriminant Analysis.”</span> <em>Not Available</em>. <a href="https://doi.org/10.21236/ada459792">https://doi.org/10.21236/ada459792</a>.
 </div>
 <div id="ref-garla2012comparison" class="csl-entry" role="listitem">
 Garla, Satish, Goutam Chakraborty, G Gaeth, and US Iowa. 2012. <span>“Comparison of k-Means, Normal Mixtures and Probabilistic-d Clustering for B2b Segmentation Using Customers’ Perceptions.”</span> In <em>SAS Global Forum 2012-Data Mining and Text Analytics</em>.
@@ -1001,6 +3206,12 @@ Riza, Lala Septem, Andrzej Janusz, Christoph Bergmeir, Chris Cornelis, Francisco
 </div>
 <div id="ref-RousseeuwUnknownTitle1987" class="csl-entry" role="listitem">
 Rousseeuw, Peter J. 1987. <span>“Silhouettes: A Graphical Aid to the Interpretation and Validation of Cluster Analysis.”</span> <em>Journal of Computational and Applied Mathematics</em>. <a href="https://doi.org/10.1016/0377-0427(87)90125-7">https://doi.org/10.1016/0377-0427(87)90125-7</a>.
+</div>
+<div id="ref-SchwarzUnknownTitle1978" class="csl-entry" role="listitem">
+Schwarz, Gideon. 1978. <span>“Estimating the Dimension of a Model.”</span> <em>The Annals of Statistics</em>. <a href="https://doi.org/10.1214/aos/1176344136">https://doi.org/10.1214/aos/1176344136</a>.
+</div>
+<div id="ref-ScruccaUnknownTitle2016" class="csl-entry" role="listitem">
+Scrucca, Luca, Michael Fop, Brendan Murphy T., and E. Raftery Adrian. 2016. <span>“Mclust 5: Clustering, Classification and Density Estimation Using Gaussian Finite Mixture Models.”</span> <em>The R Journal</em>. <a href="https://doi.org/10.32614/rj-2016-021">https://doi.org/10.32614/rj-2016-021</a>.
 </div>
 <div id="ref-singh2017cluster" class="csl-entry" role="listitem">
 Singh, Girish Kumar, and Shrabanti Mandal. 2017. <span>“Cluster Analysis Using Rough Set Theory.”</span> <em>Journal of Informatics &amp; Mathematical Sciences</em> 9 (3).
@@ -1252,6 +3463,17 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
 });
 </script>
 </div> <!-- /content -->
+<footer class="footer">
+  <div class="nav-footer">
+    <div class="nav-footer-left">
+      &nbsp;
+    </div>   
+    <div class="nav-footer-center">
+      &nbsp;
+    </div>
+    <div class="nav-footer-right"><span class="faux-block">Made with and <a href="https://quarto.org/">Quarto</a></span></div>
+  </div>
+</footer>
 
 
 

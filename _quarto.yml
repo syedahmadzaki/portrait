@@ -5,6 +5,9 @@ website:
   title: "Syed Ahmad Zaki"
   site-url: ""
   description: "This is Syed Ahmad Zaki's personal portfolio."
+  page-footer: 
+    right: |
+      <span class="faux-block">Made with {{< fa brands r-project >}} and [Quarto](https://quarto.org/)</span>
   navbar:
     left:
       - href: index.qmd

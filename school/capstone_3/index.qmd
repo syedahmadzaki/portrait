@@ -5,11 +5,14 @@ author:
   - name: Syed Ahmad Zaki Bin Syed Sakaf Al-Attas
     url: https://syedahmadzaki.netlify.app/
     affiliation: School of Computing and Information Systems, Singapore Management University (SMU)
+resources: 
+  - data/*
 categories:
   - Clustering
   - k-Means Clustering
   - Fuzzy k-Means Clustering
   - Gaussian Mixture Model
+  - ggplot2
   - Rough Set
   - SAS Enterprise Miner
   - R
@@ -48,7 +51,7 @@ format:
 
 # Install and load necessary packages
 if (!require("pacman")) install.packages("pacman")
-pacman::p_load(tidyverse, gt, gtExtras, tidyverse, kableExtra)
+pacman::p_load(tidyverse, gt, gtExtras, tidyverse, kableExtra, tidyverse, ggplot2)
 
 ```
 
@@ -95,6 +98,7 @@ Lastly, given SAS scholarship’s requirements, this study used JMP Pro and SAS 
 \
 The table below shows the clustering methods used on the differing dataset.\
 \
+
 ```{r}
 #| label: table-1
 #| code-fold: true
@@ -116,16 +120,20 @@ The table below shows the clustering methods used on the differing dataset.\
 table1 <- tibble(`DATA MANIPULATION & VARIABLE SELECTION METHODS`,
                      `Traditional Variable Manipulation (TVM)`,
                      `Rough Set Based Variable Reduction (RSVR)`)
-knitr::kable(table1, 
+knitr::kable(table1,
+             "html",
              booktabs = TRUE,
              caption = 'Clustering Methods',
-             align = "lcc") %>%
+             align = "lcc",
+             escape = FALSE) %>%
+  kable_styling(bootstrap_options = "striped")  %>%  
   row_spec(1,
            bold = T,
            color = "white",
            background = "#404040")
 
 ```
+
 \
 In summary, this study aims to understand whether either GMM, Rough Set-based variable reduction, fuzzy *k*-means, or all of them would be a welcomed complement to current established clustering methods such as *k*-means clustering.
 
@@ -499,7 +507,6 @@ As mentioned in the progress report, four out of the eight clustering outputs ar
     + 16 non-collinear input variables and 1 ID variable
     + 2 Rough Set reduct variables and 1 ID variable
 *	Whether dataset was normalized (using the Transform Variables Node) before k-means clustering was performed\
-\
 
 ![Capstone Workflow with emphasis on current step](data/Capstone_workflow3.png){#fig-workflow3}
 
@@ -508,14 +515,32 @@ It’s worth noting that since k-means is a distance-based algorithm, its input 
 Separately, the clustering algorithm in the Cluster Node within SAS EM is closer to hierarchical clustering, than k-means clustering. The following details were lifted from SAS EM 14.1’s Reference Help, with emphasis on the hierarchical clustering.\
 \
 
-::: {.grid .style="background-color: #F2F2F2"}
-*“The Automatic setting (default) configures SAS Enterprise Miner to automatically determine the optimum number of clusters to create.\
+::: {.grid}
+::: {.g-col-12 .alpha}
+*The Automatic setting (default) configures SAS Enterprise Miner to automatically determine the optimum number of clusters to create.\
 \
 When the Automatic setting is selected, the value in the Maximum Number of Clusters property in the Number of Clusters section is not used to set the maximum number of clusters. Instead, SAS Enterprise Miner first makes a preliminary clustering pass, beginning with the number of clusters that is specified as the Preliminary Maximum value in the Selection Criterion properties.\
 \
-After the preliminary pass completes, the multivariate means of the clusters are used as inputs for a second pass that uses agglomerative, hierarchical algorithms to combine and reduce the number of clusters. Then, the smallest number of clusters that meets all four of the following criteria is selected.”*
+After the preliminary pass completes, the multivariate means of the clusters are used as inputs for a second pass that uses agglomerative, hierarchical algorithms to combine and reduce the number of clusters. Then, the smallest number of clusters that meets all four of the following criteria is selected.*
+:::
 :::
 
+\
+
+::::: {.columns}
+::: {.column width="100%}
+:::: {style = "background-color: #F2F2F2"}
+
+*The Automatic setting (default) configures SAS Enterprise Miner to automatically determine the optimum number of clusters to create.\
+\
+When the Automatic setting is selected, the value in the Maximum Number of Clusters property in the Number of Clusters section is not used to set the maximum number of clusters. Instead, SAS Enterprise Miner first makes a preliminary clustering pass, beginning with the number of clusters that is specified as the Preliminary Maximum value in the Selection Criterion properties.\
+\
+After the preliminary pass completes, the multivariate means of the clusters are used as inputs for a second pass that uses agglomerative, hierarchical algorithms to combine and reduce the number of clusters. Then, the smallest number of clusters that meets all four of the following criteria is selected.*
+
+:::
+:::::
+
+\
 Since *k*-means clustering is not found within SAS EM, similar to Rough Set, this section will focus on using R code within OSI to perform *k*-means clustering. R already has k-means clustering built into its base stats package. To determine the optimal number of *k* clusters, this capstone would use the silhouette coefficient, with values between -1 and +1. It is a measure of how similar a data-point is within-cluster (cohesion), compared to other clusters (separation). @RousseeuwUnknownTitle1987 first defines a value of *s(i)* in the case of dissimilarities for object *i*. Object *i* is then assigned to cluster *A*. When cluster *A* has other objects apart from *i*, the following can be computed:\
 \
 
@@ -579,7 +604,6 @@ $$
 :::
 ::: g-col-1
 \
-\
 \( 16 \)
 :::
 :::
@@ -606,22 +630,785 @@ This section covers both the TKM-N-T and TKM-A-T outputs, using the dataset with
 
 ![EM Diagram for TKM-N-T and TKM-A-T outputs (Using 16 non-collinear inputs and 1 ID variable)](data/fig9.png){#fig-menu6}
 
-[TKM-N-T (Traditional k-means clustering on normalized form of 16 non-collinear inputs)]{style="text-decoration: underline;"}
+[TKM-N-T (Traditional k-means clustering on normalized form of 16 non-collinear inputs)]{style="text-decoration: underline;"}\
 First, the optimal number of clusters needs to be computed. Information on the transformation of these 16 non-collinear inputs, within the Transform Variables Node, is included in Appendix 3. These are then ingested into the OSI Node called ‘OSI11-TKM-N-T-Explore.’ The number 12 here refers to the node number within the EM Workspace and allows for ease of retrieval of .csv and plot files. Setting the seed value to 1234, and then calling the ‘*cluster*’ and ‘*purrr*’ packages, a function to record the silhouette index of a particular cluster k is created, and then looped through cluster counts 2 to 50. This silhouette index is then plotted within EM, as seen below.\
 \
 
 ::: grid
-::: g-col-5
+::: g-col-4
 
 ![Silhouette Index for TKM-N-T output](data/fig10.png){#fig-menu7}
 
 :::
-::: g-col-7
+::: g-col-8
 The silhouette index starts out strongest at *k* = 2, and then goes downwards sharply by *k* = 6, before gradually decreasing by *k* = 50. It’s worth noting that the silhouette index within the graph is closer to zero than to 1. This might mean that the objects within the dataset are more evenly spread out, with little cluster concentrations. For now, we will continue to regard *k* = 2 as its most optimized cluster count.\
 \
 Another OSI node, called ‘OSI12-TKM-N-T-2-Clusters,’ is now attached to the same Transform Variable Node. This time, instead of exploring, we will generate the *k* = 2 cluster output. Apart from the same R code above, a plot is created to compare the histograms of each cluster against overall for all variables. Analysis of these results will be covered in a later section.\
+\
 :::
 :::
+
+[TKM-A-T (Traditional k-means clustering on as-is form of 16 non-collinear inputs)]{style="text-decoration: underline;"}\
+Similarly, the optimal number of clusters needs to be computed here. These are then directly ingested into the OSI Node called ‘OSI9-TKM-A-T-Explore.’ Setting the seed value to 1234, and then calling the ‘*cluster*’ and ‘*purrr*’ packages, a function to record the silhouette index of a particular cluster *k* is created, and then looped through cluster counts 2 to 50. This silhouette index is then plotted within EM, as seen below.\
+\
+
+::: grid
+::: g-col-4
+
+![Silhouette Index for TKM-A-T output](data/fig11.png){#fig-menu8}
+
+:::
+::: g-col-8
+The silhouette index starts out strongest at *k* = 2, and then goes downwards sharply by *k* = 6, before gradually decreasing by *k* = 50. It’s worth noting that the silhouette index within the graph is closer to zero than to 1. This might mean that the objects within the dataset are more evenly spread out, with little cluster concentrations. For now, we will continue to regard *k* = 2 as its most optimized cluster count.\
+\
+Another OSI node, called ‘OSI12-TKM-N-T-2-Clusters,’ is now attached to the same Transform Variable Node. This time, instead of exploring, we will generate the *k* = 2 cluster output. Apart from the same R code above, a plot is created to compare the histograms of each cluster against overall for all variables. Analysis of these results will be covered in a later section.\
+\
+:::
+:::
+
+This section covers both the TKM-N-R and TKM-A-R outputs, using the dataset with 16 non-collinear input variables and one ID variable, as shown in the EM diagram below.\
+\
+
+![EM Diagram for TKM-N-R and TKM-A-R outputs (Using 2 reduct inputs and 1 ID variable)](data/fig12.png){#fig-menu9}
+
+[TKM-N-R (Traditional k-means clustering on normalized form of 2 reduct inputs)]{style="text-decoration: underline;"}\
+Both discount input variables are first transformed within the Transform Variables Node. Information on both these transformations is included in Appendix 3. These are then ingested into the OSI Node called ‘OSI13-TKM-N-R-Explore.’ Setting the seed value to 1234, and then calling the ‘*cluster*’ and ‘*purrr*’ packages, a function to record the silhouette index of a particular cluster *k* is created, and then looped through cluster counts 2 to 50. This silhouette index is then plotted within EM, as seen below.\
+\
+
+::: grid
+::: g-col-4
+
+![Silhouette Index for TKM-N-R output](data/fig13.png){#fig-menu10}
+
+:::
+::: g-col-8
+The silhouette index starts out strongest at *k* = 2, and then goes downwards sharply by *k* = 12, before plateauing til *k* = 50. This time, the silhouette index is much closer than before to 1. We can infer that the *reduct* algorithm had a strong impact in the clustering accuracy. As such, we will regard *k* = 2 as its most optimized cluster count.\
+\
+Another OSI Node, called ‘OSI14-TKM-N-R-2-Clusters,’ is now attached to the same Transform Variable Node. This time, instead of exploring, we will generate the *k* = 2 cluster output. Apart from the same R code above, a plot is created to compare the histograms of each cluster against overall for all variables. Analysis of these results will be covered in a later section.\
+\
+:::
+:::
+
+[TKM-A-R (Traditional k-means clustering on as-is form of 2 reduct inputs)]{style="text-decoration: underline;"}\
+Similarly, the optimal number of clusters needs to be computed here. These are then directly ingested into the OSI Node called ‘OSI16-TKM-A-R-Explore.’ Setting the seed value to 1234, and then calling the ‘cluster’ and ‘purrr’ packages, a function to record the silhouette index of a particular cluster *k* is created, and then looped through cluster counts 2 to 50. This silhouette index is then plotted within EM, as seen below.\
+\
+
+::: grid
+::: g-col-4
+
+![Silhouette Index for TKM-A-R output](data/fig14.png){#fig-menu10}
+
+:::
+::: g-col-8
+The silhouette index is strongest at *k* = 2, before gradually decreasing to *k* = 50. Similar to TKM-N-R, the silhouette index within the graph is very much close to 1. At the same time, TKM-A-R’s silhouette index is slightly higher than TKM-N-R. This suggests that the clustering was slightly impacted from the earlier normalisation. Thus, we will regard *k* = 2 as its most optimized cluster count.\
+\
+Another OSI Node, called ‘OSI15-TKM-A-R-2-Clusters,’ is now attached to the 2 *reduct* data node. The *k* = 2 cluster output will be generated together with its histogram plots. Analysis of these results will also be covered in a later section.
+\
+\
+:::
+:::
+
+### 4.3	Employing Relevant Clustering Methods – Fuzzy *k*-Means Clustering
+
+Similarly, as mentioned in the progress report, there will be two outputs generated from fuzzy *k*-means clustering. The difference is in the dataset used ie. either the full dataset with 28 input variables and 1 ID variable, or the *reduct* dataset with 2 input variables and 1 ID variable. This dataset will then be scaled within the OSI Node using the scale R package, before being fed into the fuzzy *k*-means R package, *fclust*.\
+\
+
+![Capstone Workflow with emphasis on current step](data/Capstone_workflow4.png){#fig-workflow4}
+
+Since fuzzy *k*-means is built on the traditional *k*-means clustering method with an additional fuzzy logic aspect, it is only natural that the same silhouette coefficient index is used to determine its optimal cluster count. The only difference is that the traditional silhouette coefficient calculates the fit of object *i* between its assigned cluster and otherwise. This is very much hard clustering and suited to the traditional *k*-means clustering. However, fuzzy *k*-means allows the same object *i* memberships to multiple clusters at the same time ie. soft clustering. As such, the silhouette index needs to be tweaked to incorporate the fuzzy logic element. @CampelloUnknownTitle2006 demonstrated exactly this in its aptly named form, Fuzzy Silhouette (FS):
+
+::: grid
+::: g-col-1
+:::
+::: g-col-10
+$$
+FS = \frac{\sum^N_{j=1}(\mu_{pj}-\mu_{qj})^\alpha s_j}{\sum^N_{j=1}(\mu_{pj}-\mu_{qj})^\alpha}
+$$
+:::
+::: g-col-1
+\
+\( 18 \)
+:::
+:::
+
+::: grid
+::: g-col-1
+where
+:::
+::: g-col-10
+
+1.  $s_j$ is the silhouette value of object *j* as per Equation 17
+2.	$μ_{pj}$ and $μ_{qj}$ are the first and second largest elements of the *j*th column of the fuzzy partition matrix
+3. 	$\alpha$ ≥ 0 is a weight coefficient 
+
+:::
+::: g-col-1
+:::
+:::
+
+Equation 18 highlights the weighted average nature of the individual silhouettes, as per Equation 17. The weight of each term is determined by the difference in membership degrees of the corresponding object to its first and second best matching fuzzy clusters, respectively. Having said that, the FS range of values are very much the same as the Silhouette Index and are to be read as such.\
+\
+As shown in the EM diagram below, the FKM-T (fuzzy *k*-means) and GMM-T (Gaussian) pull from the Data_All Node, while the FKM-R and GMM-R pulls from the Reduct Data Node. Both fuzzy *k*-means outputs would be covered first in the immediate section below, followed by both Gaussian outputs.\
+\
+
+![EM Diagram for FKM-T, GMM-T, FKM-R and GMM-R outputs](data/fig16.png){#fig-menu11}
+
+[FKM-T (Fuzzy k-means clustering on the as-is form of traditional variable manipulation)]{style="text-decoration: underline;"}\
+Similarly, the optimal number of clusters needs to be computed here. These are then directly ingested into the OSI Node called ‘OSI2-FKM-T-Explore.’ Setting the seed value to 1234, and then calling the ‘*cluster*’ and ‘*purrr*’ packages, a function to record the silhouette index of a particular cluster *k* is created, and then looped through cluster counts 2 to 20. This is a much lower initial cluster exploration range, compared to the *k*-means count range of 2 to 50. This is due to the extremely long processing time, as the cluster count increases. This fuzzy silhouette index is then plotted within EM, as seen below.\
+\
+
+::: grid
+::: g-col-4
+
+![Silhouette Index for FKM-T output](data/fig17.png){#fig-menu12}
+
+:::
+::: g-col-8
+The silhouette index is strongest at *k* = 2. It then bounced up from *k* = 4, and then dropped down from *k* = 5, before stopping at *k* = 6. It continued this up-and-down motion for an extended bit. Thus, the highest fuzzy silhouette index is at *k* = 2. Similar to the outputs generated above, the fuzzy silhouette index within the graph is near the 0.5 mark. This is in between the scores generated for the TKM *reduct* series and the TKM as-is series. Thus, we will regard *k* = 2 as its most optimized cluster count.\
+\
+Another OSI Node, called ‘OSI17-FKM-T-2-Clusters,’ is now attached to the Data_All Node. The *k* = 2 cluster output will be generated together with its histogram plots. Analysis of these results will also be covered in a later section.\
+\
+:::
+:::
+
+[FKM-R (Fuzzy k-means clustering on the as-is form of 2 reduct inputs)]{style="text-decoration: underline;"}\
+Similarly, the optimal number of clusters needs to be computed here. These are then directly ingested into the OSI Node called ‘OSI17-FKM-R-Explore.’ Calling the ‘*cluster*’ and ‘*purrr*’ packages, a function to record the silhouette index of a particular cluster k is created, and then looped through cluster counts 2 to 20. This is a much lower initial cluster exploration range, compared to the *k*-means count range of 2 to 50. This is due to the extremely long processing time, as the cluster count increases. This fuzzy silhouette index is then plotted within EM, as seen below.\
+\
+
+::: grid
+::: g-col-4
+
+![Silhouette Index for FKM-R output](data/fig18.png){#fig-menu13}
+
+:::
+::: g-col-8
+The silhouette index is strongest at *k* = 2. It then gradually reduces, before stopping at *k* = 6. There were no further *k* cluster counts after 20. Thus, the highest fuzzy silhouette index is at *k* = 2. This fuzzy silhouette index is almost double the one generated for FKM-T, mainly due to the *reduct* variables. Thus, we will regard *k* = 2 as its most optimized cluster count.\
+\
+Another OSI Node, called ‘OSI18-FKM-R-2-Clusters,’ is now attached to the Data_All Node. The *k* = 2 cluster output will be generated together with its histogram plots. Analysis of these results will also be covered in a later section.\
+\
+:::
+:::
+
+### 4.4	Employing Relevant Clustering Methods – Gaussian Mixture Model
+
+Similarly, as mentioned in the progress report, there will be two outputs generated from GMM clustering. It uses the same dataset as the fuzzy *k*-means clustering ie. either the full dataset with 28 input variables and 1 ID variable, or the reduct dataset with 2 input variables and 1 ID variable. This dataset will then be scaled within the OSI Node using the scale R package, before being fed into the GMM R package, *mclust*.\
+\
+
+![Capstone Workflow with emphasis on current step](data/Capstone_workflow5.png){#fig-workflow5}
+
+For GMM, a common method for determining the optimal number of clusters is using Bayesian Information Criterion (BIC). @FraleyUnknownTitle2002 explains the integrated likelihood for regular models can be approximated by the following BIC formula. A maximum BIC value (the approximate Bayes factors with the BIC approximation) would determine the optimal cluster *k* for the dataset.\
+
+::: grid
+::: g-col-1
+:::
+::: g-col-10
+$$
+BIC_k = 2log p (D | M_k) \approx 2logp (D | \hat{\theta}_k,M_k) - v_klog(n)
+$$
+:::
+::: g-col-1
+\
+\( 19 \)
+:::
+:::
+
+::: grid
+::: g-col-1
+where
+:::
+::: g-col-10
+
+1. 	$ν_k$ are the number of independent parameters to be estimated in model $M_k$ [@SchwarzUnknownTitle1978] 
+2.  $p(D|M_k)$ is the probability of data *D*, given model $M_k$
+3.  $\hat{\theta}_k$  are the parameters of the *k*th component in the mixture
+ 
+:::
+::: g-col-1
+:::
+:::
+
+Within the *mclust* R package, the BIC values are calculated for different univariate and multivariate mixtures. @ScruccaUnknownTitle2016 nicely summarizes the models' names and their respective traits.\
+\
+
+```{r}
+#| label: table-2
+#| code-fold: true
+#| fig-cap-location: bottom
+#| fig-cap: "*(Parameterisations of the within-group covariance matrix Σk for multidimensional data available in the mclust package, and the corresponding geometric characteristics.)*"
+
+table2 <- tibble(`Mixture Type` = c("Univariate",
+                                    "Univariate",
+                                    "Multivariate",
+                                    "Multivariate",
+                                    "Multivariate",
+                                    "Multivariate",
+                                    "Multivariate",
+                                    "Multivariate",
+                                    "Multivariate",
+                                    "Multivariate",
+                                    "Multivariate",
+                                    "Multivariate",
+                                    "Multivariate",
+                                    "Multivariate",
+                                    "Multivariate",
+                                    "Multivariate"),
+                 `*mclust*<br>Model Name` =  c("E",
+                                            "V",
+                                            "EII",
+                                            "VII",
+                                            "EEI",
+                                            "VEI",
+                                            "EVI",
+                                            "VVI",
+                                            "EEE",
+                                            "VEE",
+                                            "EVE",
+                                            "VVE",
+                                            "EEV",
+                                            "VEV",
+                                            "EVV",
+                                            "VVV"),
+                 Distribution = c("Equal variance",
+                                  "Variable /<br>Unequal Variance",
+                                  "Spherical",
+                                  "Spherical",
+                                  "Diagonal",
+                                  "Diagonal",
+                                  "Diagonal",
+                                  "Diagonal",
+                                  "Ellipsoidal",
+                                  "Ellipsoidal",
+                                  "Ellipsoidal",
+                                  "Ellipsoidal",
+                                  "Ellipsoidal",
+                                  "Ellipsoidal",
+                                  "Ellipsoidal",
+                                  "Ellipsoidal"),
+                 Volume = c("--",
+                            "--",
+                            "Equal",
+                            "Variable",
+                            "Equal",
+                            "Variable",
+                            "Equal",
+                            "Variable",
+                            "Equal",
+                            "Variable",
+                            "Equal",
+                            "Variable",
+                            "Equal",
+                            "Variable",
+                            "Equal",
+                            "Variable"),
+                 Shape =  c("--",
+                            "--",
+                            "Equal",
+                            "Equal",
+                            "Equal",
+                            "Equal",
+                            "Variable",
+                            "Variable",
+                            "Equal",
+                            "Equal",
+                            "Variable",
+                            "Variable",
+                            "Equal",
+                            "Equal",
+                            "Variable",
+                            "Variable"),
+                 Orientation =  c("--",
+                                  "--",
+                                  "--",
+                                  "--",
+                                  "Coordinate<br>Axes",
+                                  "Coordinate<br>Axes",
+                                  "Coordinate<br>Axes",
+                                  "Coordinate<br>Axes",
+                                  "Equal",
+                                  "Equal",
+                                  "Equal",
+                                  "Equal",
+                                  "Variable",
+                                  "Variable",
+                                  "Variable",
+                                  "Variable")) #%>%
+  #mutate_all(linebreak)
+
+knitr::kable(table2, 
+             "html",
+             booktabs = TRUE,
+             # caption = 'Clustering Methods',
+             align = "cccccc",
+             escape = FALSE)  %>%
+  kable_styling(bootstrap_options = "striped") %>%
+  collapse_rows(columns = 1, 
+                valign = "top") %>%
+  row_spec(0,
+           background = "#404040",
+           color = "white") %>%
+  column_spec(1:6,
+              extra_css = "vertical-align:middle;")
+  # column_spec(2:3,
+  #              width = "4cm") %>%
+  # column_spec(6,
+  #              width = "4cm")
+
+```
+
+\
+[GMM-T (Gaussian Mixture Model on the as-is form of traditional variable manipulation)]{style="text-decoration: underline;"}\
+Similarly, the optimal number of clusters needs to be computed here. These are then directly ingested into the OSI Node called ‘OSI5-GMM-T-Explore.’ Calling the *mclust* package, a function to record the BIC value of a particular cluster *k* is created, and then looped through cluster counts 2 to 20. Again, this is a much lower initial cluster exploration range, compared to the *k*-means count range of 2 to 50. This is due to the long processing time, as the cluster count increases. These BIC values are then plotted within EM, as seen below.\
+\
+
+::: grid
+::: g-col-4
+
+![Silhouette Index for GMM-T output](data/fig20.png){#fig-menu14}
+
+:::
+::: g-col-8
+The BIC values generally improve as the number of clusters *k* increases. Using VEV values as recommended by the *mclust* package, cluster 8 had the highest BIC values. Thus, we will regard *k* = 8 as its most optimized cluster count.\
+\
+Another OSI Node, called ‘OSI19-GMM-T-8-Clusters,’ is now attached to the Data_All Node. The *k* = 8 cluster output will be generated together with its histogram plots. Analysis of these results will also be covered in a later section.\
+\
+\
+\
+:::
+:::
+
+[GMM-R (Gaussian Mixture Model on the as-is form of 2 reduct inputs)]{style="text-decoration: underline;"}\
+Similarly, the optimal number of clusters needs to be computed here. These are then directly ingested into the OSI Node called ‘OSI6-GMM-R-Explore.’ Calling the *mclust* package, a function to record the BIC value of a particular cluster *k* is created, and then looped through cluster counts 2 to 20. Again, this is a much lower initial cluster exploration range, compared to the k-means count range of 2 to 50. This is due to the long processing time, as the cluster count increases. These BIC values are then plotted within EM, as seen below.\
+\
+
+::: grid
+::: g-col-4
+
+![Silhouette Index for GMM-T output](data/fig21.png){#fig-menu15}
+
+:::
+::: g-col-8
+Similarly, the BIC values generally improve as the number of clusters *k* increases. Using EVV values as recommended by the mclust package, cluster 19 had the highest BIC values. Thus, we will regard *k* = 19 as its most optimized cluster count.\
+\
+Another OSI Node, called ‘OSI20-GMM-T-19-Clusters,’ is now attached to the Data_All Node. The *k* = 19 cluster output will be generated together with its histogram plots. Analysis of these results will also be covered in a later section.\
+\
+\
+\
+\
+:::
+:::
+
+## 5.0	Analysis and Results
+
+### 5.1	Overview of Clustering Output Results
+
+After identifying the optimal cluster counts for each output, this section covers the distribution of each cluster, as well as explore its individual characteristics. Tweaks to the outputs may be explored as well, where needed. Figure below shows the outputs for exploration.\
+\
+
+![Capstone Workflow with emphasis on current step](data/Capstone_workflow6.png){#fig-workflow6}
+
+Most of the optimal cluster counts hovered at the 2-cluster mark. This was generally true for both the traditional and fuzzy k-means clustering outputs, except for the TKM-A-T. GMM produced a much higher cluster count at 8 and 19 respectively.\
+\
+
+```{r}
+#| label: barchart-1
+#| code-fold: true
+#| fig-cap-location: bottom
+#| fig-cap: "*(Optimal Cluster Counts for Each Clustering Output)*"
+
+barchart1 <- tibble(Type = c("TKM-N-T",
+                             "TKM-N-R",
+                             "TKM-A-T",
+                             "TKM-A-R",
+                             "FKM-T",
+                             "FKM-R",
+                             "GMM-T",
+                             "GMM-R"),
+                   ClusterCount = c(2,
+                                    2,
+                                    3,
+                                    2,
+                                    2,
+                                    2,
+                                    8,
+                                    19)) %>%
+  mutate(Type = factor(Type,
+                       levels = c("TKM-N-T",
+                            "TKM-N-R",
+                            "TKM-A-T",
+                            "TKM-A-R",
+                            "FKM-T",
+                            "FKM-R",
+                            "GMM-T",
+                            "GMM-R"))) %>%
+  ggplot(aes(x = Type, 
+             y = ClusterCount)) +
+  geom_bar(stat = "identity",
+           fill = "#404040") +
+  geom_text(aes(label = ClusterCount),
+            vjust = -0.4) +
+  theme(axis.text.y = element_blank(),
+        axis.ticks = element_blank(),
+        axis.title = element_blank(),
+        panel.background = element_blank(),
+        panel.grid.major = element_blank())
+
+barchart1
+
+```
+
+Table 3 shows the various output distribution within each cluster. It would appear that both the traditional and fuzzy *k*-means output, from a *reduct* dataset, had very low distribution in their first cluster, when compared to their second. Coversely, there is a more even distribution for the same clustering outputs, from a regular dataset. For the GMM outputs, the reduct dataset yielded a very uneven spread, compared to the regular dataset.\
+\
+
+```{r}
+#| label: table-3
+#| code-fold: true
+#| fig-cap-location: bottom
+#| fig-cap: "*(Distribution of 2,470 IDs across the various clustering outputs)*"
+
+table3 <- tibble(`Cluster No.` = c(1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19),
+                 `TKM-N-T` = c("1,287", "1,183", "--", "--", "--", "--", "--", "--", "--", "--", "--", "--", "--", "--", "--", "--", "--", "--", "--"),
+                 `TKM-N-R` = c("143", "2,327", "--", "--", "--", "--", "--", "--", "--", "--", "--", "--", "--", "--", "--", "--", "--", "--", "--"),
+                 `TKM-A-T` = c("774", "1,452", "244", "--", "--", "--", "--", "--", "--", "--", "--", "--", "--", "--", "--", "--", "--", "--", "--"),
+                 `TKM-A-R` = c("74", "2,396", "--", "--", "--", "--", "--", "--", "--", "--", "--", "--", "--", "--", "--", "--", "--", "--", "--"),
+                 `FKM-T` = c("1,421", "1,049", "--", "--", "--", "--", "--", "--", "--", "--", "--", "--", "--", "--", "--", "--", "--", "--", "--"),
+                 `FKM-R` = c("100", "2,370", "--", "--", "--", "--", "--", "--", "--", "--", "--", "--", "--", "--", "--", "--", "--", "--", "--"),
+                 `GMM-T` = c("283", "504", "298", "146", "274", "552", "368", "45", "--", "--", "--", "--", "--", "--", "--", "--", "--", "--", "--"),
+                 `GMM-R` = c("389", "11", "73", "40", "1,759", "51", "10", "10", "6", "22", "6", "9", "16", "22", "8", "15", "7", "3", "13"))
+
+knitr::kable(table3,
+             "html",
+             booktabs = TRUE,
+             # caption = 'Clustering Methods',
+             align = "ccccccccc",
+             escape = FALSE) %>%
+  kable_styling(bootstrap_options = "striped",
+                full_width = TRUE) %>%
+  row_spec(0,
+           background = "#404040",
+           color = "white")
+
+```
+
+\
+The clustering outputs, together with their respective cluster traits, will be explored next. Given that there’s 28 variables to consider, only 9 of the more significant variables will be included here for each output.
+
+### 5.2	TKM Clustering Output Results
+
+[TKM-N-T (Traditional k-means clustering on normalized form of 16 non-collinear inputs)]{style="text-decoration: underline;"}\
+Cluster 1 shoppers are a good mixture of frequent and infrequent shoppers. They are price sensitive, since they use a large number of discounts and sales per quantity are generally on the lower side. Their total spending is sizable.\
+\
+
+```{r tkmnt-1}
+#| code-fold: true
+#| results: hold
+#| fig-cap-location: bottom
+#| fig-cap: "*(9 Significant Attributes for Cluster 1 of TKM-N-T)*"
+
+# output1 <- tibble(`M_DISCOUNT_USED_PER_ACTIVE_WEEKDAY` = c("![](data/TKMNT_C1_1.png)",
+#                                                            "M_AVG_SALES_VALUE_PER_QTY",
+#                                                            "![](data/TKMNT_C1_4.png)"),
+#                   `M_TOTAL_SPEND` = c("![](data/TKMNT_C1_2.png)",
+#                                       "F_ACTIVE_WEEKEND_COUNT",
+#                                       "![](data/TKMNT_C1_5.png)"),
+#                   `F_ACTIVE_MORNING_COUNT` = c("![](data/TKMNT_C1_3.png)",
+#                                                "F_ACTIVE_EVENING_COUNT",
+#                                                "![](data/TKMNT_C1_6.png)"))
+
+output1 <- tibble(`M_DISCOUNT_USED<br>PER_ACTIVE_WEEKDAY` = "![](data/TKMNT_C1_1.png)",
+                  `M_TOTAL_SPEND` = "![](data/TKMNT_C1_2.png)",
+                  `F_ACTIVE<br>MORNING_COUNT` = "![](data/TKMNT_C1_3.png)")
+
+output2 <- tibble(`M_AVG_SALES<br>VALUE_PER_QTY` = "![](data/TKMNT_C1_4.png)",
+                  `F_ACTIVE<br>WEEKEND_COUNT` = "![](data/TKMNT_C1_5.png)",
+                  `F_ACTIVE<br>EVENING_COUNT` = "![](data/TKMNT_C1_6.png)")
+
+output3 <- tibble(`F_ACTIVE<br>AFTERNOON_COUNT` = "![](data/TKMNT_C1_7.png)",
+                  `F_ACTIVE<br>WEEKDAY_COUNT` = "![](data/TKMNT_C1_8.png)",
+                  `M_MIN_SPEND<br>PER_BASKET` = "![](data/TKMNT_C1_9.png)")
+
+knitr::kable(output1,
+             "html",
+             booktabs = TRUE,
+             align = "ccc",
+             escape = FALSE) %>%
+  kable_styling(bootstrap_options = "striped",
+                full_width = TRUE) %>%
+  row_spec(0,
+           background = "#404040",
+           color = "white")
+
+knitr::kable(output2,
+             "html",
+             booktabs = TRUE,
+             align = "ccc",
+             escape = FALSE) %>%
+  kable_styling(bootstrap_options = "striped",
+                full_width = TRUE) %>%
+  row_spec(0,
+           background = "#404040",
+           color = "white")
+
+knitr::kable(output3,
+             "html",
+             booktabs = TRUE,
+             align = "ccc",
+             escape = FALSE) %>%
+  kable_styling(bootstrap_options = "striped",
+                full_width = TRUE) %>%
+  row_spec(0,
+           background = "#404040",
+           color = "white")
+
+```
+
+\
+Cluster 2 shoppers are somewhat infrequent shoppers. They are not as price sensitive as they tend to use less discounts on weekdays. Their total spending is much lower than Cluster 1 shoppers. Given their infrequency, they tend to spend slightly more for each basket.\
+\
+
+```{r tkmnt-2}
+#| code-fold: true
+#| results: hold
+#| fig-cap-location: bottom
+#| fig-cap: "*(9 Significant Attributes for Cluster 2 of TKM-N-T)*"
+
+# output1 <- tibble(`M_DISCOUNT_USED_PER_ACTIVE_WEEKDAY` = c("![](data/TKMNT_C1_1.png)",
+#                                                            "M_AVG_SALES_VALUE_PER_QTY",
+#                                                            "![](data/TKMNT_C1_4.png)"),
+#                   `M_TOTAL_SPEND` = c("![](data/TKMNT_C1_2.png)",
+#                                       "F_ACTIVE_WEEKEND_COUNT",
+#                                       "![](data/TKMNT_C1_5.png)"),
+#                   `F_ACTIVE_MORNING_COUNT` = c("![](data/TKMNT_C1_3.png)",
+#                                                "F_ACTIVE_EVENING_COUNT",
+#                                                "![](data/TKMNT_C1_6.png)"))
+
+output1 <- tibble(`M_DISCOUNT_USED<br>PER_ACTIVE_WEEKDAY` = "![](data/TKMNT_C2_1.png)",
+                  `M_TOTAL_SPEND` = "![](data/TKMNT_C2_2.png)",
+                  `F_ACTIVE<br>MORNING_COUNT` = "![](data/TKMNT_C2_3.png)")
+
+output2 <- tibble(`M_AVG_SALES<br>VALUE_PER_QTY` = "![](data/TKMNT_C2_4.png)",
+                  `F_ACTIVE<br>WEEKEND_COUNT` = "![](data/TKMNT_C2_5.png)",
+                  `F_ACTIVE<br>EVENING_COUNT` = "![](data/TKMNT_C2_6.png)")
+
+output3 <- tibble(`F_ACTIVE<br>AFTERNOON_COUNT` = "![](data/TKMNT_C2_7.png)",
+                  `F_ACTIVE<br>WEEKDAY_COUNT` = "![](data/TKMNT_C2_8.png)",
+                  `M_MIN_SPEND<br>PER_BASKET` = "![](data/TKMNT_C2_9.png)")
+
+knitr::kable(output1,
+             "html",
+             booktabs = TRUE,
+             align = "ccc",
+             escape = FALSE) %>%
+  kable_styling(bootstrap_options = "striped",
+                full_width = TRUE) %>%
+  row_spec(0,
+           background = "#404040",
+           color = "white")
+
+knitr::kable(output2,
+             "html",
+             booktabs = TRUE,
+             align = "ccc",
+             escape = FALSE) %>%
+  kable_styling(bootstrap_options = "striped",
+                full_width = TRUE) %>%
+  row_spec(0,
+           background = "#404040",
+           color = "white")
+
+knitr::kable(output3,
+             "html",
+             booktabs = TRUE,
+             align = "ccc",
+             escape = FALSE) %>%
+  kable_styling(bootstrap_options = "striped",
+                full_width = TRUE) %>%
+  row_spec(0,
+           background = "#404040",
+           color = "white")
+
+```
+
+\
+[TKM-A-T (Traditional k-means clustering on as-is form of 16 non-collinear inputs)]{style="text-decoration: underline;"}\
+Cluster 1 shoppers tend to be a more frequent shopper with a preference for weekday shopping. They spend more overall, and yet are price conscious due to their use of discounts. Given their frequency, they spend less for each basket.\
+\
+
+```{r tkmat-1}
+#| code-fold: true
+#| results: hold
+#| fig-cap-location: bottom
+#| fig-cap: "*(9 Significant Attributes for Cluster 1 of TKM-A-T)*"
+
+output1 <- tibble(`M_DISCOUNT_USED<br>PER_ACTIVE_WEEKDAY` = "![](data/TKMAT_C1_1.png)",
+                  `M_MIN_SPEND<br>PER_BASKET` = "![](data/TKMAT_C1_2.png)",
+                  `F_ACTIVE<br>MORNING_COUNT` = "![](data/TKMAT_C1_3.png)")
+
+output2 <- tibble(`M_TOTAL_SPEND` = "![](data/TKMAT_C1_4.png)",
+                  `F_ACTIVE<br>EVENING_COUNT` = "![](data/TKMAT_C1_5.png)",
+                  `F_ACTIVE<br>WEEKEND_COUNT` = "![](data/TKMAT_C1_6.png)")
+
+output3 <- tibble(`F_ACTIVE<br>AFTERNOON_COUNT` = "![](data/TKMAT_C1_7.png)",
+                  `F_ACTIVE<br>WEEKDAY_COUNT` = "![](data/TKMAT_C1_8.png)",
+                  `M_AVG_SPEND<br>PER_ACTIVE_MORNING` = "![](data/TKMAT_C1_9.png)")
+
+knitr::kable(output1,
+             "html",
+             booktabs = TRUE,
+             align = "ccc",
+             escape = FALSE) %>%
+  kable_styling(bootstrap_options = "striped",
+                full_width = TRUE) %>%
+  row_spec(0,
+           background = "#404040",
+           color = "white")
+
+knitr::kable(output2,
+             "html",
+             booktabs = TRUE,
+             align = "ccc",
+             escape = FALSE) %>%
+  kable_styling(bootstrap_options = "striped",
+                full_width = TRUE) %>%
+  row_spec(0,
+           background = "#404040",
+           color = "white")
+
+knitr::kable(output3,
+             "html",
+             booktabs = TRUE,
+             align = "ccc",
+             escape = FALSE) %>%
+  kable_styling(bootstrap_options = "striped",
+                full_width = TRUE) %>%
+  row_spec(0,
+           background = "#404040",
+           color = "white")
+
+```
+
+\
+Cluster 2 shoppers are somewhat infrequent shoppers. They spend less each time, and hardly make use of discounts on weekdays. Overall spending is also on the lower side.\
+\
+
+```{r tkmat-2}
+#| code-fold: true
+#| results: hold
+#| fig-cap-location: bottom
+#| fig-cap: "*(9 Significant Attributes for Cluster 2 of TKM-A-T)*"
+
+output1 <- tibble(`M_DISCOUNT_USED<br>PER_ACTIVE_WEEKDAY` = "![](data/TKMAT_C2_1.png)",
+                  `M_MIN_SPEND<br>PER_BASKET` = "![](data/TKMAT_C2_2.png)",
+                  `F_ACTIVE<br>MORNING_COUNT` = "![](data/TKMAT_C2_3.png)")
+
+output2 <- tibble(`M_TOTAL_SPEND` = "![](data/TKMAT_C2_4.png)",
+                  `F_ACTIVE<br>EVENING_COUNT` = "![](data/TKMAT_C2_5.png)",
+                  `F_ACTIVE<br>WEEKEND_COUNT` = "![](data/TKMAT_C2_6.png)")
+
+output3 <- tibble(`F_ACTIVE<br>AFTERNOON_COUNT` = "![](data/TKMAT_C2_7.png)",
+                  `F_ACTIVE<br>WEEKDAY_COUNT` = "![](data/TKMAT_C2_8.png)",
+                  `M_AVG_SPEND<br>PER_ACTIVE_MORNING` = "![](data/TKMAT_C2_9.png)")
+
+knitr::kable(output1,
+             "html",
+             booktabs = TRUE,
+             align = "ccc",
+             escape = FALSE) %>%
+  kable_styling(bootstrap_options = "striped",
+                full_width = TRUE) %>%
+  row_spec(0,
+           background = "#404040",
+           color = "white")
+
+knitr::kable(output2,
+             "html",
+             booktabs = TRUE,
+             align = "ccc",
+             escape = FALSE) %>%
+  kable_styling(bootstrap_options = "striped",
+                full_width = TRUE) %>%
+  row_spec(0,
+           background = "#404040",
+           color = "white")
+
+knitr::kable(output3,
+             "html",
+             booktabs = TRUE,
+             align = "ccc",
+             escape = FALSE) %>%
+  kable_styling(bootstrap_options = "striped",
+                full_width = TRUE) %>%
+  row_spec(0,
+           background = "#404040",
+           color = "white")
+
+```
+
+\
+Cluster 3 shoppers are highly infrequent shoppers. They tend to use little to no discounts on weekdays and spend less overall than Cluster 2 shoppers. They are much less active through the week. Given their frequency, they tend to spend much more for each basket.\
+\
+
+```{r tkmat-3}
+#| code-fold: true
+#| results: hold
+#| fig-cap-location: bottom
+#| fig-cap: "*(9 Significant Attributes for Cluster 3 of TKM-A-T)*"
+
+output1 <- tibble(`M_DISCOUNT_USED<br>PER_ACTIVE_WEEKDAY` = "![](data/TKMAT_C3_1.png)",
+                  `M_MIN_SPEND<br>PER_BASKET` = "![](data/TKMAT_C3_2.png)",
+                  `F_ACTIVE<br>MORNING_COUNT` = "![](data/TKMAT_C3_3.png)")
+
+output2 <- tibble(`M_TOTAL_SPEND` = "![](data/TKMAT_C3_4.png)",
+                  `F_ACTIVE<br>EVENING_COUNT` = "![](data/TKMAT_C3_5.png)",
+                  `F_ACTIVE<br>WEEKEND_COUNT` = "![](data/TKMAT_C3_6.png)")
+
+output3 <- tibble(`F_ACTIVE<br>AFTERNOON_COUNT` = "![](data/TKMAT_C3_7.png)",
+                  `F_ACTIVE<br>WEEKDAY_COUNT` = "![](data/TKMAT_C3_8.png)",
+                  `M_AVG_SPEND<br>PER_ACTIVE_MORNING` = "![](data/TKMAT_C3_9.png)")
+
+knitr::kable(output1,
+             "html",
+             booktabs = TRUE,
+             align = "ccc",
+             escape = FALSE) %>%
+  kable_styling(bootstrap_options = "striped",
+                full_width = TRUE) %>%
+  row_spec(0,
+           background = "#404040",
+           color = "white")
+
+knitr::kable(output2,
+             "html",
+             booktabs = TRUE,
+             align = "ccc",
+             escape = FALSE) %>%
+  kable_styling(bootstrap_options = "striped",
+                full_width = TRUE) %>%
+  row_spec(0,
+           background = "#404040",
+           color = "white")
+
+knitr::kable(output3,
+             "html",
+             booktabs = TRUE,
+             align = "ccc",
+             escape = FALSE) %>%
+  kable_styling(bootstrap_options = "striped",
+                full_width = TRUE) %>%
+  row_spec(0,
+           background = "#404040",
+           color = "white")
+
+```
+
+\
+
+
+
+
+
+
+
+
 
 
 
